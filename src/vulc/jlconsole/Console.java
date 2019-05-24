@@ -7,38 +7,29 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.File;
-import java.io.FileReader;
 
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import vulc.bitmap.Bitmap;
+import vulc.jlconsole.game.Game;
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.BootPanel;
+import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 import vulc.jlconsole.input.InputHandler;
 import vulc.jlconsole.input.InputHandler.Key;
 import vulc.jlconsole.input.InputHandler.KeyType;
-import vulc.jlconsole.sfx.Sounds;
 
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String USER_DIR = "./console-userdata";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.1.1 (WIP)";
 
 	public static final int WIDTH = 150, HEIGHT = 150, SCALE = 3;
 	public final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	public final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
 	public final Screen screen = new Screen(WIDTH, HEIGHT);
-	public JsonObject jsonConfig;
-	public Panel currentPanel = new BootPanel(this, screen);
-	public Bitmap atlas;
+	public Panel currentPanel = new BootPanel(this, new GamePanel(this, new Game()));
 
 	public Key[] keys = {
 		new Key(KeyType.KEYBOARD, KeyEvent.VK_W),
@@ -79,15 +70,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	private void init() {
-		try {
-			InputHandler.init(this);
-			atlas = new Bitmap(ImageIO.read(new File(USER_DIR + "/atlas.png")));
-			jsonConfig = new JsonParser().parse(new FileReader(USER_DIR + "/config.json")).getAsJsonObject();
-			Sounds.init();
-			ConsoleInterface.init(this);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		InputHandler.init(this);
 	}
 
 	private void tick() {
@@ -128,12 +111,7 @@ public class Console extends Canvas implements Runnable {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 
-		new Thread() {
-			public void run() {
-				instance.init();
-			}
-		}.start();
-
+		instance.init();
 
 		frame.setVisible(true);
 		new Thread(instance).start();

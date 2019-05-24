@@ -2,7 +2,7 @@
  * Copyright (C) 2019 Vulcalien
  * This code or part of it is licensed under MIT License by Vulcalien
  ******************************************************************************/
-package vulc.jlconsole.sfx;
+package vulc.jlconsole.game.sfx;
 
 import java.net.URL;
 

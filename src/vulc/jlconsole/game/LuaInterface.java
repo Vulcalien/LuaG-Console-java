@@ -1,18 +1,25 @@
-package vulc.jlconsole;
+package vulc.jlconsole.game;
 
-import vulc.jlconsole.sfx.Sound;
-import vulc.jlconsole.sfx.Sounds;
+import vulc.jlconsole.Console;
+import vulc.jlconsole.game.sfx.Sound;
+import vulc.jlconsole.game.sfx.Sounds;
 
-public class JavaToLuaInterface {
+public class LuaInterface {
 
 	private final Console console;
+	private final Game game;
 
-	public JavaToLuaInterface(Console console) {
+	public LuaInterface(Console console, Game game) {
 		this.console = console;
+		this.game = game;
 	}
 
 	public boolean key(int id) {
 		return console.keys[id].isKeyDown();
+	}
+
+	public void settransparent(int color) {
+		console.screen.setTransparent(color);
 	}
 
 	public void clear(int color) {
@@ -27,16 +34,12 @@ public class JavaToLuaInterface {
 		console.screen.fill(x0, y0, x1, y1, color);
 	}
 
-	public void spr(int x, int y, int xs, int ys, int ws, int hs) {
-		console.screen.draw(console.atlas.getSubimage(xs, ys, ws, hs), x, y);
-	}
-
 	public void write(String text, int color, int x, int y) {
 		console.screen.write(text, color, x, y);
 	}
 
-	public void settransparent(int color) {
-		console.screen.setTransparent(color);
+	public void spr(int x, int y, int xs, int ys, int ws, int hs) {
+		console.screen.draw(game.atlas.getSubimage(xs, ys, ws, hs), x, y);
 	}
 
 	public void sfx(String name) {
@@ -46,6 +49,14 @@ public class JavaToLuaInterface {
 		} else {
 			sound.play();
 		}
+	}
+
+	public byte gettile(int x, int y) {
+		return game.map.getTile(x, y);
+	}
+
+	public void settile(int x, int y, int id) {
+		game.map.setTile(x, y, id);
 	}
 
 }

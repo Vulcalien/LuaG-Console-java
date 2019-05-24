@@ -1,18 +1,18 @@
-package vulc.jlconsole.sfx;
+package vulc.jlconsole.game.sfx;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import vulc.jlconsole.Console;
+import vulc.jlconsole.game.Game;
 
 public abstract class Sounds {
 
 	private static final HashMap<String, Sound> LIST = new HashMap<String, Sound>();
 
 	public static void init() {
-		File sfxDir = new File(Console.USER_DIR + "/sfx");
+		File sfxDir = new File(Game.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
 			System.err.println("Error: 'sfx' folder does not exist");
 			return;

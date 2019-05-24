@@ -1,4 +1,4 @@
-package vulc.jlconsole;
+package vulc.jlconsole.game;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
@@ -10,15 +10,23 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonSyntaxException;
 
-public abstract class ConsoleInterface {
+import vulc.jlconsole.Console;
+
+public abstract class LuaScriptCore {
+
+	private static Console console;
 
 	private static LuaFunction luaTick;
+	private static boolean hasInit = false;
+	private static int loadingTicks = 0;
 
-	public static void init(Console console) {
+	public static void init(Console console, Game game) {
+		LuaScriptCore.console = console;
+
 		Globals globals = JsePlatform.standardGlobals();
 
 		//set variables
-		globals.set("_jinterface", CoerceJavaToLua.coerce(new JavaToLuaInterface(console)));
+		globals.set("_jinterface", CoerceJavaToLua.coerce(new LuaInterface(console, game)));
 
 		globals.set("scr_w", LuaValue.valueOf(Console.WIDTH));
 		globals.set("scr_h", LuaValue.valueOf(Console.HEIGHT));
@@ -31,12 +39,12 @@ public abstract class ConsoleInterface {
 
 		//LOAD USER FILES
 		try {
-			JsonArray list = console.jsonConfig.get("scripts").getAsJsonArray();
+			JsonArray list = game.jsonConfig.get("scripts").getAsJsonArray();
 			for(int i = 0; i < list.size(); i++) {
 				try {
 					String file = (String) list.get(i).getAsString();
 					try {
-						globals.get("dofile").call(Console.USER_DIR + "/script/" + file);
+						globals.get("dofile").call(Game.USER_DIR + "/script/" + file);
 					} catch(LuaError e) {
 						System.err.println("Error: script file not found: " + file);
 					}
@@ -55,14 +63,30 @@ public abstract class ConsoleInterface {
 		//LOAD TICK FUNCTION
 		try {
 			luaTick = globals.get("tick").checkfunction();
+			globals.get("init").checkfunction().call();
+			hasInit = true;
 		} catch(Exception e) {
-			System.err.println("Error: one of your scripts must contain a function 'tick()'");
+			System.err.println("Error: one of your scripts must contain functions 'tick()' and 'init()'");
 			System.exit(1);
 		}
 	}
 
 	public static void tick() {
-		luaTick.call();
+		if(hasInit) {
+			luaTick.call();
+		} else {
+			int phase = loadingTicks / 30 % 4;
+			String text = null;
+			if(phase == 0) text = "Loading";
+			else if(phase == 1) text = "Loading.";
+			else if(phase == 2) text = "Loading..";
+			else if(phase == 3) text = "Loading...";
+
+			console.screen.clear(0);
+			console.screen.write(text, 0xffffff, 1, 1);
+
+			loadingTicks++;
+		}
 	}
 
 }

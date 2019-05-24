@@ -1,16 +1,16 @@
 package vulc.jlconsole.gfx.panel;
 
 import vulc.jlconsole.Console;
-import vulc.jlconsole.gfx.Screen;
 
 public abstract class Panel {
 
 	protected final Console console;
-	protected final Screen screen;
 
-	public Panel(Console console, Screen screen) {
+	public Panel(Console console) {
 		this.console = console;
-		this.screen = screen;
+	}
+
+	public void preInit() {
 	}
 
 	public abstract void tick();
