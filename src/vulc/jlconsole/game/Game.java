@@ -32,9 +32,15 @@ public class Game {
 		Sounds.init();
 		try {
 			atlas = new Bitmap(ImageIO.read(new File(Console.USER_DIR + "/atlas.png")));
+		} catch(IOException e) {
+			System.err.println("Error: 'atlas.png' does not exist");
+			System.exit(1);
+		}
+		try {
 			jsonConfig = new JsonParser().parse(new FileReader(Console.USER_DIR + "/config.json")).getAsJsonObject();
 		} catch(IOException e) {
-			e.printStackTrace();
+			System.err.println("Error: 'config.json' does not exist");
+			System.exit(1);
 		}
 
 		//TODO change map system to a file

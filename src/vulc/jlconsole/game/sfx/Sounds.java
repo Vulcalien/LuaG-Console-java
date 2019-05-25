@@ -15,7 +15,7 @@ public abstract class Sounds {
 		File sfxDir = new File(Console.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
 			System.err.println("Error: 'sfx' folder does not exist");
-			return;
+			System.exit(1);
 		}
 
 		File[] files = sfxDir.listFiles(new FilenameFilter() {

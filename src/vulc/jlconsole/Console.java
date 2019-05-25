@@ -21,7 +21,7 @@ import vulc.jlconsole.input.InputHandler.KeyType;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String VERSION = "0.1.1";
+	public static final String VERSION = "0.1.2 (WIP)";
 	public static final String USER_DIR = "./console-userdata";
 
 	public static final int WIDTH = 150, HEIGHT = 150, SCALE = 3;
