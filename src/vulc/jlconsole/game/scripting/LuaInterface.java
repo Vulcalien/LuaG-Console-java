@@ -30,6 +30,10 @@ public abstract class LuaInterface {
 		env.set("font_w", console.screen.font.lengthOf(' '));
 		env.set("font_h", console.screen.font.getHeight());
 
+		//MAP
+		env.set("map_w", game.map.width);
+		env.set("map_h", game.map.height);
+
 		//FUNCTIONS
 		env.set("key", new key());
 		env.set("settransparent", new settransparent());

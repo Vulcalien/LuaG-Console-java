@@ -5,8 +5,10 @@ import vulc.jlconsole.gfx.Screen;
 
 public class BootPanel extends Panel {
 
-	private int bootTime = 180;
+	private int bootTime = 150;
 	private Panel nextPanel;
+	private boolean hasInit = false;
+	private int animationTicks = 0;
 
 	public BootPanel(Console console, Panel nextPanel) {
 		super(console);
@@ -15,6 +17,7 @@ public class BootPanel extends Panel {
 		new Thread() {
 			public void run() {
 				nextPanel.preInit();
+				hasInit = true;
 			}
 		}.start();
 	}
@@ -28,8 +31,22 @@ public class BootPanel extends Panel {
 
 		bootTime--;
 		if(bootTime <= 0) {
-			console.currentPanel = nextPanel;
-			screen.clear(0);
+			if(hasInit) {
+				console.currentPanel = nextPanel;
+				screen.clear(0);
+			} else {
+				int animatPhase = animationTicks / 30 % 4;
+				String text = null;
+				if(animatPhase == 0) text = "Loading";
+				else if(animatPhase == 1) text = "Loading.";
+				else if(animatPhase == 2) text = "Loading..";
+				else if(animatPhase == 3) text = "Loading...";
+
+				console.screen.clear(0);
+				console.screen.write(text, 0xffffff, 1, 1);
+
+				animationTicks++;
+			}
 		}
 	}
 

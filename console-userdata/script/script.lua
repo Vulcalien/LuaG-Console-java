@@ -18,7 +18,5 @@ function tick()
 	
 	if t % 60 == 0 then sfx("test") end
 	
-	print(gettile(2, 6))
-
 	t = t + 1
 end

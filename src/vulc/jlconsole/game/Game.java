@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -17,27 +18,29 @@ import vulc.jlconsole.game.sfx.Sounds;
 
 public class Game {
 
-	public static final String USER_DIR = "./console-userdata";
-
 	public final Console console;
 	public JsonObject jsonConfig;
 	public Bitmap atlas;
+
+	public Map map;
 
 	public Game(Console console) {
 		this.console = console;
 	}
 
-	//TODO add map file system
-	public Map map = new Map(100, 100);
-
 	public void init() {
 		Sounds.init();
 		try {
-			atlas = new Bitmap(ImageIO.read(new File(USER_DIR + "/atlas.png")));
-			jsonConfig = new JsonParser().parse(new FileReader(USER_DIR + "/config.json")).getAsJsonObject();
+			atlas = new Bitmap(ImageIO.read(new File(Console.USER_DIR + "/atlas.png")));
+			jsonConfig = new JsonParser().parse(new FileReader(Console.USER_DIR + "/config.json")).getAsJsonObject();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+
+		//TODO change map system to a file
+		JsonArray mapSize = jsonConfig.get("map-size").getAsJsonArray();
+		map = new Map(mapSize.get(0).getAsInt(), mapSize.get(1).getAsInt());
+
 		LuaScriptCore.init(console, this);
 	}
 
