@@ -7,13 +7,13 @@ public class GamePanel extends Panel {
 
 	private final Game game;
 
-	public GamePanel(Console console, Game game) {
+	public GamePanel(Console console) {
 		super(console);
-		this.game = game;
+		this.game = new Game(console);
 	}
 
 	public void preInit() {
-		game.init(console);
+		game.init();
 	}
 
 	public void tick() {

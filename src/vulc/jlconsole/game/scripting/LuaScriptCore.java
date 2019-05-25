@@ -1,16 +1,15 @@
-package vulc.jlconsole.game;
+package vulc.jlconsole.game.scripting;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaFunction;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonSyntaxException;
 
 import vulc.jlconsole.Console;
+import vulc.jlconsole.game.Game;
 
 public abstract class LuaScriptCore {
 
@@ -26,16 +25,8 @@ public abstract class LuaScriptCore {
 		Globals globals = JsePlatform.standardGlobals();
 
 		//set variables
-		globals.set("_jinterface", CoerceJavaToLua.coerce(new LuaInterface(console, game)));
 
-		globals.set("scr_w", LuaValue.valueOf(Console.WIDTH));
-		globals.set("scr_h", LuaValue.valueOf(Console.HEIGHT));
-
-		globals.set("font_w", console.screen.font.lengthOf(' '));
-		globals.set("font_h", console.screen.font.getHeight());
-
-		//LOAD INTERFACE FILE
-		globals.get("dofile").call("/res/interface.lua");
+		LuaInterface.init(console, game, globals);
 
 		//LOAD USER FILES
 		try {
@@ -66,7 +57,7 @@ public abstract class LuaScriptCore {
 			globals.get("init").checkfunction().call();
 			hasInit = true;
 		} catch(Exception e) {
-			System.err.println("Error: one of your scripts must contain functions 'tick()' and 'init()'");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

@@ -12,21 +12,25 @@ import com.google.gson.JsonParser;
 import vulc.bitmap.Bitmap;
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.map.Map;
+import vulc.jlconsole.game.scripting.LuaScriptCore;
 import vulc.jlconsole.game.sfx.Sounds;
 
 public class Game {
 
 	public static final String USER_DIR = "./console-userdata";
 
-	public Console console;
+	public final Console console;
 	public JsonObject jsonConfig;
 	public Bitmap atlas;
+
+	public Game(Console console) {
+		this.console = console;
+	}
 
 	//TODO add map file system
 	public Map map = new Map(100, 100);
 
-	public void init(Console console) {
-		this.console = console;
+	public void init() {
 		Sounds.init();
 		try {
 			atlas = new Bitmap(ImageIO.read(new File(USER_DIR + "/atlas.png")));

@@ -10,7 +10,6 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
-import vulc.jlconsole.game.Game;
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.BootPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
@@ -29,7 +28,7 @@ public class Console extends Canvas implements Runnable {
 	public final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
 	public final Screen screen = new Screen(WIDTH, HEIGHT);
-	public Panel currentPanel = new BootPanel(this, new GamePanel(this, new Game()));
+	public Panel currentPanel = new BootPanel(this, new GamePanel(this));
 
 	public Key[] keys = {
 		new Key(KeyType.KEYBOARD, KeyEvent.VK_W),
