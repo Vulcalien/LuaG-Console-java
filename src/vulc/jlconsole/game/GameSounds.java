@@ -1,4 +1,4 @@
-package vulc.jlconsole.game.sfx;
+package vulc.jlconsole.game;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -6,12 +6,13 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 import vulc.jlconsole.Console;
+import vulc.jlconsole.sfx.Sound;
 
-public abstract class Sounds {
+public class GameSounds {
 
-	private static final HashMap<String, Sound> LIST = new HashMap<String, Sound>();
+	private final HashMap<String, Sound> list = new HashMap<String, Sound>();
 
-	public static void init() {
+	public void init() {
 		File sfxDir = new File(Console.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
 			System.err.println("Error: 'sfx' folder does not exist");
@@ -28,15 +29,15 @@ public abstract class Sounds {
 			String name = soundFile.getName();
 			name = name.substring(0, name.lastIndexOf('.'));
 			try {
-				LIST.put(name, new Sound(soundFile.toURI().toURL()));
+				list.put(name, new Sound(soundFile.toURI().toURL()));
 			} catch(MalformedURLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public static Sound get(String name) {
-		return LIST.get(name);
+	public Sound get(String name) {
+		return list.get(name);
 	}
 
 }

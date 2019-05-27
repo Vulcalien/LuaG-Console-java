@@ -10,21 +10,20 @@ import org.luaj.vm2.lib.VarArgFunction;
 
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
-import vulc.jlconsole.game.sfx.Sound;
-import vulc.jlconsole.game.sfx.Sounds;
+import vulc.jlconsole.sfx.Sound;
 
-public abstract class LuaInterface {
+public class LuaInterface {
 
-	private static Console console;
-	private static Game game;
+	private Console console;
+	private Game game;
 
-	public static void init(Console console, Game game, Globals env) {
-		LuaInterface.console = console;
-		LuaInterface.game = game;
+	public void init(Console console, Game game, Globals env) {
+		this.console = console;
+		this.game = game;
 
 		//SCREEN
-		env.set("scr_w", Console.WIDTH);
-		env.set("scr_h", Console.HEIGHT);
+		env.set("scr_w", console.screen.width);
+		env.set("scr_h", console.screen.height);
 
 		//FONT
 		env.set("font_w", console.screen.font.lengthOf(' '));
@@ -46,27 +45,27 @@ public abstract class LuaInterface {
 		env.set("settile", new settile());
 	}
 
-	private static class key extends OneArgFunction {
+	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(console.keys[id.checkint()].isKeyDown());
+			return valueOf(Game.KEYS[id.checkint()].isKeyDown());
 		}
 	}
 
-	private static class settransparent extends OneArgFunction {
+	private class settransparent extends OneArgFunction {
 		public LuaValue call(LuaValue color) {
 			console.screen.setTransparent(color.checkint());
 			return NIL;
 		}
 	}
 
-	private static class clear extends OneArgFunction {
+	private class clear extends OneArgFunction {
 		public LuaValue call(LuaValue color) {
 			console.screen.clear(color.checkint());
 			return NIL;
 		}
 	}
 
-	private static class pix extends VarArgFunction {
+	private class pix extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			int x = args.arg(1).checkint();
 			int y = args.arg(2).checkint();
@@ -83,7 +82,7 @@ public abstract class LuaInterface {
 		}
 	}
 
-	private static class write extends VarArgFunction {
+	private class write extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			String text = args.arg(1).checkjstring();
 			int color = args.arg(2).checkint();
@@ -95,7 +94,7 @@ public abstract class LuaInterface {
 		}
 	}
 
-	private static class spr extends VarArgFunction {
+	private class spr extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			int x = args.arg(1).checkint();
 			int y = args.arg(2).checkint();
@@ -109,9 +108,9 @@ public abstract class LuaInterface {
 		}
 	}
 
-	private static class sfx extends OneArgFunction {
+	private class sfx extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
-			Sound sound = Sounds.get(name.checkjstring());
+			Sound sound = game.sounds.get(name.checkjstring());
 			if(sound == null) {
 				System.err.println("Error: sound '" + name + "' does not exist");
 			} else {
@@ -121,13 +120,13 @@ public abstract class LuaInterface {
 		}
 	}
 
-	private static class gettile extends TwoArgFunction {
+	private class gettile extends TwoArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y) {
 			return valueOf(game.map.getTile(x.checkint(), y.checkint()));
 		}
 	}
 
-	private static class settile extends ThreeArgFunction {
+	private class settile extends ThreeArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y, LuaValue id) {
 			game.map.setTile(x.checkint(), y.checkint(), id.checkint());
 			return NIL;

@@ -14,7 +14,7 @@ function tick()
 
 	write("ciaoo", 0xffffff, 100, 100)
 
-	spr(50, 50, 0, 0, 8, 8)
+	spr(t, 50, 0, 0, 8, 8)
 
 	if t % 60 == 0 then sfx("test") end
 

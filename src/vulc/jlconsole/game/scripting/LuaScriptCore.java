@@ -11,14 +11,16 @@ import com.google.gson.JsonSyntaxException;
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
 
-public abstract class LuaScriptCore {
+public class LuaScriptCore {
 
-	private static LuaFunction luaTick;
+	private final LuaInterface luaInterface = new LuaInterface();
 
-	public static void init(Console console, Game game) {
+	private LuaFunction luaTick;
+
+	public void init(Console console, Game game) {
 		Globals globals = JsePlatform.standardGlobals();
 
-		LuaInterface.init(console, game, globals);
+		luaInterface.init(console, game, globals);
 
 		//LOAD USER FILES
 		try {
@@ -53,7 +55,7 @@ public abstract class LuaScriptCore {
 		}
 	}
 
-	public static void tick() {
+	public void tick() {
 		luaTick.call();
 	}
 

@@ -8,12 +8,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import vulc.jlconsole.Console;
 
-public class InputHandler implements KeyListener, MouseListener {
+public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
 
 	public static enum KeyType {KEYBOARD, MOUSE}
 	public static enum KeyAction {PRESS, RELEASE}
@@ -21,10 +22,14 @@ public class InputHandler implements KeyListener, MouseListener {
 	public static final List<Key> KEYBOARD_KEYS = new ArrayList<Key>();
 	public static final List<Key> MOUSE_KEYS = new ArrayList<Key>();
 
+	public static int xMouse = -1;
+	public static int yMouse = -1;
+
 	public static void init(Console app) {
 		InputHandler instance = new InputHandler();
 		app.addKeyListener(instance);
 		app.addMouseListener(instance);
+		app.addMouseMotionListener(instance);
 
 		app.requestFocus();
 	}
@@ -94,6 +99,16 @@ public class InputHandler implements KeyListener, MouseListener {
 	}
 
 	public void mouseExited(MouseEvent e) {
+	}
+
+	public void mouseDragged(MouseEvent e) {
+		xMouse = e.getX();
+		yMouse = e.getY();
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		xMouse = e.getX();
+		yMouse = e.getY();
 	}
 
 	public static class Key {
