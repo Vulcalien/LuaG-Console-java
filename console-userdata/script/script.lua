@@ -8,8 +8,13 @@ function init()
 end
 
 t = 0
+x = math.floor(scr_w / 2) - 4
+y = math.floor(scr_h / 2) - 4
 function tick()
-	if key(3) then print("d") end
+	if key(0) then y = y - 1 end
+	if key(1) then x = x - 1 end
+	if key(2) then y = y + 1 end
+	if key(3) then x = x + 1 end
 
 	clear(0x555555)
 	pix(5, 5, 0xff0000)
@@ -17,7 +22,7 @@ function tick()
 
 	write("ciaoo", 0xffffff, 100, 100)
 
-	spr(t, 50, 0, 0, 8, 8)
+	spr(x, y, 0, 0, 8, 8)
 
 	if t % 60 == 0 then sfx("test") end
 
