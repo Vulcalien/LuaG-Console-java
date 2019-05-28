@@ -2,12 +2,13 @@ package vulc.jlconsole.game;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -55,9 +56,12 @@ public class Game {
 			System.exit(1);
 		}
 
-		//TODO change map system to a file
-		JsonArray mapSize = jsonConfig.get("map-size").getAsJsonArray();
-		map = new Map(mapSize.get(0).getAsInt(), mapSize.get(1).getAsInt());
+		try {
+			map = Map.load(new FileInputStream(Console.USER_DIR + "/map"));
+		} catch(FileNotFoundException e) {
+			System.err.println("Error: file 'map' not found");
+			System.exit(1);
+		}
 
 		scriptCore.init(console, this);
 	}

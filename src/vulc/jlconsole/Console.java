@@ -20,6 +20,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static final String VERSION = "0.1.2 (WIP)";
 	public static final String USER_DIR = "./console-userdata";
+	public static String[] args;
 
 	private static final int WIDTH = 150, HEIGHT = 150, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -61,10 +62,12 @@ public class Console extends Canvas implements Runnable {
 
 	private void init() {
 		InputHandler.init(this);
+		Debug.init(this);
 	}
 
 	private void tick() {
 		currentPanel.tick();
+		Debug.tick();
 		InputHandler.tick();
 
 		render();
@@ -77,9 +80,6 @@ public class Console extends Canvas implements Runnable {
 			return;
 		}
 
-		screen.clear(0);
-		screen.write(InputHandler.xMouse + " " + InputHandler.yMouse, 0xff0000, 0, 0);
-
 		for(int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
 		}
@@ -91,6 +91,9 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
+		Console.args = args;
+		Debug.onStartup();
+
 		JFrame frame = new JFrame("LuaJ Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

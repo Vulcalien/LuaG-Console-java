@@ -1,7 +1,10 @@
 settransparent(0xff00ff)
 
 function init()
-
+	print("scr_w: " .. scr_w)
+	print("scr_h: " .. scr_h)
+	print("map_w: " .. map_w)
+	print("map_h: " .. map_h)
 end
 
 t = 0
