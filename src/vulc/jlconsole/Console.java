@@ -22,7 +22,7 @@ public class Console extends Canvas implements Runnable {
 	public static final String USER_DIR = "./console-userdata";
 	public static String[] args;
 
-	private static final int WIDTH = 150, HEIGHT = 150, SCALE = 3;
+	private static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
