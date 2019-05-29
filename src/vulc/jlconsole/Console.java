@@ -18,7 +18,7 @@ import vulc.jlconsole.input.InputHandler;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String VERSION = "0.1.2 (WIP)";
+	public static final String VERSION = "0.1.2";
 	public static final String USER_DIR = "./console-userdata";
 	public static String[] args;
 
@@ -94,7 +94,7 @@ public class Console extends Canvas implements Runnable {
 		Console.args = args;
 		Debug.onStartup();
 
-		JFrame frame = new JFrame("LuaJ Test");
+		JFrame frame = new JFrame("Vulc's Java-Lua Console " + VERSION);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 

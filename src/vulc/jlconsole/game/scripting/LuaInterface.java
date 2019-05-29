@@ -16,10 +16,12 @@ public class LuaInterface {
 
 	private Console console;
 	private Game game;
+	private Globals env;
 
 	public void init(Console console, Game game, Globals env) {
 		this.console = console;
 		this.game = game;
+		this.env = env;
 
 		//SCREEN
 		env.set("scr_w", console.screen.width);
@@ -43,6 +45,8 @@ public class LuaInterface {
 		env.set("sfx", new sfx());
 		env.set("gettile", new gettile());
 		env.set("settile", new settile());
+
+		env.set("loadscript", new loadscript());
 	}
 
 	private class key extends OneArgFunction {
@@ -129,6 +133,13 @@ public class LuaInterface {
 	private class settile extends ThreeArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y, LuaValue id) {
 			game.map.setTile(x.checkint(), y.checkint(), id.checkint());
+			return NIL;
+		}
+	}
+
+	private class loadscript extends OneArgFunction {
+		public LuaValue call(LuaValue script) {
+			env.get("dofile").call(Console.USER_DIR + "/script/" + script);
 			return NIL;
 		}
 	}

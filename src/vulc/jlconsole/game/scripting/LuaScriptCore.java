@@ -5,9 +5,6 @@ import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonSyntaxException;
-
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
 
@@ -22,26 +19,10 @@ public class LuaScriptCore {
 
 		luaInterface.init(console, game, globals);
 
-		//LOAD USER FILES
 		try {
-			JsonArray list = game.jsonConfig.get("scripts").getAsJsonArray();
-			for(int i = 0; i < list.size(); i++) {
-				try {
-					String file = (String) list.get(i).getAsString();
-					try {
-						globals.get("dofile").call(Console.USER_DIR + "/script/" + file);
-					} catch(LuaError e) {
-						System.err.println("Error: script file not found: " + file);
-					}
-				} catch(ClassCastException e) {
-					System.err.println("Error: json's 'scripts' array contains a non-string value");
-				}
-			}
-		} catch(JsonSyntaxException e) {
-			System.err.println("Error: config.json is malformed");
-			System.exit(1);
-		} catch(Exception e) {
-			System.err.println("Error: config.json must contain an array called 'scripts'");
+			globals.get("dofile").call(Console.USER_DIR + "/script/main.lua");
+		} catch(LuaError e) {
+			System.err.println("Error: 'main.lua' not found");
 			System.exit(1);
 		}
 
@@ -50,7 +31,7 @@ public class LuaScriptCore {
 			luaTick = globals.get("tick").checkfunction();
 			globals.get("init").checkfunction().call();
 		} catch(Exception e) {
-			e.printStackTrace();
+			System.err.println("Error: functions 'tick' and 'init' must be defined");
 			System.exit(1);
 		}
 	}
