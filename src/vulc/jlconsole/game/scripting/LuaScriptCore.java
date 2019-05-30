@@ -31,7 +31,7 @@ public class LuaScriptCore {
 			luaTick = globals.get("tick").checkfunction();
 			globals.get("init").checkfunction().call();
 		} catch(Exception e) {
-			System.err.println("Error: functions 'tick' and 'init' must be defined");
+			e.printStackTrace();
 			System.exit(1);
 		}
 	}

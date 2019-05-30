@@ -10,6 +10,9 @@ public abstract class Panel {
 		this.console = console;
 	}
 
+	public void init() {
+	}
+
 	public abstract void tick();
 
 }

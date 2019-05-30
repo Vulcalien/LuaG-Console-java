@@ -54,8 +54,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 				} else if(action == KeyAction.RELEASE) {
 					key.isReleased = true;
 				}
-
-				return;
 			}
 		}
 	}

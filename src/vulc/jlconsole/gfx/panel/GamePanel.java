@@ -3,7 +3,7 @@ package vulc.jlconsole.gfx.panel;
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
 
-public class GamePanel extends BootablePanel {
+public class GamePanel extends Panel {
 
 	private final Game game;
 
@@ -12,7 +12,7 @@ public class GamePanel extends BootablePanel {
 		this.game = new Game(console);
 	}
 
-	public void preInit() {
+	public void init() {
 		game.init();
 	}
 

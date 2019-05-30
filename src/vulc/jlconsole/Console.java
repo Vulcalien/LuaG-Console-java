@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.BootPanel;
+import vulc.jlconsole.gfx.panel.CmdPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 import vulc.jlconsole.input.InputHandler;
@@ -18,16 +19,15 @@ import vulc.jlconsole.input.InputHandler;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String VERSION = "0.1.2";
+	public static final String VERSION = "0.1.3 (WIP)";
 	public static final String USER_DIR = "./console-userdata";
-	public static String[] args;
 
 	private static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
 	public final Screen screen = new Screen(WIDTH, HEIGHT);
-	public Panel currentPanel = new BootPanel(this, new GamePanel(this));
+	public Panel currentPanel;
 
 	public void run() {
 		int ticksPerSecond = 60;
@@ -60,14 +60,30 @@ public class Console extends Canvas implements Runnable {
 		}
 	}
 
-	private void init() {
+	private void init(String[] args) {
 		InputHandler.init(this);
-		Debug.init(this);
+
+		Panel nextPanel = null;
+		if(args.length > 0) {
+			switch(args[0]) {
+				case "-run":
+					nextPanel = new GamePanel(this);
+					break;
+
+				default:
+					System.err.println("Error: invalid boot argument");
+					System.exit(1);
+			}
+		} else {
+			nextPanel = new CmdPanel(this);
+		}
+
+		currentPanel = new BootPanel(this, nextPanel);
+		currentPanel.init();
 	}
 
 	private void tick() {
 		currentPanel.tick();
-		Debug.tick();
 		InputHandler.tick();
 
 		render();
@@ -91,9 +107,6 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		Console.args = args;
-		Debug.onStartup();
-
 		JFrame frame = new JFrame("Vulc's Java-Lua Console " + VERSION);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
@@ -107,7 +120,7 @@ public class Console extends Canvas implements Runnable {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 
-		instance.init();
+		instance.init(args);
 
 		frame.setVisible(true);
 		new Thread(instance).start();
