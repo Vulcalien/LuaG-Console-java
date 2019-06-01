@@ -16,6 +16,7 @@ import vulc.bitmap.Bitmap;
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.map.Map;
 import vulc.jlconsole.game.scripting.LuaScriptCore;
+import vulc.jlconsole.input.InputHandler;
 import vulc.jlconsole.input.InputHandler.Key;
 import vulc.jlconsole.input.InputHandler.KeyType;
 
@@ -28,15 +29,16 @@ public class Game {
 	public final GameSounds sounds = new GameSounds();
 
 	public JsonObject jsonConfig;
+	public InputHandler input = new InputHandler();
 	public Bitmap atlas;
 
 	public Map map;
 
-	public static final Key[] KEYS = {
-		new Key(KeyType.KEYBOARD, KeyEvent.VK_W),
-		new Key(KeyType.KEYBOARD, KeyEvent.VK_A),
-		new Key(KeyType.KEYBOARD, KeyEvent.VK_S),
-		new Key(KeyType.KEYBOARD, KeyEvent.VK_D)
+	public final Key[] KEYS = {
+		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W),
+		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_A),
+		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S),
+		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D)
 	};
 
 	public Game(Console console) {
@@ -71,11 +73,13 @@ public class Game {
 	}
 
 	public void initScript() {
+		input.init(console);
 		scriptCore.init(console, this);
 	}
 
 	public void tick() {
 		scriptCore.tick();
+		input.tick();
 	}
 
 	public Bitmap getSprite(int x, int y, int w, int h) {

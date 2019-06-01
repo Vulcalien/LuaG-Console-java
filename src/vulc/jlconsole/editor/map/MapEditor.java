@@ -12,15 +12,16 @@ import vulc.jlconsole.input.InputHandler.KeyType;
 
 public class MapEditor extends Editor {
 
-	private static final Key
-	MOUSE_1 = new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
+	private final InputHandler input = new InputHandler();
+	private final Key
+	MOUSE_1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 
 	private int xOffset = 0, yOffset = 0;
-
 	private int selectedTile = 1;
 
 	public MapEditor(Console console, EditorPanel panel) {
 		super(console, panel);
+		input.init(console);
 	}
 
 	public void tick() {
@@ -28,8 +29,8 @@ public class MapEditor extends Editor {
 
 		mouse_if:
 		if(MOUSE_1.isKeyDown()) {
-			int xt = (InputHandler.xMouse - xOffset) / 8 / Console.SCALE;
-			int yt = (InputHandler.yMouse - yOffset - 10 * Console.SCALE) / 8 / Console.SCALE;
+			int xt = (input.xMouse - xOffset) / 8 / Console.SCALE;
+			int yt = (input.yMouse - yOffset - 10 * Console.SCALE) / 8 / Console.SCALE;
 
 			if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) break mouse_if;
 

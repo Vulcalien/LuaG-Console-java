@@ -19,22 +19,20 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public static enum KeyType {KEYBOARD, MOUSE}
 	public static enum KeyAction {PRESS, RELEASE}
 
-	public static final List<Key> KEYBOARD_KEYS = new ArrayList<Key>();
-	public static final List<Key> MOUSE_KEYS = new ArrayList<Key>();
+	private final List<Key> KEYBOARD_KEYS = new ArrayList<Key>();
+	private final List<Key> MOUSE_KEYS = new ArrayList<Key>();
 
-	public static int xMouse = -1;
-	public static int yMouse = -1;
+	public int xMouse = -1, yMouse = -1;
 
-	public static void init(Console app) {
-		InputHandler instance = new InputHandler();
-		app.addKeyListener(instance);
-		app.addMouseListener(instance);
-		app.addMouseMotionListener(instance);
+	public void init(Console console) {
+		console.addKeyListener(this);
+		console.addMouseListener(this);
+		console.addMouseMotionListener(this);
 
-		app.requestFocus();
+		console.requestFocus();
 	}
 
-	public static void tick() {
+	public void tick() {
 		for(int i = 0; i < KEYBOARD_KEYS.size(); i++) {
 			KEYBOARD_KEYS.get(i).tick();
 		}
@@ -43,7 +41,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		}
 	}
 
-	private static void receiveInput(KeyAction action, KeyType type, int code) {
+	private void receiveInput(KeyAction action, KeyType type, int code) {
 		List<Key> keys = getList(type);
 		for(int i = 0; i < keys.size(); i++) {
 			Key key = keys.get(i);
@@ -58,7 +56,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		}
 	}
 
-	private static List<Key> getList(KeyType type) {
+	private List<Key> getList(KeyType type) {
 		switch(type) {
 			case KEYBOARD:
 				return KEYBOARD_KEYS;
@@ -109,7 +107,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		yMouse = e.getY();
 	}
 
-	public static class Key {
+	public class Key {
 
 		private KeyType type;
 		private int code;

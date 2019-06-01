@@ -52,7 +52,7 @@ public class LuaInterface {
 
 	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(Game.KEYS[id.checkint()].isKeyDown());
+			return valueOf(game.KEYS[id.checkint()].isKeyDown());
 		}
 	}
 

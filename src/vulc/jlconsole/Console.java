@@ -15,7 +15,6 @@ import vulc.jlconsole.gfx.panel.CmdPanel;
 import vulc.jlconsole.gfx.panel.EditorPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
-import vulc.jlconsole.input.InputHandler;
 
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
@@ -61,8 +60,6 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	private void init(String[] args) {
-		InputHandler.init(this);
-
 		Panel nextPanel = null;
 		if(args.length > 0) {
 			switch(args[0]) {
@@ -88,7 +85,6 @@ public class Console extends Canvas implements Runnable {
 
 	private void tick() {
 		currentPanel.tick();
-		InputHandler.tick();
 
 		render();
 	}
