@@ -3,6 +3,9 @@ package vulc.jlconsole.game.map;
 import java.io.IOException;
 import java.io.InputStream;
 
+import vulc.jlconsole.game.Game;
+import vulc.jlconsole.gfx.Screen;
+
 public class Map {
 
 	public final int width, height;
@@ -14,12 +17,22 @@ public class Map {
 		this.tiles = new byte[w * h];
 	}
 
-	public byte getTile(int x, int y) {
-		return tiles[x + y * width];
+	public void render(Screen screen, Game game, int xOffset, int yOffset, int scale) {
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				int id = getTile(x, y);
+
+				screen.draw(game.getSprite(id % 16, id / 16, 1, 1).getScaled(scale), xOffset + x * 8 * scale, yOffset + y * 8 * scale);
+			}
+		}
+	}
+
+	public int getTile(int x, int y) {
+		return tiles[x + y * width] + 128;
 	}
 
 	public void setTile(int x, int y, int id) {
-		tiles[x + y * width] = (byte) id;
+		tiles[x + y * width] = (byte) (id - 128);
 	}
 
 	public static Map load(InputStream input) {

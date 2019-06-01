@@ -20,7 +20,7 @@ public class LuaScriptCore {
 		luaInterface.init(console, game, globals);
 
 		try {
-			globals.get("dofile").call(Console.USER_DIR + "/script/main.lua");
+			globals.get("dofile").call(Game.USER_DIR + "/script/main.lua");
 		} catch(LuaError e) {
 			System.err.println("Error: 'main.lua' not found");
 			System.exit(1);

@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.BootPanel;
 import vulc.jlconsole.gfx.panel.CmdPanel;
+import vulc.jlconsole.gfx.panel.EditorPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 import vulc.jlconsole.input.InputHandler;
@@ -20,9 +21,8 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String VERSION = "0.1.3 (WIP)";
-	public static final String USER_DIR = "./console-userdata";
 
-	private static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
+	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
@@ -68,6 +68,10 @@ public class Console extends Canvas implements Runnable {
 			switch(args[0]) {
 				case "-run":
 					nextPanel = new GamePanel(this);
+					break;
+
+				case "-editor":
+					nextPanel = new EditorPanel(this);
 					break;
 
 				default:

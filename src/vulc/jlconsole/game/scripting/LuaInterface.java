@@ -45,6 +45,7 @@ public class LuaInterface {
 		env.set("sfx", new sfx());
 		env.set("gettile", new gettile());
 		env.set("settile", new settile());
+		env.set("maprender", new maprender());
 
 		env.set("loadscript", new loadscript());
 	}
@@ -100,14 +101,16 @@ public class LuaInterface {
 
 	private class spr extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
-			int x = args.arg(1).checkint();
-			int y = args.arg(2).checkint();
-			int xs = args.arg(3).checkint();
-			int ys = args.arg(4).checkint();
-			int ws = args.arg(5).checkint();
-			int hs = args.arg(6).checkint();
+			int id = args.arg(1).checkint();
+			int x = args.arg(2).checkint();
+			int y = args.arg(3).checkint();
 
-			console.screen.draw(game.atlas.getSubimage(xs, ys, ws, hs), x, y);
+			int scale = args.arg(4).isnil() ? 1 : args.arg(4).checkint();
+
+			int sw = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
+			int sh = args.arg(6).isnil() ? 1 : args.arg(6).checkint();
+
+			console.screen.draw(game.getSprite(id % 16, id / 16, sw, sh).getScaled(scale), x, y);
 			return NIL;
 		}
 	}
@@ -137,9 +140,20 @@ public class LuaInterface {
 		}
 	}
 
+	private class maprender extends ThreeArgFunction {
+		public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
+			int x = arg1.isnil() ? 0 : arg1.checkint();
+			int y = arg2.isnil() ? 0 : arg2.checkint();
+			int scale = arg3.isnil() ? 1 : arg3.checkint();
+
+			game.map.render(console.screen, game, x, y, scale);
+			return NIL;
+		}
+	}
+
 	private class loadscript extends OneArgFunction {
 		public LuaValue call(LuaValue script) {
-			env.get("dofile").call(Console.USER_DIR + "/script/" + script);
+			env.get("dofile").call(Game.USER_DIR + "/script/" + script);
 			return NIL;
 		}
 	}

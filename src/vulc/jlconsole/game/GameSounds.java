@@ -5,7 +5,6 @@ import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
-import vulc.jlconsole.Console;
 import vulc.jlconsole.sfx.Sound;
 
 public class GameSounds {
@@ -13,7 +12,7 @@ public class GameSounds {
 	private final HashMap<String, Sound> list = new HashMap<String, Sound>();
 
 	public void init() {
-		File sfxDir = new File(Console.USER_DIR + "/sfx");
+		File sfxDir = new File(Game.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
 			System.err.println("Error: 'sfx' folder does not exist");
 			System.exit(1);

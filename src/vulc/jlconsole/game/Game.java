@@ -21,6 +21,8 @@ import vulc.jlconsole.input.InputHandler.KeyType;
 
 public class Game {
 
+	public static final String USER_DIR = "./console-userdata";
+
 	public final Console console;
 	public final LuaScriptCore scriptCore = new LuaScriptCore();
 	public final GameSounds sounds = new GameSounds();
@@ -41,33 +43,43 @@ public class Game {
 		this.console = console;
 	}
 
-	public void init() {
+	public void initResources() {
 		sounds.init();
 		try {
-			atlas = new Bitmap(ImageIO.read(new File(Console.USER_DIR + "/atlas.png")));
+			atlas = new Bitmap(ImageIO.read(new File(Game.USER_DIR + "/atlas.png")));
+			if(atlas.width != 128 || atlas.height != 128) {
+				System.err.println("Error: atlas must be 128x128 (256 sprites)");
+				System.exit(1);
+			}
 		} catch(IOException e) {
 			System.err.println("Error: 'atlas.png' does not exist");
 			System.exit(1);
 		}
 		try {
-			jsonConfig = new JsonParser().parse(new FileReader(Console.USER_DIR + "/config.json")).getAsJsonObject();
+			jsonConfig = new JsonParser().parse(new FileReader(Game.USER_DIR + "/config.json")).getAsJsonObject();
 		} catch(IOException e) {
 			System.err.println("Error: 'config.json' does not exist");
 			System.exit(1);
 		}
 
 		try {
-			map = Map.load(new FileInputStream(Console.USER_DIR + "/map"));
+			map = Map.load(new FileInputStream(Game.USER_DIR + "/map"));
 		} catch(FileNotFoundException e) {
 			System.err.println("Error: file 'map' not found");
 			System.exit(1);
 		}
+	}
 
+	public void initScript() {
 		scriptCore.init(console, this);
 	}
 
 	public void tick() {
 		scriptCore.tick();
+	}
+
+	public Bitmap getSprite(int x, int y, int w, int h) {
+		return atlas.getSubimage(x * 8, y * 8, w * 8, h * 8);
 	}
 
 }

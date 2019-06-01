@@ -13,7 +13,8 @@ public class GamePanel extends Panel {
 	}
 
 	public void init() {
-		game.init();
+		game.initResources();
+		game.initScript();
 	}
 
 	public void tick() {

@@ -17,12 +17,14 @@ function tick()
 	if key(3) then x = x + 1 end
 
 	clear(0x555555)
+	maprender()
+
 	pix(5, 5, 0xff0000)
 	pix(8, 8, 0x00ff00, 5, 2)
 
 	write("ciaoo", 0xffffff, 100, 100)
 
-	spr(x, y, 0, 0, 8, 8)
+	spr(255, x - 4, y - 4, 1)
 
 	if t % 60 == 0 then sfx("test") end
 
