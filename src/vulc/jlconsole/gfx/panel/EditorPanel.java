@@ -9,20 +9,24 @@ import vulc.jlconsole.gfx.Screen;
 public class EditorPanel extends Panel {
 
 	public final Game game;
-	public final Screen screen;
+	public final Screen innerScreen;
+
+	public final int[] margins = {10, 0, 10, 0};
 
 	public final Editor
 	mapEditor;
 
 	public Editor currentEditor;
 
+	//TODO switch to a GUI based interface
 	public EditorPanel(Console console) {
 		super(console);
 		this.game = new Game(console);
 
+		innerScreen = new Screen(console.screen.width - margins[1] - margins[3], console.screen.height - margins[0] - margins[2]);
+
 		mapEditor = new MapEditor(console, this);
 
-		screen = new Screen(console.screen.width, console.screen.height - 20);
 		currentEditor = mapEditor;
 	}
 
@@ -33,7 +37,7 @@ public class EditorPanel extends Panel {
 	public void tick() {
 		currentEditor.tick();
 		console.screen.clear(0xDD4444);
-		console.screen.draw(screen, 0, 10);
+		console.screen.draw(innerScreen, margins[1], margins[0]);
 	}
 
 }

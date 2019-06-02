@@ -5,16 +5,18 @@ import vulc.bitmap.Font;
 
 public class Screen extends Bitmap {
 
-	public final Font font;
+	public static final Font FONT;
+	static {
+		FONT = new Font(Screen.class.getResourceAsStream("/res/font.lwfont"));
+		FONT.setLetterSpacing(1);
+	}
 
 	public Screen(int width, int height) {
 		super(width, height);
-		font = new Font(Screen.class.getResourceAsStream("/res/font.lwfont"));
-		font.setLetterSpacing(1);
 	}
 
 	public void write(String text, int color, int x, int y) {
-		font.write(text, color, this, x, y);
+		FONT.write(text, color, this, x, y);
 	}
 
 }

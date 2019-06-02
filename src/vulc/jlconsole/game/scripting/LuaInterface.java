@@ -10,6 +10,7 @@ import org.luaj.vm2.lib.VarArgFunction;
 
 import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
+import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.sfx.Sound;
 
 public class LuaInterface {
@@ -28,8 +29,8 @@ public class LuaInterface {
 		env.set("scr_h", console.screen.height);
 
 		//FONT
-		env.set("font_w", console.screen.font.lengthOf(' '));
-		env.set("font_h", console.screen.font.getHeight());
+		env.set("font_w", Screen.FONT.lengthOf(' '));
+		env.set("font_h", Screen.FONT.getHeight());
 
 		//MAP
 		env.set("map_w", game.map.width);

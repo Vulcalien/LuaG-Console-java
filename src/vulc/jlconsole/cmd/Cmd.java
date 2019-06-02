@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vulc.jlconsole.Console;
+import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 
@@ -29,7 +30,7 @@ public class Cmd {
 		}
 
 		for(int i = 0; i < lines.size(); i++) {
-			console.screen.write(lines.get(i), 0xffffff, 1, i * (console.screen.font.getHeight() + 1));
+			console.screen.write(lines.get(i), 0xffffff, 1, i * (Screen.FONT.getHeight() + 1));
 		}
 	}
 
