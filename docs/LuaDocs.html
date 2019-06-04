@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <title>Lua Documentation - Java Lua Console</title>
+</head>
+<body>
+
+<header>
+    <h1 align="center">Java Lua Console</h1>
+    Author: Vulcalien<br>
+    Console version: 1.13<br>
+    <a href="https://github.com/Vulcalien/Java-Lua-Console">GitHub</a>
+</header>
+
+<main>
+    <h1 align="center">Lua Documentation</h1>
+
+    <h1>Variables</h1>
+    <div class="item" id="scr_w, scr_h">
+        <h2>scr_w, scr_h</h2>
+        scr_w - the screen width<br>
+        scr_h - the screen height
+    </div>
+    <div class="item" id="font_w, font_h">
+        <h2>font_w, font_h</h2>
+        font_w - the width of font's characters (the font is monospaced)<br>
+        font_h - the height of font's characters
+    </div>
+    <div class="item" id="map_w, map_h">
+        <h2>map_w, map_h</h2>
+        map_w - the width of the map<br>
+        map_h - the height of the map
+    </div>
+
+    <br>
+    <br>
+
+    <h1>General Functions</h1>
+    <div class="item" id="loadscript">
+        <h2>loadscript(script)</h2>
+        <ol>
+            <li>script (String) - the path of the script to be loaded</li>
+        </ol>
+        Calls 'dofile' for the given script.<br>
+        The script path is relative to 'console-userdata/script'.<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="key">
+        <h2>key(id)</h2>
+        <ol>
+            <li>id (int) - the id of the key</li>
+        </ol>
+        key(0) -> W<br>
+        key(1) -> A<br>
+        key(2) -> S<br>
+        key(3) -> D<br>
+        <br>
+        returns: true if the key is pressed, else false
+    </div>
+    <div class="item" id="sfx">
+        <h2>sfx(name)</h2>
+        <ol>
+            <li>name (String) - the name of the sound. The '.wav' hasn't to be added</li>
+        </ol>
+        Plays a sound contained in the 'sfx' folder.<br>
+        Prints an error message if the sound does not exist.<br>
+        <br>
+        Example:
+        <div class="code">sfx("test")</div>
+        will play 'test.wav'.<br>
+        <br>
+        returns: nil
+    </div>
+
+    <br>
+    <br>
+
+    <h1>Screen Functions</h1>
+    <div class="item" id=""></div>
+
+    <br>
+    <br>
+
+    <h1>Map Functions</h1>
+    <div class="item" id="gettile">
+        <h2>gettile(x, y)</h2>
+        <ol>
+            <li>x (int) - tile's x</li>
+            <li>y (int) - tile's y</li>
+        </ol>
+
+        returns: the tile's id (int)
+    </div>
+    <div class="item" id="settile">
+        <h2>settile(x, y, id)</h2>
+        <ol>
+            <li>x (int) - tile's x</li>
+            <li>y (int) - tile's y</li>
+            <li>id (int) - tile's id</li>
+        </ol>
+        Sets to [id] the tile at [x, y]<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="maprender">
+        <h2>maprender([scale [, x [, y)</h2>
+        <ol>
+            <li>scale (int) def: 1 - the render scale</li>
+            <li>x (int) def: 0 - the render offset x</li>
+            <li>y (int) def: 0 - the render offset y</li>
+        </ol>
+        Renders the map.<br>
+        <br>
+        returns: nil
+    </div>
+</main>
+
+</body>
+</html>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import vulc.jlconsole.Console;
 import vulc.jlconsole.gfx.Screen;
+import vulc.jlconsole.gfx.panel.EditorPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 
@@ -58,6 +59,12 @@ public class Cmd {
 				Panel gamePanel = new GamePanel(console);
 				console.currentPanel = gamePanel;
 				gamePanel.init();
+				break;
+
+			case "edit": case "editor":
+				Panel editorPanel = new EditorPanel(console);
+				console.currentPanel = editorPanel;
+				editorPanel.init();
 				break;
 
 			default:

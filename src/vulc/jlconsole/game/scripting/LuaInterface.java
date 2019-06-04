@@ -37,18 +37,23 @@ public class LuaInterface {
 		env.set("map_h", game.map.height);
 
 		//FUNCTIONS
+		//general
+		env.set("loadscript", new loadscript());
 		env.set("key", new key());
+		env.set("sfx", new sfx());
+
+		//screen
 		env.set("settransparent", new settransparent());
 		env.set("clear", new clear());
 		env.set("pix", new pix());
 		env.set("write", new write());
 		env.set("spr", new spr());
-		env.set("sfx", new sfx());
+
+		//map
 		env.set("gettile", new gettile());
 		env.set("settile", new settile());
 		env.set("maprender", new maprender());
 
-		env.set("loadscript", new loadscript());
 	}
 
 	private class key extends OneArgFunction {
@@ -143,9 +148,9 @@ public class LuaInterface {
 
 	private class maprender extends ThreeArgFunction {
 		public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
-			int x = arg1.isnil() ? 0 : arg1.checkint();
-			int y = arg2.isnil() ? 0 : arg2.checkint();
-			int scale = arg3.isnil() ? 1 : arg3.checkint();
+			int scale = arg1.isnil() ? 1 : arg1.checkint();
+			int x = arg2.isnil() ? 0 : arg2.checkint();
+			int y = arg3.isnil() ? 0 : arg3.checkint();
 
 			game.map.render(console.screen, game, x, y, scale);
 			return NIL;

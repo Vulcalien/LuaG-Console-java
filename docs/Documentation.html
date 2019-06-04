@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <title>Console Documentation - Java Lua Console</title>
+</head>
+<body>
+
+<header>
+    <h1 align="center">Java Lua Console</h1>
+    Author: Vulcalien<br>
+    Console version: 1.13<br>
+    <a href="https://github.com/Vulcalien/Java-Lua-Console">GitHub</a>
+</header>
+
+<main>
+    <h1 align="center">Console Documentation</h1>
+
+    <h1>Running the console</h1>
+    <div class="item" id="">
+        TODO
+    </div>
+
+    <br>
+    <br>
+
+    <h1>Scripting</h1>
+    <div class="item" class="main.lua">
+        <h2>main.lua</h2>
+        The console automatically calls the file 'main.lua' put in '<bold>console-userdata/script</bold>'<br>
+        This script must contain 2 functions: init() and tick()<br>
+        <div class="code">
+            function init()             <br>
+                                        <br>
+            end                         <br>
+                                        <br>
+            function tick()             <br>
+                                        <br>
+            end
+        </div>
+        Both ticking and rendering operations are called in the tick() function.<br>
+        init() is called before the game starts. It is strongly recommended to call initialization functions in this function to avoid possible errors.<br>
+        <br>
+        <bold>See the <a href="./LuaDocs.html">Lua Documentation</a> to learn about Console Lua Interface.</bold>
+    </div>
+
+    <br>
+    <br>
+
+    <h1>Files and folders</h1>
+    <div class="item" id="console-userdata">
+        <h2>console-userdata</h2>
+        In order to use the console there must be a folder '<bold>console-userdata</bold>' put in the same location of the .jar file.<br>
+        This console will contain all the game assets and scripts.<br>
+        The files that it must contain are:
+        <ul>
+            <li>script ~ a folder</li>
+            <li>sfx ~ a folder</li>
+            <li>config.json ~ a json file</li>
+            <li>atlas.png ~ a 128x128 image</li>
+            <li>map ~ a binary file</li>
+        </ul>
+    </div>
+    <div class="item" id="script">
+        <h2>script</h2>
+        This folder contains lua files. It can also contain subfolders.<br>
+        It must contain 'main.lua' (see Scripting section).
+    </div>
+    <div class="item" id="sfx">
+        <h2>sfx</h2>
+        This folder contains sounds. Sounds have to be '.wav' files.
+    </div>
+    <div class="item" id="config.json">
+        <h2>config.json</h2>
+        It is a json file used to store user settings. However, it has no use for now.<br>
+        It should contain just two braces: {}<br>
+        This will probably be removed in a future version.
+    </div>
+    <div class="item" id="atlas.png">
+        <h2>atlas.png</h2>
+        It is a 128x128 pixels png image.<br>
+        This image contains 256 sprites (8x8 pixels).
+    </div>
+    <div class="item" id="map">
+        <h2>map</h2>
+        This is a binary file in which level data is stored.<br>
+        Each byte represents a tile, and there are 8 bytes used as 'header'.<br>
+        The level size is encoded in the header.<br>
+        If the map is malformed, it must be replaced with a working one in order to run the game or the editor.<br>
+        There is a integrated editor for creating maps.
+    </div>
+</main>
+
+<footer>
+
+</footer>
+
+</body>
+</html>
