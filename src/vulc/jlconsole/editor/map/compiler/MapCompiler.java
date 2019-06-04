@@ -23,7 +23,9 @@ public abstract class MapCompiler {
 			write(out, w >> 24, w >> 16, w >> 8, w);
 			write(out, h >> 24, h >> 16, h >> 8, h);
 
-			out.write(map.tiles);
+			for(int i = 0; i < map.tiles.length; i++) {
+				out.write(map.tiles[i] + 128);
+			}
 
 			out.close();
 		} catch(IOException e) {

@@ -13,7 +13,7 @@ public class EditorPanel extends Panel {
 
 	public final int[] margins = {10, 0, 10, 0};
 
-	public final Editor
+	public Editor
 	mapEditor;
 
 	public Editor currentEditor;
@@ -22,16 +22,19 @@ public class EditorPanel extends Panel {
 	public EditorPanel(Console console) {
 		super(console);
 		this.game = new Game(console);
-
 		innerScreen = new Screen(console.screen.width - margins[1] - margins[3], console.screen.height - margins[0] - margins[2]);
+	}
+
+	public void init() {
+		game.initResources();
 
 		mapEditor = new MapEditor(console, this);
 
 		currentEditor = mapEditor;
 	}
 
-	public void init() {
-		game.initResources();
+	public void remove() {
+		currentEditor.remove();
 	}
 
 	public void tick() {

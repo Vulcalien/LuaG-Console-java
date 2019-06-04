@@ -13,6 +13,9 @@ public abstract class Panel {
 	public void init() {
 	}
 
+	public void remove() {
+	}
+
 	public abstract void tick();
 
 }

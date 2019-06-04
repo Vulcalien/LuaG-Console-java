@@ -17,22 +17,25 @@ public class GUIComponent {
 		this.h = h;
 	}
 
-	public void render(Screen screen, int xOff, int yOff) {
-		if(opaque) screen.fill(xOff + x,
-		                       yOff + y,
-		                       xOff + x + w - 2,
-		                       yOff + y + h - 2,
+	public void render(Screen screen) {
+		if(opaque) screen.fill(x,
+		                       y,
+		                       x + w - 1,
+		                       y + h - 1,
 		                       background);
 	}
 
 	public boolean isPressed(int xm, int ym) {
-		return xm >= x && ym >= y && xm < w && ym < h;
+		return xm >= x && ym >= y && xm < x + w && ym < y + h;
 	}
 
 	public void press() {
 	}
 
 	public void onKeyPress(char character) {
+	}
+
+	public void onRemove(GUIContainer container) {
 	}
 
 }

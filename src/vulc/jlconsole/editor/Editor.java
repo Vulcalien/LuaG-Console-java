@@ -13,4 +13,7 @@ public abstract class Editor {
 
 	public abstract void tick();
 
+	public void remove() {
+	}
+
 }

@@ -3,6 +3,7 @@ package vulc.jlconsole.game.map;
 import java.io.IOException;
 import java.io.InputStream;
 
+import vulc.jlconsole.Console;
 import vulc.jlconsole.game.Game;
 import vulc.jlconsole.gfx.Screen;
 
@@ -15,14 +16,27 @@ public class Map {
 		this.width = w;
 		this.height = h;
 		this.tiles = new byte[w * h];
+		for(int i = 0; i < tiles.length; i++) {
+			tiles[i] = -128;
+		}
 	}
 
 	public void render(Screen screen, Game game, int xOffset, int yOffset, int scale) {
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < width; x++) {
-				int id = getTile(x, y);
+		int xt0 = Math.floorDiv(xOffset, 8 * scale);
+		int yt0 = Math.floorDiv(yOffset, 8 * scale);
+		int xt1 = xt0 + (Console.WIDTH / 8);
+		int yt1 = yt0 + (Console.HEIGHT / 8);
 
-				screen.draw(game.getSprite(id % 16, id / 16, 1, 1).getScaled(scale), xOffset + x * 8 * scale, yOffset + y * 8 * scale);
+		for(int yt = yt0; yt <= yt1; yt++) {
+			if(yt < 0 || yt >= height) continue;
+
+			for(int xt = xt0; xt <= xt1; xt++) {
+				if(xt < 0 || xt >= width) continue;
+
+				int id = getTile(xt, yt);
+				screen.draw(game.getSprite(id % 16, id / 16, 1, 1).getScaled(scale),
+				            xt * 8 * scale - xOffset,
+				            yt * 8 * scale - yOffset);
 			}
 		}
 	}

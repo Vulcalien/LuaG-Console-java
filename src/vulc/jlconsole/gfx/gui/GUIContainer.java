@@ -15,13 +15,16 @@ import vulc.jlconsole.input.InputHandler.KeyType;
 public class GUIContainer extends GUIComponent {
 
 	protected final List<GUIComponent> comps = new ArrayList<GUIComponent>();
-	protected final InputHandler input = new InputHandler();
 
+	private final Console console;
+	public final InputHandler input = new InputHandler();
+	public final Screen screen;
+	public int xInputOff = 0, yInputOff = 0;
+
+	protected final List<Character> keyBuffer = new ArrayList<Character>();
 	protected final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
-			for(GUIComponent comp : comps) {
-				comp.onKeyPress(e.getKeyChar());
-			}
+			keyBuffer.add(e.getKeyChar());
 		}
 	};
 
@@ -29,32 +32,68 @@ public class GUIContainer extends GUIComponent {
 
 	public GUIContainer(Console console, int x, int y, int w, int h) {
 		super(x, y, w, h);
+		this.console = console;
+		this.screen = new Screen(w, h);
 		input.init(console);
+		console.addKeyListener(keyListener);
 	}
 
 	public void tick() {
-		for(GUIComponent comp : comps) {
-			//TODO change to absolute input coordinates
-			if(comp.isPressed(input.xMouse / Console.SCALE, input.yMouse / Console.SCALE)) {
-				comp.focused = true;
-				comp.press();
+		while(keyBuffer.size() != 0) {
+			char c = keyBuffer.remove(0);
+			for(GUIComponent comp : comps) {
+				comp.onKeyPress(c);
+			}
+		}
+		if(mouse1.isKeyDown()) {
+			if(this.isPressed(input.xMouse / Console.SCALE - xInputOff,
+			                  input.yMouse / Console.SCALE - yInputOff)) {
+				this.press();
 			}
 		}
 		input.tick();
 	}
 
-	public void render(Screen screen, int xOff, int yOff) {
+	@Override
+	public void render(Screen screen) {
+		this.screen.clear(background);
 		for(GUIComponent comp : comps) {
-			comp.render(screen, x + xOff, y + yOff);
+			comp.render(this.screen);
 		}
+		screen.draw(this.screen, x, y);
 	}
 
 	public void add(GUIComponent comp) {
 		comps.add(comp);
+		if(comp instanceof GUIContainer) {
+			GUIContainer container = (GUIContainer) comp;
+			container.xInputOff = x;
+			container.yInputOff = y;
+		}
 	}
 
 	public void remove(GUIComponent comp) {
 		comps.remove(comp);
+	}
+
+	@Override
+	public void onRemove(GUIContainer container) {
+		super.onRemove(container);
+		input.remove();
+		console.removeKeyListener(keyListener);
+	}
+
+	@Override
+	public void press() {
+		for(GUIComponent comp : comps) {
+			if(comp.isPressed(input.xMouse / Console.SCALE - xInputOff,
+			                  input.yMouse / Console.SCALE - yInputOff)) {
+				comp.focused = true;
+				comp.press();
+			} else {
+				comp.focused = false;
+			}
+		}
 	}
 
 }

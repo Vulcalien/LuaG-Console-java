@@ -11,9 +11,10 @@ public class GUILabel extends GUIComponent {
 		super(x, y, w, h);
 	}
 
-	public void render(Screen screen, int xOff, int yOff) {
-		super.render(screen, xOff, yOff);
-		screen.write(text, textColor, xOff + x + 1, yOff + y + (h - Screen.FONT.getHeight()) / 2);
+	@Override
+	public void render(Screen screen) {
+		super.render(screen);
+		screen.write(text, textColor, x + 1, y + (h - Screen.FONT.getHeight()) / 2);
 	}
 
 }
