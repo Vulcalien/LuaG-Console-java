@@ -16,12 +16,22 @@ public class EditorPanel extends Panel {
 
 	public Editor currentEditor;
 
-	//TODO switch to a GUI based interface
 	public EditorPanel(Console console) {
 		super(console);
 		this.game = new Game(console);
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
 		guiPanel.background = 0xDD4444;
+
+		//DEBUG
+//		GUIButton mapBtn = new GUIButton(0, 0, 50, 10);
+//		mapBtn.text = "RUN";
+//		mapBtn.action = () -> {
+//			Panel game = new GamePanel(console);
+//			console.currentPanel = game;
+//			game.init();
+//			this.remove();
+//		};
+//		guiPanel.add(mapBtn);
 	}
 
 	public void init() {
@@ -34,6 +44,7 @@ public class EditorPanel extends Panel {
 
 	public void remove() {
 		currentEditor.remove();
+		guiPanel.removeInputListeners();
 	}
 
 	public void tick() {

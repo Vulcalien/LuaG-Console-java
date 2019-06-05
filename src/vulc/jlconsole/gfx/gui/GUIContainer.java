@@ -82,6 +82,10 @@ public class GUIContainer extends GUIComponent {
 	@Override
 	public void onRemove(GUIContainer container) {
 		super.onRemove(container);
+		removeInputListeners();
+	}
+
+	public void removeInputListeners() {
 		input.remove();
 		console.removeKeyListener(keyListener);
 	}

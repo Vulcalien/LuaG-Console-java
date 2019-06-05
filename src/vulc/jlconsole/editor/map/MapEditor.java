@@ -11,7 +11,6 @@ import vulc.jlconsole.game.Game;
 import vulc.jlconsole.game.map.Map;
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.gui.GUIComponent;
-import vulc.jlconsole.gfx.gui.GUIContainer;
 import vulc.jlconsole.gfx.gui.GUILabel;
 import vulc.jlconsole.gfx.gui.GUITextBox;
 import vulc.jlconsole.gfx.panel.EditorPanel;
@@ -22,13 +21,12 @@ import vulc.jlconsole.input.InputHandler.KeyType;
 public class MapEditor extends Editor {
 
 	private final Key
-	MOUSE_1,
-	MOVE_UP,
-	MOVE_LEFT,
-	MOVE_DOWN,
-	MOVE_RIGHT;
+	mouse1,
+	moveUp,
+	moveLeft,
+	moveDown,
+	moveRight;
 
-	private final GUIContainer guiPanel;
 	private final InputHandler input;
 	private final int editWidth = 128, editHeight = 128;
 
@@ -39,17 +37,16 @@ public class MapEditor extends Editor {
 	private int selectedTile = 0;
 
 	public MapEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
-		super(console, panel);
+		super(console, panel, x, y, w, h);
 
-		this.guiPanel = new GUIContainer(console, x, y, w, h);
 		this.input = guiPanel.input;
 		panel.guiPanel.add(this.guiPanel);
 
-		MOUSE_1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
-		MOVE_UP = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);
-		MOVE_LEFT = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_A);
-		MOVE_DOWN = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
-		MOVE_RIGHT = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D);
+		mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
+		moveUp = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);
+		moveLeft = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_A);
+		moveDown = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
+		moveRight = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D);
 
 		//INTERFACE
 		guiPanel.opaque = true;
@@ -151,21 +148,16 @@ public class MapEditor extends Editor {
 		guiPanel.add(spriteComp);
 	}
 
-	public void remove() {
-		guiPanel.remove(null);
-		input.remove();
-	}
-
 	public void tick() {
 		Game game = panel.game;
 
-		if(MOVE_UP.isKeyDown()) yOffset--;
-		if(MOVE_LEFT.isKeyDown()) xOffset--;
-		if(MOVE_DOWN.isKeyDown()) yOffset++;
-		if(MOVE_RIGHT.isKeyDown()) xOffset++;
+		if(moveUp.isKeyDown()) yOffset--;
+		if(moveLeft.isKeyDown()) xOffset--;
+		if(moveDown.isKeyDown()) yOffset++;
+		if(moveRight.isKeyDown()) xOffset++;
 
 		mouse_if:
-		if(MOUSE_1.isKeyDown()) {
+		if(mouse1.isKeyDown()) {
 			int xm = (input.xMouse / Console.SCALE) - guiPanel.xParentAbs - guiPanel.y;
 			int ym = (input.yMouse / Console.SCALE) - guiPanel.yParentAbs - guiPanel.x;
 
