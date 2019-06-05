@@ -82,6 +82,10 @@ public class Game {
 		input.tick();
 	}
 
+	public Bitmap getSprite(int id, int sw, int sh) {
+		return getSprite(id % 16, id / 16, sw, sh);
+	}
+
 	public Bitmap getSprite(int x, int y, int w, int h) {
 		return atlas.getSubimage(x * 8, y * 8, w * 8, h * 8);
 	}

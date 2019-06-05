@@ -32,11 +32,11 @@ public class MapEditor extends Editor {
 	private final InputHandler input;
 	private final int editWidth = 128, editHeight = 128;
 
-	private final GUITextBox hTextBox, wTextBox;
+	private final GUITextBox hTextBox, wTextBox, selectTileTxt;
 	private final SaveMapButton saveButton;
 
 	private int xOffset = 0, yOffset = 0;
-	private int selectedTile = 1;
+	private int selectedTile = 0;
 
 	public MapEditor(Console console, EditorPanel panel) {
 		super(console, panel);
@@ -82,7 +82,10 @@ public class MapEditor extends Editor {
 		wLabel.text = "Map W";
 		guiPanel.add(wLabel);
 
-		wTextBox = new GUITextBox(editWidth + 1, 30, guiPanel.w - editWidth - 1, 10) {
+		wTextBox = new GUITextBox(editWidth + 1, 32, guiPanel.w - editWidth - 1, 10) {
+			public void onLostFocus() {
+				text = panel.game.map.width + "";
+			}
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
@@ -101,7 +104,10 @@ public class MapEditor extends Editor {
 		hLabel.text = "Map H";
 		guiPanel.add(hLabel);
 
-		hTextBox = new GUITextBox(editWidth + 1, 60, guiPanel.w - editWidth - 1, 10) {
+		hTextBox = new GUITextBox(editWidth + 1, 62, guiPanel.w - editWidth - 1, 10) {
+			public void onLostFocus() {
+				text = panel.game.map.height + "";
+			}
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
@@ -118,6 +124,33 @@ public class MapEditor extends Editor {
 
 		saveButton = new SaveMapButton(editWidth + 1, 100, guiPanel.w - editWidth - 2, 10, panel);
 		guiPanel.add(saveButton);
+
+		selectTileTxt = new GUITextBox(1, editHeight + 1, 19, 10) {
+			public void onLostFocus() {
+				text = selectedTile + "";
+			}
+			public void onEnterPress() {
+				super.onEnterPress();
+				int n = Integer.parseInt(selectTileTxt.text);
+				if(n > 255) n = 255;
+
+				selectedTile = n;
+				selectTileTxt.text = n + "";
+			}
+		};
+		selectTileTxt.text = selectedTile + "";
+		selectTileTxt.nChars = 3;
+		selectTileTxt.numbersOnly = true;
+		selectTileTxt.opaque = true;
+		guiPanel.add(selectTileTxt);
+
+		GUIComponent spriteComp = new GUIComponent(21, editHeight + 1, 8, 8) {
+			public void render(Screen screen) {
+				super.render(screen);
+				screen.draw(panel.game.getSprite(selectedTile, 1, 1), x, y);
+			}
+		};
+		guiPanel.add(spriteComp);
 	}
 
 	public void remove() {

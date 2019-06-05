@@ -116,7 +116,7 @@ public class LuaInterface {
 			int sw = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 			int sh = args.arg(6).isnil() ? 1 : args.arg(6).checkint();
 
-			console.screen.draw(game.getSprite(id % 16, id / 16, sw, sh).getScaled(scale), x, y);
+			console.screen.draw(game.getSprite(id, sw, sh).getScaled(scale), x, y);
 			return NIL;
 		}
 	}

@@ -88,10 +88,15 @@ public class GUIContainer extends GUIComponent {
 		for(GUIComponent comp : comps) {
 			if(comp.isPressed(input.xMouse / Console.SCALE - xInputOff,
 			                  input.yMouse / Console.SCALE - yInputOff)) {
+				boolean gainFocus = !comp.focused;
 				comp.focused = true;
+				if(gainFocus) comp.onGainFocus();
+
 				comp.press();
 			} else {
+				boolean lostFocus = comp.focused;
 				comp.focused = false;
+				if(lostFocus) comp.onLostFocus();
 			}
 		}
 	}

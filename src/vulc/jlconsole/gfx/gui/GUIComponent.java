@@ -32,6 +32,12 @@ public class GUIComponent {
 	public void press() {
 	}
 
+	public void onGainFocus() {
+	}
+
+	public void onLostFocus() {
+	}
+
 	public void onKeyPress(char character) {
 	}
 
