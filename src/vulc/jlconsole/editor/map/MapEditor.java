@@ -158,8 +158,8 @@ public class MapEditor extends Editor {
 
 		mouse_if:
 		if(mouse1.isKeyDown()) {
-			int xm = (input.xMouse / Console.SCALE) - guiPanel.xParentAbs - guiPanel.y;
-			int ym = (input.yMouse / Console.SCALE) - guiPanel.yParentAbs - guiPanel.x;
+			int xm = (input.xMouse / Console.SCALE) - guiPanel.xParentAbs - guiPanel.x;
+			int ym = (input.yMouse / Console.SCALE) - guiPanel.yParentAbs - guiPanel.y;
 
 			if(xm < 0 || ym < 0 || xm >= editWidth || ym >= editHeight) break mouse_if;
 
