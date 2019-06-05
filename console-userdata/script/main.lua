@@ -17,10 +17,10 @@ function tick()
 	if key(3) then x = x + 1 end
 
 	clear(0x555555)
-	maprender(1, 8, 8)
+	--maprender(1, 8, 8)
 
 	pix(5, 5, 0xff0000)
-	pix(8, 8, 0x00ff00, 5, 2)
+	pix(8, 8, 0x00ff00, 1, 1)
 
 	write("ciaoo", 0xffffff, 100, 100)
 

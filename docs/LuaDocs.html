@@ -11,7 +11,7 @@
 <header>
     <h1 align="center">Java Lua Console</h1>
     Author: Vulcalien<br>
-    Console version: 1.13<br>
+    Console version: 0.4<br>
     <a href="https://github.com/Vulcalien/Java-Lua-Console">GitHub</a>
 </header>
 
@@ -80,7 +80,70 @@
     <br>
 
     <h1>Screen Functions</h1>
-    <div class="item" id=""></div>
+
+    <div class="item" id="settransparent">
+        <h2>settransparent(color)</h2>
+        <ol>
+            <li>color (int) - the color that will be ignored</li>
+        </ol>
+        Sets the color to be ignored.<br>
+        It is useful if you use a background color for sprites.<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="clear">
+        <h2>clear(color)</h2>
+        <ol>
+            <li>color (int) - the color that will be used to clear the screen</li>
+        </ol>
+        Clears the screen.<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="pix">
+        <h2>pix(x, y, color [, w [, h)</h2>
+        <ol>
+            <li>x (int) - the x of the pixel</li>
+            <li>y (int) - the y of the pixel</li>
+            <li>color (int) - the color of the pixel</li>
+            <li>w (int) def: 1 - the width of the pixel</li>
+            <li>h (int) def: 1 - the height of the pixel</li>
+        </ol>
+        Sets a pixel in the screen.<br>
+        It can also draw a rectangle if [w] and [h] are passed.<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="write">
+        <h2>write(text, color, x, y)</h2>
+        <ol>
+            <li>text (String) - the text to be printed</li>
+            <li>color (int) - the foreground color</li>
+            <li>x (int) - indicates the left side of the text</li>
+            <li>y (int) - indicates the top side of the text</li>
+        </ol>
+        Prints a text on the screen.<br>
+        <br>
+        returns: nil
+    </div>
+    <div class="item" id="spr">
+        <h2>spr(id, x, y [, scale [, sw [, sh)</h2>
+        <ol>
+            <li>id (int) - the id of the sprite (a number from 0 to 255); the corresponding coordinates are x = id % 16 and y = id / 16</li>
+            <li>x (int) - the x draw coordinate</li>
+            <li>y (int) - the y draw coordinate</li>
+            <li>scale (int) - the rendering scale of the sprite</li>
+            <li>sw (int) def: 1 - the width of the sprite (multiple of 8; on atlas)</li>
+            <li>sh (int) def: 1 - the height of the sprite (multiple of 8; on atlas)</li>
+        </ol>
+        Draws a sprite in the screen at [x, y] coordinates.<br>
+        The id indicates the position on the atlas (which has 256 sprites, from 0 to 255)<br>
+        sw and sh are indicated as multiple of 8.<br>
+        For example, sw = 3 means that the sprite's width is 3 * 8 = 24 pixels on atlas.<br>
+        Even if sw or sh are not 1, [x, y] indicates the top-left sprite.<br>
+        <br>
+        returns: nil
+    </div>
 
     <br>
     <br>

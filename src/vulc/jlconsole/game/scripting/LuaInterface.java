@@ -81,14 +81,10 @@ public class LuaInterface {
 			int x = args.arg(1).checkint();
 			int y = args.arg(2).checkint();
 			int color = args.arg(3).checkint();
-			LuaValue w = args.arg(4);
-			LuaValue h = args.arg(5);
+			int w = args.arg(4).isnil() ? 1 : args.arg(4).checkint();
+			int h = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 
-			if(!w.isnil() && !h.isnil()) {
-				console.screen.fill(x, y, x + w.checkint() - 1, y + h.checkint() - 1, color);
-			} else {
-				console.screen.setPixel(x, y, color);
-			}
+			console.screen.fill(x, y, x + w - 1, y + h - 1, color);
 			return NIL;
 		}
 	}

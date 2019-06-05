@@ -34,7 +34,7 @@ import vulc.jlconsole.gfx.panel.Panel;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String VERSION = "0.3.1";
+	public static final String VERSION = "0.4 (WIP)";
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -83,7 +83,7 @@ public class Console extends Canvas implements Runnable {
 					nextPanel = new GamePanel(this);
 					break;
 
-				case "-editor":
+				case "-editor": case "-edit":
 					nextPanel = new EditorPanel(this);
 					break;
 
