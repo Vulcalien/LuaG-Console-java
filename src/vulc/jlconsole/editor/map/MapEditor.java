@@ -38,14 +38,12 @@ public class MapEditor extends Editor {
 	private int xOffset = 0, yOffset = 0;
 	private int selectedTile = 0;
 
-	public MapEditor(Console console, EditorPanel panel) {
+	public MapEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
 		super(console, panel);
 
-		this.guiPanel = new GUIContainer(console, 0, 0, panel.innerScreen.width, panel.innerScreen.height);
+		this.guiPanel = new GUIContainer(console, x, y, w, h);
 		this.input = guiPanel.input;
-
-		guiPanel.xInputOff = panel.margins[1];
-		guiPanel.yInputOff = panel.margins[0];
+		panel.guiPanel.add(this.guiPanel);
 
 		MOUSE_1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 		MOVE_UP = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);
@@ -168,8 +166,8 @@ public class MapEditor extends Editor {
 
 		mouse_if:
 		if(MOUSE_1.isKeyDown()) {
-			int xm = (input.xMouse / Console.SCALE) - panel.margins[1];
-			int ym = (input.yMouse / Console.SCALE) - panel.margins[0];
+			int xm = (input.xMouse / Console.SCALE) - guiPanel.xParentAbs - guiPanel.y;
+			int ym = (input.yMouse / Console.SCALE) - guiPanel.yParentAbs - guiPanel.x;
 
 			if(xm < 0 || ym < 0 || xm >= editWidth || ym >= editHeight) break mouse_if;
 
@@ -181,9 +179,6 @@ public class MapEditor extends Editor {
 			game.map.setTile(xt, yt, selectedTile);
 			saveButton.setContentModified(true);
 		}
-
-		guiPanel.tick();
-		guiPanel.render(panel.innerScreen);
 	}
 
 	public Map resizeMap(Map old, int w, int h) {

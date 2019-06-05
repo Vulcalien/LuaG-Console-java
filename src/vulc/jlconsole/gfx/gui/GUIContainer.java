@@ -19,7 +19,7 @@ public class GUIContainer extends GUIComponent {
 	private final Console console;
 	public final InputHandler input = new InputHandler();
 	public final Screen screen;
-	public int xInputOff = 0, yInputOff = 0;
+	public int xParentAbs = 0, yParentAbs = 0;
 
 	protected final List<Character> keyBuffer = new ArrayList<Character>();
 	protected final KeyAdapter keyListener = new KeyAdapter() {
@@ -39,6 +39,9 @@ public class GUIContainer extends GUIComponent {
 	}
 
 	public void tick() {
+		for(GUIComponent comp : comps) {
+			comp.tick();
+		}
 		while(keyBuffer.size() != 0) {
 			char c = keyBuffer.remove(0);
 			for(GUIComponent comp : comps) {
@@ -46,8 +49,8 @@ public class GUIContainer extends GUIComponent {
 			}
 		}
 		if(mouse1.isKeyDown()) {
-			if(this.isPressed(input.xMouse / Console.SCALE - xInputOff,
-			                  input.yMouse / Console.SCALE - yInputOff)) {
+			if(this.isPressed(input.xMouse / Console.SCALE - xParentAbs,
+			                  input.yMouse / Console.SCALE - yParentAbs)) {
 				this.press();
 			}
 		}
@@ -67,8 +70,8 @@ public class GUIContainer extends GUIComponent {
 		comps.add(comp);
 		if(comp instanceof GUIContainer) {
 			GUIContainer container = (GUIContainer) comp;
-			container.xInputOff = x;
-			container.yInputOff = y;
+			container.xParentAbs = this.xParentAbs + x;
+			container.yParentAbs = this.yParentAbs + y;
 		}
 	}
 
@@ -86,8 +89,8 @@ public class GUIContainer extends GUIComponent {
 	@Override
 	public void press() {
 		for(GUIComponent comp : comps) {
-			if(comp.isPressed(input.xMouse / Console.SCALE - xInputOff,
-			                  input.yMouse / Console.SCALE - yInputOff)) {
+			if(comp.isPressed(input.xMouse / Console.SCALE - xParentAbs - x,
+			                  input.yMouse / Console.SCALE - yParentAbs - y)) {
 				boolean gainFocus = !comp.focused;
 				comp.focused = true;
 				if(gainFocus) comp.onGainFocus();

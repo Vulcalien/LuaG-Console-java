@@ -1,7 +1,5 @@
 package vulc.jlconsole.gfx.gui;
 
-import vulc.jlconsole.gfx.Screen;
-
 public class GUITextBox extends GUILabel {
 
 	public boolean numbersOnly = false;
@@ -12,11 +10,6 @@ public class GUITextBox extends GUILabel {
 	}
 
 	public void press() {
-	}
-
-	@Override
-	public void render(Screen screen) {
-		super.render(screen);
 	}
 
 	public void onKeyPress(char character) {

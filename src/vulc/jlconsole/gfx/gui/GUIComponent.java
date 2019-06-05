@@ -17,6 +17,9 @@ public class GUIComponent {
 		this.h = h;
 	}
 
+	public void tick() {
+	}
+
 	public void render(Screen screen) {
 		if(opaque) screen.fill(x,
 		                       y,
