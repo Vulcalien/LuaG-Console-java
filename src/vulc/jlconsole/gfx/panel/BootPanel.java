@@ -27,7 +27,7 @@ public class BootPanel extends Panel {
 		Screen screen = console.screen;
 
 		screen.write("Vulc's Java-Lua Console", 0xffffff, 1, 1);
-		screen.write("Copyright 2019 Vulcalien", 0xffffff, 1, 11);
+		screen.write(Console.COPYRIGHT, 0xffffff, 1, 11);
 		screen.write("Version: " + Console.VERSION, 0xffffff, 1, 22);
 
 		bootTime--;

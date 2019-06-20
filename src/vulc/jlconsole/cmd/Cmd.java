@@ -55,7 +55,7 @@ public class Cmd {
 
 	public void init() {
 		write("Vulc's Java-Lua Console\n");
-		write("Copyright 2019 Vulcalien\n");
+		write(Console.COPYRIGHT + "\n");
 		write("Version: " + Console.VERSION + "\n");
 		write("\n");
 	}
@@ -91,23 +91,28 @@ public class Cmd {
 	public void execute(String command) {
 		switch(command) {
 			case "run":
+				cmdPanel.remove();
 				Panel gamePanel = new GamePanel(console);
 				console.currentPanel = gamePanel;
 				gamePanel.init();
-				cmdPanel.remove();
 				break;
 
 			case "edit":
 			case "editor":
+				cmdPanel.remove();
 				Panel editorPanel = new EditorPanel(console);
 				console.currentPanel = editorPanel;
 				editorPanel.init();
-				cmdPanel.remove();
 				break;
 
 			case "cls":
 				closedLines.clear();
 				currentLine = "";
+				break;
+
+			case "ver":
+			case "version":
+				write(Console.VERSION + " - By Vulcalien\n");
 				break;
 
 			default:
