@@ -19,19 +19,19 @@ public class CmdPanel extends Panel {
 
 	public CmdPanel(Console console) {
 		super(console);
-		this.cmd = new Cmd(console);
+		this.cmd = console.cmd;
+		cmd.cmdPanel = this;
 	}
 
 	public void init() {
 		console.addKeyListener(listener);
-		cmd.init();
 	}
 
 	public void tick() {
 		cmd.tick();
 	}
 
-	protected void finalize() throws Throwable {
+	public void remove() {
 		console.removeKeyListener(listener);
 	}
 

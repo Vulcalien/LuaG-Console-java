@@ -5,6 +5,7 @@ import java.util.List;
 
 import vulc.jlconsole.Console;
 import vulc.jlconsole.gfx.Screen;
+import vulc.jlconsole.gfx.panel.CmdPanel;
 import vulc.jlconsole.gfx.panel.EditorPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
@@ -21,6 +22,7 @@ public class Cmd {
 	private int animationTicks = 0;
 
 	private Console console;
+	public CmdPanel cmdPanel;
 
 	public Cmd(Console console) {
 		this.console = console;
@@ -92,6 +94,7 @@ public class Cmd {
 				Panel gamePanel = new GamePanel(console);
 				console.currentPanel = gamePanel;
 				gamePanel.init();
+				cmdPanel.remove();
 				break;
 
 			case "edit":
@@ -99,6 +102,7 @@ public class Cmd {
 				Panel editorPanel = new EditorPanel(console);
 				console.currentPanel = editorPanel;
 				editorPanel.init();
+				cmdPanel.remove();
 				break;
 
 			case "cls":

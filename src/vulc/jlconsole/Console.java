@@ -24,6 +24,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import vulc.jlconsole.cmd.Cmd;
 import vulc.jlconsole.gfx.Screen;
 import vulc.jlconsole.gfx.panel.BootPanel;
 import vulc.jlconsole.gfx.panel.CmdPanel;
@@ -54,6 +55,7 @@ public class Console extends Canvas implements Runnable {
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
 
 	public final Screen screen = new Screen(WIDTH, HEIGHT);
+	public Cmd cmd;
 	public Panel currentPanel;
 
 	public void run() {
@@ -88,6 +90,8 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	private void init(String[] args) {
+		cmd = new Cmd(this);
+		cmd.init();
 		Panel nextPanel = null;
 
 		if(args.length > 0) {

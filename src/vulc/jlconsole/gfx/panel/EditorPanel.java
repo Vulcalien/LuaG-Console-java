@@ -11,8 +11,7 @@ public class EditorPanel extends Panel {
 	public final Game game;
 	public final GUIContainer guiPanel;
 
-	public Editor
-	mapEditor;
+	public Editor mapEditor;
 
 	public Editor currentEditor;
 
@@ -22,16 +21,17 @@ public class EditorPanel extends Panel {
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
 		guiPanel.background = 0xDD4444;
 
-		//DEBUG
-//		GUIButton mapBtn = new GUIButton(0, 0, 50, 10);
-//		mapBtn.text = "RUN";
-//		mapBtn.action = () -> {
-//			Panel game = new GamePanel(console);
-//			console.currentPanel = game;
-//			game.init();
+		// DEBUG
+//		GUIButton cmdBtn = new GUIButton(0, 0, 19, 10);
+//		cmdBtn.opaque = true;
+//		cmdBtn.text = "CMD";
+//		cmdBtn.action = () -> {
+//			Panel cmdPanel = new CmdPanel(console);
+//			console.currentPanel = cmdPanel;
+//			cmdPanel.init();
 //			this.remove();
 //		};
-//		guiPanel.add(mapBtn);
+//		guiPanel.add(cmdBtn);
 	}
 
 	public void init() {
