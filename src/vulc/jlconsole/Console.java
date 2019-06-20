@@ -83,7 +83,8 @@ public class Console extends Canvas implements Runnable {
 					nextPanel = new GamePanel(this);
 					break;
 
-				case "-editor": case "-edit":
+				case "-editor":
+				case "-edit":
 					nextPanel = new EditorPanel(this);
 					break;
 
@@ -94,6 +95,8 @@ public class Console extends Canvas implements Runnable {
 		} else {
 			nextPanel = new CmdPanel(this);
 		}
+
+		requestFocus();
 
 		currentPanel = new BootPanel(this, nextPanel);
 		currentPanel.init();

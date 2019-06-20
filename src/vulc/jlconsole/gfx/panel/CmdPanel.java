@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import vulc.jlconsole.Console;
 import vulc.jlconsole.cmd.Cmd;
+import vulc.jlconsole.cmd.CmdChar;
 
 public class CmdPanel extends Panel {
 
@@ -12,7 +13,7 @@ public class CmdPanel extends Panel {
 
 	private final KeyAdapter listener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
-			cmd.charBuffer.add(e.getKeyChar());
+			cmd.charBuffer.add(new CmdChar(e.getKeyChar(), true));
 		}
 	};
 
@@ -23,6 +24,7 @@ public class CmdPanel extends Panel {
 
 	public void init() {
 		console.addKeyListener(listener);
+		cmd.init();
 	}
 
 	public void tick() {

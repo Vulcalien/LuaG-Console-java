@@ -16,8 +16,13 @@ import vulc.jlconsole.Console;
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
 
-	public static enum KeyType {KEYBOARD, MOUSE}
-	public static enum KeyAction {PRESS, RELEASE}
+	public static enum KeyType {
+		KEYBOARD, MOUSE
+	}
+
+	public static enum KeyAction {
+		PRESS, RELEASE
+	}
 
 	private Console console;
 
@@ -31,8 +36,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		console.addKeyListener(this);
 		console.addMouseListener(this);
 		console.addMouseMotionListener(this);
-
-		console.requestFocus();
 	}
 
 	public void remove() {
