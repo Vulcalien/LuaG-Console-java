@@ -31,6 +31,19 @@ import vulc.jlconsole.gfx.panel.EditorPanel;
 import vulc.jlconsole.gfx.panel.GamePanel;
 import vulc.jlconsole.gfx.panel.Panel;
 
+/**
+ * Open Source since: 20.06.2019<br>
+ * GitHub: https://github.com/Vulcalien/Java-Lua-Console<br>
+ * Author: Vulcalien<br>
+ *
+ * <h2>Used Libraries</h2>
+ * <ul>
+ * <li>'Bitmap Utility'     by Vulcalien</li>
+ * <li>'Gson'               by Google</li>
+ * <li>'LuaJ'               by LuaJ</li>
+ * </ul>
+ *
+ */
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 

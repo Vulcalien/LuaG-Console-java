@@ -1,3 +1,6 @@
+-- This is just a test.
+-- To use the console see docs/Documentation.html and docs/LuaDocs.html
+
 function init()
 	loadscript("init.lua")
 
