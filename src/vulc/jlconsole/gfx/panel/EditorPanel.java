@@ -4,16 +4,17 @@ import vulc.jlconsole.Console;
 import vulc.jlconsole.editor.Editor;
 import vulc.jlconsole.editor.map.MapEditor;
 import vulc.jlconsole.game.Game;
+import vulc.jlconsole.gfx.Screen;
+import vulc.jlconsole.gfx.gui.GUIButton;
 import vulc.jlconsole.gfx.gui.GUIContainer;
 
 public class EditorPanel extends Panel {
 
 	public final Game game;
 	public final GUIContainer guiPanel;
+	public Editor currentEditor;
 
 	public Editor mapEditor;
-
-	public Editor currentEditor;
 
 	public EditorPanel(Console console) {
 		super(console);
@@ -22,16 +23,18 @@ public class EditorPanel extends Panel {
 		guiPanel.background = 0xDD4444;
 
 		// DEBUG
-//		GUIButton cmdBtn = new GUIButton(0, 0, 19, 10);
-//		cmdBtn.opaque = true;
-//		cmdBtn.text = "CMD";
-//		cmdBtn.action = () -> {
-//			Panel cmdPanel = new CmdPanel(console);
-//			console.currentPanel = cmdPanel;
-//			cmdPanel.init();
-//			this.remove();
-//		};
-//		guiPanel.add(cmdBtn);
+		GUIButton cmdBtn = new GUIButton(0, 0, Screen.FONT.lengthOf(">_") + 2, 10);
+		cmdBtn.opaque = true;
+		cmdBtn.background = 0xAA4444;
+		cmdBtn.text = ">_";
+		cmdBtn.textColor = 0xffffff;
+		cmdBtn.action = () -> {
+			Panel cmdPanel = new CmdPanel(console);
+			console.currentPanel = cmdPanel;
+			cmdPanel.init();
+			this.remove();
+		};
+		guiPanel.add(cmdBtn);
 	}
 
 	public void init() {
