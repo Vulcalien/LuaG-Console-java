@@ -116,7 +116,9 @@ public class Console extends Canvas implements Runnable {
 
 		requestFocus();
 
-		currentPanel = new BootPanel(this, nextPanel);
+		BootPanel bootPanel = new BootPanel(this);
+		bootPanel.nextPanel = nextPanel;
+		currentPanel = bootPanel;
 		currentPanel.init();
 	}
 

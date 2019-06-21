@@ -5,16 +5,17 @@ import vulc.jlconsole.gfx.Screen;
 
 public class BootPanel extends Panel {
 
+	public Panel nextPanel;
 	private int bootTime = 150;
-	private Panel nextPanel;
 	private boolean hasInit = false;
 	private int animationTicks = 0;
 
-	public BootPanel(Console console, Panel nextPanel) {
+	public BootPanel(Console console) {
 		super(console);
-		this.nextPanel = nextPanel;
 		console.screen.clear(0);
+	}
 
+	public void init() {
 		new Thread() {
 			public void run() {
 				nextPanel.init();

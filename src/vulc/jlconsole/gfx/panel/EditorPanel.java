@@ -22,7 +22,6 @@ public class EditorPanel extends Panel {
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
 		guiPanel.background = 0xDD4444;
 
-		// DEBUG
 		GUIButton cmdBtn = new GUIButton(0, 0, Screen.FONT.lengthOf(">_") + 2, 10);
 		cmdBtn.opaque = true;
 		cmdBtn.background = 0xAA4444;
