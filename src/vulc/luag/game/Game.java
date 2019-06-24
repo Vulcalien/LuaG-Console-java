@@ -1,14 +1,18 @@
 package vulc.luag.game;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.KeyStroke;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -34,12 +38,7 @@ public class Game {
 
 	public Map map;
 
-	public final Key[] KEYS = {
-		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W),
-		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_A),
-		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S),
-		input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D)
-	};
+	public final List<Key> keys = new ArrayList<Key>();
 
 	public Game(Console console) {
 		this.console = console;
@@ -73,6 +72,18 @@ public class Game {
 	}
 
 	public void initScript() {
+		JsonElement keysElement = jsonConfig.get("keys");
+		if(keysElement != null && keysElement.isJsonArray()) {
+			JsonArray keyArray = keysElement.getAsJsonArray();
+			for(int i = 0; i < keyArray.size(); i++) {
+				String key = keyArray.get(i).getAsString().toUpperCase();
+				keys.add(input.new Key(KeyType.KEYBOARD,
+				                       KeyStroke.getKeyStroke(key).getKeyCode()));
+			}
+		} else {
+			System.err.println("Error: config.json must contain a string array 'keys'");
+			System.exit(1);
+		}
 		input.init(console);
 		scriptCore.init(console, this);
 	}

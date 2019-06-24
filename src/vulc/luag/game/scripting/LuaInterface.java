@@ -24,32 +24,32 @@ public class LuaInterface {
 		this.game = game;
 		this.env = env;
 
-		//SCREEN
+		// SCREEN
 		env.set("scr_w", console.screen.width);
 		env.set("scr_h", console.screen.height);
 
-		//FONT
+		// FONT
 		env.set("font_w", Screen.FONT.lengthOf(' '));
 		env.set("font_h", Screen.FONT.getHeight());
 
-		//MAP
+		// MAP
 		env.set("map_w", game.map.width);
 		env.set("map_h", game.map.height);
 
-		//FUNCTIONS
-		//general
+		// FUNCTIONS
+		// general
 		env.set("loadscript", new loadscript());
 		env.set("key", new key());
 		env.set("sfx", new sfx());
 
-		//screen
+		// screen
 		env.set("settransparent", new settransparent());
 		env.set("clear", new clear());
 		env.set("pix", new pix());
 		env.set("write", new write());
 		env.set("spr", new spr());
 
-		//map
+		// map
 		env.set("gettile", new gettile());
 		env.set("settile", new settile());
 		env.set("maprender", new maprender());
@@ -58,7 +58,7 @@ public class LuaInterface {
 
 	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(game.KEYS[id.checkint()].isKeyDown());
+			return valueOf(game.keys.get(id.checkint()).isKeyDown());
 		}
 	}
 
