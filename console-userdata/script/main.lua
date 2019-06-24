@@ -1,5 +1,5 @@
 -- This is just a test.
--- To use the console see docs/Documentation.html and docs/LuaDocs.html
+-- For Documentation, see 'https://github.com/Vulcalien/LuaG-Console/wiki'
 
 function init()
 	loadscript("init.lua")
