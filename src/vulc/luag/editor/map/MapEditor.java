@@ -20,12 +20,11 @@ import vulc.luag.input.InputHandler.KeyType;
 
 public class MapEditor extends Editor {
 
-	private final Key
-	mouse1,
-	moveUp,
-	moveLeft,
-	moveDown,
-	moveRight;
+	private final Key mouse1;
+	private final Key moveUp;
+	private final Key moveLeft;
+	private final Key moveDown;
+	private final Key moveRight;
 
 	private final InputHandler input;
 	private final int editWidth = 128, editHeight = 128;
@@ -48,7 +47,7 @@ public class MapEditor extends Editor {
 		moveDown = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
 		moveRight = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D);
 
-		//INTERFACE
+		// INTERFACE
 		guiPanel.opaque = true;
 		guiPanel.background = 0x000000;
 
@@ -81,6 +80,7 @@ public class MapEditor extends Editor {
 			public void onLostFocus() {
 				text = panel.game.map.width + "";
 			}
+
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
@@ -103,6 +103,7 @@ public class MapEditor extends Editor {
 			public void onLostFocus() {
 				text = panel.game.map.height + "";
 			}
+
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
@@ -124,6 +125,7 @@ public class MapEditor extends Editor {
 			public void onLostFocus() {
 				text = selectedTile + "";
 			}
+
 			public void onEnterPress() {
 				super.onEnterPress();
 				int n = Integer.parseInt(selectTileTxt.text);
@@ -182,7 +184,7 @@ public class MapEditor extends Editor {
 
 			y_loop:
 			for(int y = 0; y < old.height; y++) {
-				if(x >= h) break y_loop;
+				if(y >= h) break y_loop;
 
 				newMap.setTile(x, y, old.getTile(x, y));
 			}
