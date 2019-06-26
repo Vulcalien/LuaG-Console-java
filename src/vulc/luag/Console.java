@@ -147,7 +147,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame(NAME + VERSION);
+		JFrame frame = new JFrame(NAME + " " + VERSION);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 
