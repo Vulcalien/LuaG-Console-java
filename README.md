@@ -21,6 +21,7 @@ Just clone into your favourite Java IDE and compile it (don't forget to include 
 When you run the console, you have to choose what mode you want it to run.<br>
 
 You have to pass an argument when calling the jar file:
+
 | mode     | argument |
 | -------- | -------- |
 | cmd      | (none)   |
