@@ -6,6 +6,7 @@ import java.io.InputStream;
 import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
+import vulc.luag.gfx.panel.DeathPanel;
 
 public class Map {
 
@@ -49,7 +50,7 @@ public class Map {
 		tiles[x + y * width] = (byte) (id - 128);
 	}
 
-	public static Map load(InputStream input) {
+	public static Map load(InputStream input, Console console) {
 		try {
 			int w = (input.read() << 24) | (input.read() << 16) | (input.read() << 8) | input.read();
 			int h = (input.read() << 24) | (input.read() << 16) | (input.read() << 8) | input.read();
@@ -58,8 +59,10 @@ public class Map {
 			for(int i = 0; i < map.tiles.length; i++) {
 				int data = input.read();
 				if(data == -1) {
-					System.err.println("Error: map file is malformed (not enought tile data)");
-					System.exit(1);
+					console.switchToPanel(new DeathPanel(console, "Error:\n"
+					                                              + "map file is malformed\n"
+					                                              + "(not enought tile data)"));
+					return null;
 				}
 				map.tiles[i] = (byte) (data - 128);
 			}

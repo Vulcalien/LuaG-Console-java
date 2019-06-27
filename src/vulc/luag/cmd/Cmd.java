@@ -8,7 +8,6 @@ import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.CmdPanel;
 import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.gfx.panel.GamePanel;
-import vulc.luag.gfx.panel.Panel;
 
 public class Cmd {
 
@@ -91,18 +90,12 @@ public class Cmd {
 	public void execute(String command) {
 		switch(command) {
 			case "run":
-				cmdPanel.remove();
-				Panel gamePanel = new GamePanel(console);
-				console.currentPanel = gamePanel;
-				gamePanel.init();
+				console.switchToPanel(new GamePanel(console));
 				break;
 
 			case "edit":
 			case "editor":
-				cmdPanel.remove();
-				Panel editorPanel = new EditorPanel(console);
-				console.currentPanel = editorPanel;
-				editorPanel.init();
+				console.switchToPanel(new EditorPanel(console));
 				break;
 
 			case "cls":

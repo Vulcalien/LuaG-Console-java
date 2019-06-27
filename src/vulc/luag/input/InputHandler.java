@@ -39,6 +39,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	}
 
 	public void remove() {
+		if(console == null) return;
+
 		console.removeKeyListener(this);
 		console.removeMouseListener(this);
 		console.removeMouseMotionListener(this);

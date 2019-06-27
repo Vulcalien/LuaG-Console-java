@@ -20,6 +20,7 @@ import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.game.map.Map;
 import vulc.luag.game.scripting.LuaScriptCore;
+import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
@@ -44,34 +45,44 @@ public class Game {
 		this.console = console;
 	}
 
-	public void initResources() {
-		sounds.init();
+	public boolean initResources() {
+		sounds.init(console);
 		try {
 			atlas = new Bitmap(ImageIO.read(new File(Game.USER_DIR + "/atlas.png")));
 			if(atlas.width != 128 || atlas.height != 128) {
-				System.err.println("Error: atlas must be 128x128 (256 sprites)");
-				System.exit(1);
+				console.switchToPanel(new DeathPanel(console, "Error:\n"
+				                                              + "atlas must be\n"
+				                                              + "128x128 (256 sprites)"));
+				return false;
 			}
 		} catch(IOException e) {
-			System.err.println("Error: 'atlas.png' does not exist");
-			System.exit(1);
+			console.switchToPanel(new DeathPanel(console, "Error:\n"
+			                                              + "'atlas.png' does\n"
+			                                              + "not exist"));
+			return false;
 		}
 		try {
 			jsonConfig = new JsonParser().parse(new FileReader(Game.USER_DIR + "/config.json")).getAsJsonObject();
 		} catch(IOException e) {
-			System.err.println("Error: 'config.json' does not exist");
-			System.exit(1);
+			console.switchToPanel(new DeathPanel(console, "Error:\n"
+			                                              + "'config.json' does\n"
+			                                              + "not exist"));
+			return false;
 		}
 
 		try {
-			map = Map.load(new FileInputStream(Game.USER_DIR + "/map"));
+			map = Map.load(new FileInputStream(Game.USER_DIR + "/map"), console);
+			if(map == null) return false;
 		} catch(FileNotFoundException e) {
-			System.err.println("Error: file 'map' not found");
-			System.exit(1);
+			console.switchToPanel(new DeathPanel(console, "Error:\n"
+			                                              + "'map' does\n"
+			                                              + "not exist"));
+			return false;
 		}
+		return true;
 	}
 
-	public void initScript() {
+	public boolean initScript() {
 		JsonElement keysElement = jsonConfig.get("keys");
 		if(keysElement != null && keysElement.isJsonArray()) {
 			JsonArray keyArray = keysElement.getAsJsonArray();
@@ -81,11 +92,15 @@ public class Game {
 				                       KeyStroke.getKeyStroke(key).getKeyCode()));
 			}
 		} else {
-			System.err.println("Error: config.json must contain a string array 'keys'");
-			System.exit(1);
+			console.switchToPanel(new DeathPanel(console, "Error:\n"
+			                                              + "'config.json' must contain\n"
+			                                              + "a string array 'keys'"));
+			return false;
 		}
 		input.init(console);
 		scriptCore.init(console, this);
+
+		return true;
 	}
 
 	public void tick() {

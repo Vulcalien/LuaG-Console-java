@@ -1,12 +1,16 @@
 package vulc.luag.game.scripting;
 
+import java.io.File;
+
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaFunction;
+import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import vulc.luag.Console;
 import vulc.luag.game.Game;
+import vulc.luag.gfx.panel.DeathPanel;
 
 public class LuaScriptCore {
 
@@ -20,19 +24,48 @@ public class LuaScriptCore {
 		luaInterface.init(console, game, globals);
 
 		try {
-			globals.get("dofile").call(Game.USER_DIR + "/script/main.lua");
+			File mainFile = new File(Game.USER_DIR + "/script/main.lua");
+			if(!mainFile.exists()) {
+				console.switchToPanel(new DeathPanel(console, "Error:\n"
+				                                              + "'script/main.lua' does\n"
+				                                              + "not exist"));
+				return;
+			} else {
+				globals.get("dofile").call(mainFile.getPath());
+			}
 		} catch(LuaError e) {
+			console.switchToPanel(new DeathPanel(console, "Script Error:\n"
+			                                              + "see the terminal"));
 			e.printStackTrace();
-			System.exit(1);
+			return;
 		}
 
-		//LOAD TICK FUNCTION
+		// LOAD TICK FUNCTION
 		try {
-			luaTick = globals.get("tick").checkfunction();
-			globals.get("init").checkfunction().call();
+			LuaValue tick = globals.get("tick");
+			if(tick == LuaValue.NIL || !tick.isfunction()) {
+				console.switchToPanel(new DeathPanel(console, "Error:\n"
+				                                              + "'main.lua' must contain\n"
+				                                              + "a function 'tick()'"));
+				return;
+			} else {
+				luaTick = tick.checkfunction();
+			}
+
+			LuaValue init = globals.get("init");
+			if(init == LuaValue.NIL || !init.isfunction()) {
+				console.switchToPanel(new DeathPanel(console, "Error:\n"
+				                                              + "'main.lua' must contain\n"
+				                                              + "a function 'init()'"));
+				return;
+			} else {
+				init.checkfunction().call();
+			}
 		} catch(Exception e) {
+			console.switchToPanel(new DeathPanel(console, "Script Error:\n"
+			                                              + "see the terminal"));
 			e.printStackTrace();
-			System.exit(1);
+			return;
 		}
 	}
 

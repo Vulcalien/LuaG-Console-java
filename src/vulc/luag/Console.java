@@ -28,6 +28,7 @@ import vulc.luag.cmd.Cmd;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
 import vulc.luag.gfx.panel.CmdPanel;
+import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.Panel;
@@ -49,7 +50,7 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "Vulc's LuaG Console";
-	public static final String VERSION = "0.4.0";
+	public static final String VERSION = "0.4.1 (WIP)";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
@@ -108,8 +109,9 @@ public class Console extends Canvas implements Runnable {
 					break;
 
 				default:
-					System.err.println("Error: invalid boot argument");
-					System.exit(1);
+					switchToPanel(new DeathPanel(this, "Error:\n"
+					                                   + "invalid boot argument"));
+					return;
 			}
 		} else {
 			nextPanel = new CmdPanel(this);
@@ -144,6 +146,12 @@ public class Console extends Canvas implements Runnable {
 		g.drawImage(img, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 		g.dispose();
 		bs.show();
+	}
+
+	public void switchToPanel(Panel panel) {
+		if(currentPanel != null) currentPanel.remove();
+		currentPanel = panel;
+		panel.init();
 	}
 
 	public static void main(String[] args) {

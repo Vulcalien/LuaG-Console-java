@@ -5,17 +5,21 @@ import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 
+import vulc.luag.Console;
+import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.sfx.Sound;
 
 public class GameSounds {
 
 	private final HashMap<String, Sound> list = new HashMap<String, Sound>();
 
-	public void init() {
+	public boolean init(Console console) {
 		File sfxDir = new File(Game.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
-			System.err.println("Error: 'sfx' folder does not exist");
-			System.exit(1);
+			console.switchToPanel(new DeathPanel(console, "Error:\n"
+			                                              + "'sfx' folder does\n"
+			                                              + "not exist"));
+			return false;
 		}
 
 		File[] files = sfxDir.listFiles(new FilenameFilter() {
@@ -33,6 +37,7 @@ public class GameSounds {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 
 	public Sound get(String name) {
