@@ -1,5 +1,6 @@
 package vulc.luag.game;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,9 +19,9 @@ import com.google.gson.JsonParser;
 
 import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
+import vulc.luag.editor.map.compiler.MapCompiler;
 import vulc.luag.game.map.Map;
 import vulc.luag.game.scripting.LuaScriptCore;
-import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
@@ -46,39 +47,81 @@ public class Game {
 	}
 
 	public boolean initResources() {
-		sounds.init(console);
-		try {
-			atlas = new Bitmap(ImageIO.read(new File(Game.USER_DIR + "/atlas.png")));
-			if(atlas.width != 128 || atlas.height != 128) {
-				console.switchToPanel(new DeathPanel(console, "Error:\n"
-				                                              + "atlas must be\n"
-				                                              + "128x128 (256 sprites)"));
-				return false;
-			}
-		} catch(IOException e) {
-			console.switchToPanel(new DeathPanel(console, "Error:\n"
-			                                              + "'atlas.png' does\n"
-			                                              + "not exist"));
-			return false;
-		}
-		try {
-			jsonConfig = new JsonParser().parse(new FileReader(Game.USER_DIR + "/config.json")).getAsJsonObject();
-		} catch(IOException e) {
-			console.switchToPanel(new DeathPanel(console, "Error:\n"
-			                                              + "'config.json' does\n"
-			                                              + "not exist"));
+		// root
+		File rootFolder = new File(USER_DIR);
+		if(!rootFolder.isDirectory()) {
+			console.die("Error:\n"
+			            + "'" + USER_DIR.replaceFirst("./", "") + "'\n"
+			            + "folder not found");
 			return false;
 		}
 
-		try {
-			map = Map.load(new FileInputStream(Game.USER_DIR + "/map"), console);
-			if(map == null) return false;
-		} catch(FileNotFoundException e) {
-			console.switchToPanel(new DeathPanel(console, "Error:\n"
-			                                              + "'map' does\n"
-			                                              + "not exist"));
+		// sounds
+		if(!sounds.init(console)) return false;
+
+		// config.json
+		File configFile = new File(USER_DIR + "/config.json");
+		if(configFile.isFile()) {
+			try {
+				JsonElement element = new JsonParser().parse(new FileReader(configFile));
+				if(element.isJsonObject()) {
+					jsonConfig = element.getAsJsonObject();
+				} else {
+					console.die("Error:\n"
+					            + "'config.json'\n"
+					            + "must be a json object");
+					return false;
+				}
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			console.die("Error:\n"
+			            + "'config.json'\n"
+			            + "file not found");
 			return false;
 		}
+
+		// atlas.png
+		File atlasFile = new File(USER_DIR + "/atlas.png");
+		if(atlasFile.isFile()) {
+			try {
+				BufferedImage img = ImageIO.read(atlasFile);
+				if(img != null) {
+					atlas = new Bitmap(img);
+					if(atlas.width != 128 || atlas.height != 128) {
+						console.die("Error:\n"
+						            + "atlas must be\n"
+						            + "128x128 pixels\n"
+						            + "(256 sprites)");
+						return false;
+					}
+				} else {
+					console.die("Error:\n"
+					            + "'atlas.png'\n"
+					            + "is not an image");
+					return false;
+				}
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			console.die("Error:\n"
+			            + "'atlas.png'\n"
+			            + "file not found");
+			return false;
+		}
+
+		// map
+		File mapFile = new File(USER_DIR + "/map");
+		try {
+			map = Map.load(new FileInputStream(mapFile), console);
+			if(map == null) return false;
+		} catch(FileNotFoundException e) {
+			map = new Map(10, 10);
+			MapCompiler.compile(map);
+		}
+
 		return true;
 	}
 
@@ -92,9 +135,10 @@ public class Game {
 				                       KeyStroke.getKeyStroke(key).getKeyCode()));
 			}
 		} else {
-			console.switchToPanel(new DeathPanel(console, "Error:\n"
-			                                              + "'config.json' must contain\n"
-			                                              + "a string array 'keys'"));
+			console.die("Error:\n"
+			            + "'config.json'\n"
+			            + "must contain\n"
+			            + "a string array 'keys'");
 			return false;
 		}
 		input.init(console);

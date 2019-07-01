@@ -154,6 +154,10 @@ public class Console extends Canvas implements Runnable {
 		panel.init();
 	}
 
+	public void die(String text) {
+		switchToPanel(new DeathPanel(this, text));
+	}
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame(NAME + " " + VERSION);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

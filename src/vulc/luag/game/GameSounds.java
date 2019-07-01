@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 
 import vulc.luag.Console;
-import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.sfx.Sound;
 
 public class GameSounds {
@@ -16,9 +15,9 @@ public class GameSounds {
 	public boolean init(Console console) {
 		File sfxDir = new File(Game.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
-			console.switchToPanel(new DeathPanel(console, "Error:\n"
-			                                              + "'sfx' folder does\n"
-			                                              + "not exist"));
+			console.die("Error:\n"
+			            + "'sfx'\n"
+			            + "folder not found");
 			return false;
 		}
 

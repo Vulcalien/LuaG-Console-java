@@ -6,7 +6,6 @@ import java.io.InputStream;
 import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
-import vulc.luag.gfx.panel.DeathPanel;
 
 public class Map {
 
@@ -59,9 +58,9 @@ public class Map {
 			for(int i = 0; i < map.tiles.length; i++) {
 				int data = input.read();
 				if(data == -1) {
-					console.switchToPanel(new DeathPanel(console, "Error:\n"
-					                                              + "map file is malformed\n"
-					                                              + "(not enought tile data)"));
+					console.die("Error:\n"
+					            + "map file is malformed\n"
+					            + "(not enought tile data)");
 					return null;
 				}
 				map.tiles[i] = (byte) (data - 128);

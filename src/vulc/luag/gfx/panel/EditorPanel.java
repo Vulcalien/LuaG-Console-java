@@ -37,7 +37,7 @@ public class EditorPanel extends Panel {
 	}
 
 	public void init() {
-		game.initResources();
+		if(!game.initResources()) return;
 
 		mapEditor = new MapEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
 
@@ -45,7 +45,7 @@ public class EditorPanel extends Panel {
 	}
 
 	public void remove() {
-		currentEditor.remove();
+		if(currentEditor != null) currentEditor.remove();
 		guiPanel.removeInputListeners();
 	}
 

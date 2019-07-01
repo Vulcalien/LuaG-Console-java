@@ -10,15 +10,17 @@ import org.luaj.vm2.lib.jse.JsePlatform;
 
 import vulc.luag.Console;
 import vulc.luag.game.Game;
-import vulc.luag.gfx.panel.DeathPanel;
 
 public class LuaScriptCore {
 
 	private final LuaInterface luaInterface = new LuaInterface();
 
+	private Console console;
+
 	private LuaFunction luaTick;
 
 	public void init(Console console, Game game) {
+		this.console = console;
 		Globals globals = JsePlatform.standardGlobals();
 
 		luaInterface.init(console, game, globals);
@@ -26,16 +28,16 @@ public class LuaScriptCore {
 		try {
 			File mainFile = new File(Game.USER_DIR + "/script/main.lua");
 			if(!mainFile.exists()) {
-				console.switchToPanel(new DeathPanel(console, "Error:\n"
-				                                              + "'script/main.lua' does\n"
-				                                              + "not exist"));
+				console.die("Error:\n"
+				            + "'script/main.lua' does\n"
+				            + "not exist");
 				return;
 			} else {
 				globals.get("dofile").call(mainFile.getPath());
 			}
 		} catch(LuaError e) {
-			console.switchToPanel(new DeathPanel(console, "Script Error:\n"
-			                                              + "see the terminal"));
+			console.die("Script Error:\n"
+			            + "see the terminal");
 			e.printStackTrace();
 			return;
 		}
@@ -44,9 +46,9 @@ public class LuaScriptCore {
 		try {
 			LuaValue tick = globals.get("tick");
 			if(tick == LuaValue.NIL || !tick.isfunction()) {
-				console.switchToPanel(new DeathPanel(console, "Error:\n"
-				                                              + "'main.lua' must contain\n"
-				                                              + "a function 'tick()'"));
+				console.die("Error:\n"
+				            + "'main.lua' must contain\n"
+				            + "a function 'tick()'");
 				return;
 			} else {
 				luaTick = tick.checkfunction();
@@ -54,23 +56,29 @@ public class LuaScriptCore {
 
 			LuaValue init = globals.get("init");
 			if(init == LuaValue.NIL || !init.isfunction()) {
-				console.switchToPanel(new DeathPanel(console, "Error:\n"
-				                                              + "'main.lua' must contain\n"
-				                                              + "a function 'init()'"));
+				console.die("Error:\n"
+				            + "'main.lua' must contain\n"
+				            + "a function 'init()'");
 				return;
 			} else {
 				init.checkfunction().call();
 			}
 		} catch(Exception e) {
-			console.switchToPanel(new DeathPanel(console, "Script Error:\n"
-			                                              + "see the terminal"));
+			console.die("Script Error:\n"
+			            + "see the terminal");
 			e.printStackTrace();
 			return;
 		}
 	}
 
 	public void tick() {
-		luaTick.call();
+		try {
+			luaTick.call();
+		} catch(Exception e) {
+			console.die("Script Error:\n"
+			            + "see the terminal");
+			e.printStackTrace();
+		}
 	}
 
 }
