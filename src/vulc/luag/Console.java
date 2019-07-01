@@ -50,7 +50,7 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "Vulc's LuaG Console";
-	public static final String VERSION = "0.4.1 (WIP)";
+	public static final String VERSION = "0.4.1";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
