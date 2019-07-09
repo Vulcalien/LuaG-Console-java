@@ -1,8 +1,7 @@
 package vulc.luag.editor.map;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
-import com.sun.glass.events.KeyEvent;
 
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
