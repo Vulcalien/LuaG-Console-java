@@ -10,7 +10,7 @@ The editor view contains a **map editor**.
 ## Getting Started
 You can:
 - clone and compile
-- [download](https://github.com/Vulcalien/LuaG-Console/releases) a release
+- [download](https://github.com/Vulcalien/LuaG-Console/wiki/Download) a release
 
 **I strongly recommend you to download a release** that will also contain blank '*console-userdata*' files.
 
