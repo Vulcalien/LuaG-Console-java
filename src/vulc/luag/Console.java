@@ -40,11 +40,10 @@ import vulc.luag.gfx.panel.Panel;
  *
  * <h2>Used Libraries</h2>
  * <ul>
- * <li>'Bitmap Utility'     by Vulcalien</li>
- * <li>'Gson'               by Google</li>
- * <li>'LuaJ'               by LuaJ</li>
+ * <li>'Bitmap Utility'    by Vulcalien (Copyright 2019 Vulcalien - https://github.com/Vulcalien/Bitmap-Utility/blob/master/LICENSE)</li>
+ * <li>'Gson'              by Google (Copyright 2008-2011 Google Inc. - https://github.com/google/gson/blob/master/LICENSE)</li>
+ * <li>'LuaJ'              by LuaJ (Copyright (c) 2007-2013 LuaJ - http://luaj.sourceforge.net/license.txt)</li>
  * </ul>
- *
  */
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
