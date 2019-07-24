@@ -40,7 +40,13 @@ public class LuaInterface {
 		// general
 		env.set("loadscript", new loadscript());
 		env.set("key", new key());
+		env.set("key_down", new key());
+		env.set("key_pressed", new key_pressed());
+		env.set("key_released", new key_released());
 		env.set("sfx", new sfx());
+		env.set("sfx_play", new sfx());
+		env.set("sfx_loop", new sfx_loop());
+		env.set("sfx_stop", new sfx_stop());
 
 		// screen
 		env.set("settransparent", new settransparent());
@@ -50,8 +56,8 @@ public class LuaInterface {
 		env.set("spr", new spr());
 
 		// map
-		env.set("gettile", new gettile());
-		env.set("settile", new settile());
+		env.set("get_tile", new get_tile());
+		env.set("set_tile", new set_tile());
 		env.set("maprender", new maprender());
 
 	}
@@ -59,6 +65,59 @@ public class LuaInterface {
 	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
 			return valueOf(game.keys.get(id.checkint()).isKeyDown());
+		}
+	}
+
+	private class key_pressed extends OneArgFunction {
+		public LuaValue call(LuaValue id) {
+			return valueOf(game.keys.get(id.checkint()).isPressed());
+		}
+	}
+
+	private class key_released extends OneArgFunction {
+		public LuaValue call(LuaValue id) {
+			return valueOf(game.keys.get(id.checkint()).isReleased());
+		}
+	}
+
+	private class sfx extends OneArgFunction {
+		public LuaValue call(LuaValue name) {
+			Sound sound = game.sounds.get(name.checkjstring());
+			if(sound == null) {
+				System.err.println("Error: sound '" + name + "' does not exist");
+			} else {
+				sound.play();
+			}
+			return NIL;
+		}
+	}
+
+	private class sfx_loop extends TwoArgFunction {
+		public LuaValue call(LuaValue name, LuaValue times) {
+			Sound sound = game.sounds.get(name.checkjstring());
+			if(sound == null) {
+				System.err.println("Error: sound '" + name + "' does not exist");
+			} else {
+				int count;
+
+				if(times.isnil()) count = -1;
+				else count = times.checkint();
+
+				sound.loop(count);
+			}
+			return NIL;
+		}
+	}
+
+	private class sfx_stop extends OneArgFunction {
+		public LuaValue call(LuaValue name) {
+			Sound sound = game.sounds.get(name.checkjstring());
+			if(sound == null) {
+				System.err.println("Error: sound '" + name + "' does not exist");
+			} else {
+				sound.stop();
+			}
+			return NIL;
 		}
 	}
 
@@ -117,25 +176,13 @@ public class LuaInterface {
 		}
 	}
 
-	private class sfx extends OneArgFunction {
-		public LuaValue call(LuaValue name) {
-			Sound sound = game.sounds.get(name.checkjstring());
-			if(sound == null) {
-				System.err.println("Error: sound '" + name + "' does not exist");
-			} else {
-				sound.play();
-			}
-			return NIL;
-		}
-	}
-
-	private class gettile extends TwoArgFunction {
+	private class get_tile extends TwoArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y) {
 			return valueOf(game.map.getTile(x.checkint(), y.checkint()));
 		}
 	}
 
-	private class settile extends ThreeArgFunction {
+	private class set_tile extends ThreeArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y, LuaValue id) {
 			game.map.setTile(x.checkint(), y.checkint(), id.checkint());
 			return NIL;
