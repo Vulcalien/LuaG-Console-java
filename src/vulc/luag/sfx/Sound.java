@@ -14,12 +14,16 @@ import javax.sound.sampled.Mixer;
 
 public class Sound {
 
-	private static Mixer mixer;
+	private final static Mixer MIXER;
+	static {
+		MIXER = AudioSystem.getMixer(AudioSystem.getMixerInfo()[0]);
+	}
+
 	private Clip clip;
 
 	public Sound(URL url) {
 		try {
-			Clip clip = (Clip) mixer.getLine(new DataLine.Info(Clip.class, null));
+			Clip clip = (Clip) MIXER.getLine(new DataLine.Info(Clip.class, null));
 			AudioInputStream audioStream = AudioSystem.getAudioInputStream(url);
 			clip.open(audioStream);
 			this.clip = clip;
@@ -30,22 +34,20 @@ public class Sound {
 
 	public void play() {
 		if(clip == null) return;
+		clip.stop();
 		clip.setFramePosition(0);
 		clip.start();
 	}
 
 	public void loop() {
 		if(clip == null) return;
+		clip.setFramePosition(0);
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
 	public void stop() {
 		if(clip == null) return;
 		clip.stop();
-	}
-
-	public static void init() {
-		mixer = AudioSystem.getMixer(AudioSystem.getMixerInfo()[0]);
 	}
 
 }

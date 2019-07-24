@@ -32,7 +32,6 @@ import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.Panel;
-import vulc.luag.sfx.Sound;
 
 /**
  * Open Source since: 20.06.2019<br>
@@ -94,7 +93,6 @@ public class Console extends Canvas implements Runnable {
 
 	private void init(String[] args) {
 		requestFocus();
-		Sound.init();
 
 		cmd = new Cmd(this);
 		cmd.init();
