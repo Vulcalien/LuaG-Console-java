@@ -39,10 +39,14 @@ public class LuaInterface {
 		// FUNCTIONS
 		// general
 		env.set("loadscript", new loadscript());
+
+		// keys
 		env.set("key", new key());
 		env.set("key_down", new key());
 		env.set("key_pressed", new key_pressed());
 		env.set("key_released", new key_released());
+
+		// sound
 		env.set("sfx", new sfx());
 		env.set("sfx_play", new sfx());
 		env.set("sfx_loop", new sfx_loop());
@@ -62,6 +66,17 @@ public class LuaInterface {
 
 	}
 
+	//---GENERAL---\\
+
+	private class loadscript extends OneArgFunction {
+		public LuaValue call(LuaValue script) {
+			env.get("dofile").call(Game.USER_DIR + "/script/" + script);
+			return NIL;
+		}
+	}
+
+	//---KEYS---\\
+
 	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
 			return valueOf(game.keys.get(id.checkint()).isKeyDown());
@@ -79,6 +94,8 @@ public class LuaInterface {
 			return valueOf(game.keys.get(id.checkint()).isReleased());
 		}
 	}
+
+	//---SOUND---\\
 
 	private class sfx extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
@@ -115,6 +132,8 @@ public class LuaInterface {
 			return NIL;
 		}
 	}
+
+	//---SCREEN---\\
 
 	private class settransparent extends OneArgFunction {
 		public LuaValue call(LuaValue color) {
@@ -171,6 +190,8 @@ public class LuaInterface {
 		}
 	}
 
+	//---MAP---\\
+
 	private class get_tile extends TwoArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y) {
 			return valueOf(game.map.getTile(x.checkint(), y.checkint()));
@@ -191,13 +212,6 @@ public class LuaInterface {
 			int y = arg3.isnil() ? 0 : arg3.checkint();
 
 			game.map.render(console.screen, game, x, y, scale);
-			return NIL;
-		}
-	}
-
-	private class loadscript extends OneArgFunction {
-		public LuaValue call(LuaValue script) {
-			env.get("dofile").call(Game.USER_DIR + "/script/" + script);
 			return NIL;
 		}
 	}
