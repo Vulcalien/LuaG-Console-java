@@ -34,13 +34,9 @@ public class Sound {
 		clip.start();
 	}
 
-	public void loop(int count) {
-		if(clip == null) return;
-		clip.loop(count);
-	}
-
 	public void loop() {
-		loop(Clip.LOOP_CONTINUOUSLY);
+		if(clip == null) return;
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
 
 	public void stop() {

@@ -18,7 +18,7 @@ function tick()
 		sfx('test')
 		y = y - 1
 	end
-	if key(1) then
+	if key_pressed(1) then
 		sfx_loop('test')
 		x = x - 1
 	end

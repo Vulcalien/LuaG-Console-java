@@ -92,18 +92,13 @@ public class LuaInterface {
 		}
 	}
 
-	private class sfx_loop extends TwoArgFunction {
-		public LuaValue call(LuaValue name, LuaValue times) {
+	private class sfx_loop extends OneArgFunction {
+		public LuaValue call(LuaValue name) {
 			Sound sound = game.sounds.get(name.checkjstring());
 			if(sound == null) {
 				System.err.println("Error: sound '" + name + "' does not exist");
 			} else {
-				int count;
-
-				if(times.isnil()) count = -1;
-				else count = times.checkint();
-
-				sound.loop(count);
+				sound.loop();
 			}
 			return NIL;
 		}
