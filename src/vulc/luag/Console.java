@@ -160,7 +160,12 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public void die(String text) {
-		switchToPanel(new DeathPanel(this, text));
+		if(mode == Mode.DEVELOPER) {
+			switchToPanel(new CmdPanel(this));
+			cmd.write(text + "\n\n");
+		} else {
+			switchToPanel(new DeathPanel(this, text));
+		}
 	}
 
 	public static void main(String[] args) {
