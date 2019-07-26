@@ -88,6 +88,7 @@ public class Cmd {
 	}
 
 	public void execute(String command) {
+		command.trim();
 		switch(command) {
 			case "run":
 				console.switchToPanel(new GamePanel(console));
