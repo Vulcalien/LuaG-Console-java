@@ -29,7 +29,6 @@ import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
 import vulc.luag.gfx.panel.CmdPanel;
 import vulc.luag.gfx.panel.DeathPanel;
-import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.Panel;
 
@@ -59,6 +58,12 @@ public class Console extends Canvas implements Runnable {
 	public final Screen screen = new Screen(WIDTH, HEIGHT);
 	public Cmd cmd;
 	public Panel currentPanel;
+
+	private enum Mode {
+		USER, DEVELOPER
+	}
+
+	private Mode mode;
 
 	public void run() {
 		int ticksPerSecond = 60;
@@ -94,19 +99,10 @@ public class Console extends Canvas implements Runnable {
 	private void init(String[] args) {
 		requestFocus();
 
-		cmd = new Cmd(this);
-		cmd.init();
-		Panel nextPanel = null;
-
 		if(args.length > 0) {
 			switch(args[0]) {
-				case "-run":
-					nextPanel = new GamePanel(this);
-					break;
-
-				case "-editor":
-				case "-edit":
-					nextPanel = new EditorPanel(this);
+				case "-dev":
+					mode = Mode.DEVELOPER;
 					break;
 
 				default:
@@ -115,7 +111,17 @@ public class Console extends Canvas implements Runnable {
 					return;
 			}
 		} else {
+			mode = Mode.USER;
+		}
+
+		Panel nextPanel = null;
+
+		if(mode == Mode.DEVELOPER) {
+			cmd = new Cmd(this);
+			cmd.init();
 			nextPanel = new CmdPanel(this);
+		} else if(mode == Mode.USER) {
+			nextPanel = new GamePanel(this);
 		}
 
 		BootPanel bootPanel = new BootPanel(this);
