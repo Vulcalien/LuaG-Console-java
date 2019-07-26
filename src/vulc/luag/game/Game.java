@@ -1,5 +1,6 @@
 package vulc.luag.game;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,9 +20,11 @@ import com.google.gson.JsonParser;
 
 import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
+import vulc.luag.Console.Mode;
 import vulc.luag.editor.map.compiler.MapCompiler;
 import vulc.luag.game.map.Map;
 import vulc.luag.game.scripting.LuaScriptCore;
+import vulc.luag.gfx.panel.CmdPanel;
 import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
@@ -42,8 +45,13 @@ public class Game {
 
 	public final List<Key> keys = new ArrayList<Key>();
 
+	private Key debugGotoCMD = null;
+
 	public Game(Console console) {
 		this.console = console;
+		if(console.mode == Mode.DEVELOPER) {
+			debugGotoCMD = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F8);
+		}
 	}
 
 	public boolean initResources() {
@@ -149,6 +157,11 @@ public class Game {
 
 	public void tick() {
 		scriptCore.tick();
+		if(console.mode == Mode.DEVELOPER) {
+			if(debugGotoCMD.isPressed()) {
+				console.switchToPanel(new CmdPanel(console));
+			}
+		}
 		input.tick();
 	}
 

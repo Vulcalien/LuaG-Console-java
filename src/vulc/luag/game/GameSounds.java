@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.Set;
 
 import vulc.luag.Console;
 import vulc.luag.sfx.Sound;
@@ -41,6 +42,13 @@ public class GameSounds {
 
 	public Sound get(String name) {
 		return list.get(name);
+	}
+
+	public void remove() {
+		Set<String> keys = list.keySet();
+		for(String key : keys) {
+			list.get(key).stop();
+		}
 	}
 
 }

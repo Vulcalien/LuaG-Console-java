@@ -19,6 +19,7 @@ public class GamePanel extends Panel {
 
 	public void remove() {
 		game.input.remove();
+		game.sounds.remove();
 	}
 
 	public void tick() {

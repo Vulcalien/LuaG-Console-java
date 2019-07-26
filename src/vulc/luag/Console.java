@@ -59,11 +59,11 @@ public class Console extends Canvas implements Runnable {
 	public Cmd cmd;
 	public Panel currentPanel;
 
-	private enum Mode {
+	public enum Mode {
 		USER, DEVELOPER
 	}
 
-	private Mode mode;
+	public Mode mode;
 
 	public void run() {
 		int ticksPerSecond = 60;

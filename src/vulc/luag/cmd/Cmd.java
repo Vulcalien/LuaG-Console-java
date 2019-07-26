@@ -81,9 +81,9 @@ public class Cmd {
 		}
 	}
 
-	public void write(String line) {
-		for(int i = 0; i < line.length(); i++) {
-			charBuffer.add(new CmdChar(line.charAt(i), false));
+	public void write(String text) {
+		for(int i = 0; i < text.length(); i++) {
+			charBuffer.add(new CmdChar(text.charAt(i), false));
 		}
 	}
 
@@ -106,11 +106,11 @@ public class Cmd {
 
 			case "ver":
 			case "version":
-				write(Console.VERSION + " - By Vulcalien\n");
+				write(Console.VERSION + " - By Vulcalien\n\n");
 				break;
 
 			default:
-				write("unknown command\n");
+				write("unknown command\n\n");
 				break;
 		}
 	}
