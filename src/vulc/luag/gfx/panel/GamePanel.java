@@ -20,6 +20,10 @@ public class GamePanel extends Panel {
 	public void remove() {
 		game.input.remove();
 		game.sounds.remove();
+
+		// Game's interface can set screen's transparent colors.
+		// This will reset it.
+		console.screen.setTransparent();
 	}
 
 	public void tick() {

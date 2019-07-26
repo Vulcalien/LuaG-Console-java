@@ -63,7 +63,6 @@ public class LuaInterface {
 		env.set("get_tile", new get_tile());
 		env.set("set_tile", new set_tile());
 		env.set("maprender", new maprender());
-
 	}
 
 	//---GENERAL---\\
