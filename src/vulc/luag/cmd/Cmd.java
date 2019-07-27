@@ -109,6 +109,14 @@ public class Cmd {
 				write(Console.VERSION + " - By Vulcalien\n\n");
 				break;
 
+			case "help":
+				write("run: runs the game\n");
+				write("edit: opens the editor\n");
+				write("cls: clears the cmd\n");
+				write("ver: prints version\n");
+				write("help: prints this list\n\n");
+				break;
+
 			default:
 				write("unknown command\n\n");
 				break;
