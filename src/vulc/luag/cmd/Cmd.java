@@ -16,8 +16,10 @@ public class Cmd {
 
 	private final int renderedLines = Console.HEIGHT / (Screen.FONT.getHeight() + 1) + 1;
 
-	private final List<String> closedLines = new ArrayList<String>();
 	public final List<CmdChar> charBuffer = new ArrayList<CmdChar>();
+	public int scrollBuffer = 0;
+
+	private final List<String> closedLines = new ArrayList<String>();
 	private String currentLine = "";
 
 	private int renderOffset = 0;
@@ -38,6 +40,20 @@ public class Cmd {
 			writing = true;
 		} else {
 			animationTicks++;
+		}
+
+		if(scrollBuffer != 0) {
+			int newOffset = renderOffset + scrollBuffer;
+
+			if(newOffset > closedLines.size() - renderedLines + 2) {
+				newOffset = closedLines.size() - renderedLines + 2;
+			}
+
+			// this may be caused by the previous if block
+			if(newOffset < 0) newOffset = 0;
+
+			renderOffset = newOffset;
+			scrollBuffer = 0;
 		}
 
 		console.screen.clear(background);
@@ -74,7 +90,12 @@ public class Cmd {
 				closedLines.add(currentLine);
 				currentLine = "";
 
-//				renderOffset++; // DEBUG
+				// Theory is when you know everything but nothing works.
+				// Practice is when everything works but you don’t know why.
+				// THIS IS PRACTICE
+				if(renderOffset < closedLines.size() - renderedLines + 2) {
+					renderOffset = closedLines.size() - renderedLines + 2;
+				}
 				break;
 
 			case '\b':
@@ -112,6 +133,7 @@ public class Cmd {
 			case "cls":
 				closedLines.clear();
 				currentLine = "";
+				renderOffset = 0;
 				break;
 
 			case "ver":

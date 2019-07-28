@@ -2,6 +2,8 @@ package vulc.luag.gfx.panel;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import vulc.luag.Console;
 import vulc.luag.cmd.Cmd;
@@ -11,9 +13,14 @@ public class CmdPanel extends Panel {
 
 	private final Cmd cmd;
 
-	private final KeyAdapter listener = new KeyAdapter() {
+	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
 			cmd.charBuffer.add(new CmdChar(e.getKeyChar(), true));
+		}
+	};
+	private final MouseWheelListener mouseScrollListener = new MouseWheelListener() {
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			cmd.scrollBuffer += e.getWheelRotation();
 		}
 	};
 
@@ -24,7 +31,8 @@ public class CmdPanel extends Panel {
 	}
 
 	public void onShow() {
-		console.addKeyListener(listener);
+		console.addKeyListener(keyListener);
+		console.addMouseWheelListener(mouseScrollListener);
 	}
 
 	public void tick() {
@@ -32,7 +40,8 @@ public class CmdPanel extends Panel {
 	}
 
 	public void remove() {
-		console.removeKeyListener(listener);
+		console.removeKeyListener(keyListener);
+		console.removeMouseWheelListener(mouseScrollListener);
 	}
 
 }
