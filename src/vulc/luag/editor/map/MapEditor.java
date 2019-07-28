@@ -126,11 +126,14 @@ public class MapEditor extends Editor {
 
 			public void onEnterPress() {
 				super.onEnterPress();
-				int n = Integer.parseInt(selectTileTxt.text);
-				if(n > 255) n = 255;
 
-				selectedTile = n;
-				selectTileTxt.text = n + "";
+				int id;
+				if(selectTileTxt.text.equals("")) id = 0;
+				else id = Integer.parseInt(selectTileTxt.text);
+				if(id > 255) id = 255;
+
+				selectedTile = id;
+				selectTileTxt.text = id + "";
 			}
 		};
 		selectTileTxt.text = selectedTile + "";
