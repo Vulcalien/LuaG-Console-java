@@ -83,8 +83,8 @@ public class MapEditor extends Editor {
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
-				                           Integer.parseInt(wTextBox.text),
-				                           Integer.parseInt(hTextBox.text));
+				                           wTextBox.text,
+				                           hTextBox.text);
 				saveButton.setContentModified(true);
 			}
 		};
@@ -106,8 +106,8 @@ public class MapEditor extends Editor {
 			public void onEnterPress() {
 				super.onEnterPress();
 				panel.game.map = resizeMap(panel.game.map,
-				                           Integer.parseInt(wTextBox.text),
-				                           Integer.parseInt(hTextBox.text));
+				                           wTextBox.text,
+				                           hTextBox.text);
 				saveButton.setContentModified(true);
 			}
 		};
@@ -174,7 +174,14 @@ public class MapEditor extends Editor {
 		}
 	}
 
-	public Map resizeMap(Map old, int w, int h) {
+	public Map resizeMap(Map old, String wText, String hText) {
+		int w, h;
+		if(!wText.equals("")) w = Integer.parseInt(wText);
+		else w = 0;
+
+		if(!hText.equals("")) h = Integer.parseInt(hText);
+		else h = 0;
+
 		Map newMap = new Map(w, h);
 
 		x_loop:
