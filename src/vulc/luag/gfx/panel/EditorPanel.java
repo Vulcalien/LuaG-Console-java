@@ -21,19 +21,27 @@ public class EditorPanel extends Panel {
 		this.game = new Game(console);
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
 		guiPanel.background = 0xDD4444;
+		guiPanel.init();
 
-		GUIButton cmdBtn = new GUIButton(0, 0, Screen.FONT.lengthOf(">_") + 2, 10);
+		GUIButton cmdBtn = new GUIButton(1, 1, Screen.FONT.lengthOf(">_") + 2, 8);
 		cmdBtn.opaque = true;
 		cmdBtn.background = 0xAA4444;
 		cmdBtn.text = ">_";
 		cmdBtn.textColor = 0xffffff;
 		cmdBtn.action = () -> {
-			Panel cmdPanel = new CmdPanel(console);
-			console.currentPanel = cmdPanel;
-			cmdPanel.init();
-			this.remove();
+			console.switchToPanel(new CmdPanel(console));
 		};
 		guiPanel.add(cmdBtn);
+
+		GUIButton mapEditBtn = new GUIButton(cmdBtn.w + 2, 1, Screen.FONT.lengthOf("Map") + 2, 8);
+		mapEditBtn.opaque = true;
+		mapEditBtn.background = 0xAA4444;
+		mapEditBtn.text = "Map";
+		mapEditBtn.textColor = 0xffffff;
+		mapEditBtn.action = () -> {
+			switchToEditor(mapEditor);
+		};
+		guiPanel.add(mapEditBtn);
 	}
 
 	public void init() {
@@ -41,11 +49,12 @@ public class EditorPanel extends Panel {
 
 		mapEditor = new MapEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
 
-		currentEditor = mapEditor;
+		switchToEditor(mapEditor);
 	}
 
 	public void remove() {
-		if(currentEditor != null) currentEditor.remove();
+		mapEditor.remove();
+
 		guiPanel.removeInputListeners();
 	}
 
@@ -53,6 +62,12 @@ public class EditorPanel extends Panel {
 		currentEditor.tick();
 		guiPanel.tick();
 		guiPanel.render(console.screen);
+	}
+
+	private void switchToEditor(Editor editor) {
+		if(currentEditor != null) currentEditor.remove();
+		editor.init();
+		currentEditor = editor;
 	}
 
 }

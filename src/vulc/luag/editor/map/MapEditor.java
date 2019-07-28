@@ -38,7 +38,6 @@ public class MapEditor extends Editor {
 		super(console, panel, x, y, w, h);
 
 		this.input = guiPanel.input;
-		panel.guiPanel.add(this.guiPanel);
 
 		mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 		moveUp = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);

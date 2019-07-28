@@ -14,6 +14,11 @@ public abstract class Editor {
 		this.guiPanel = new GUIContainer(console, x, y, w, h);
 	}
 
+	public void init() {
+		guiPanel.init();
+		panel.guiPanel.add(this.guiPanel);
+	}
+
 	public abstract void tick();
 
 	public void remove() {

@@ -34,6 +34,9 @@ public class GUIContainer extends GUIComponent {
 		super(x, y, w, h);
 		this.console = console;
 		this.screen = new Screen(w, h);
+	}
+
+	public void init() {
 		input.init(console);
 		console.addKeyListener(keyListener);
 	}
@@ -92,7 +95,9 @@ public class GUIContainer extends GUIComponent {
 
 	@Override
 	public void press() {
-		for(GUIComponent comp : comps) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+
 			if(comp.isPressed(input.xMouse / Console.SCALE - xParentAbs - x,
 			                  input.yMouse / Console.SCALE - yParentAbs - y)) {
 				boolean gainFocus = !comp.focused;
