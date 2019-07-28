@@ -21,7 +21,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import vulc.luag.cmd.Cmd;
@@ -182,6 +184,12 @@ public class Console extends Canvas implements Runnable {
 		frame.add(instance);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
+
+		try {
+			frame.setIconImage(ImageIO.read(Console.class.getResourceAsStream("/res/icon.png")));
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 
 		instance.init(args);
 
