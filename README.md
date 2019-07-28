@@ -1,3 +1,4 @@
+![icon](res/res/icon.png)
 # LuaG Console
 LuaG is a virtual console that allows you to build a game very quickly using lua.  
 The console comes with an integrated game editor.
