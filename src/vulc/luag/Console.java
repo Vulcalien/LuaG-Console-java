@@ -157,6 +157,7 @@ public class Console extends Canvas implements Runnable {
 		if(currentPanel != null) currentPanel.remove();
 		currentPanel = panel;
 		panel.init();
+		panel.onShow();
 	}
 
 	public void die(String text) {

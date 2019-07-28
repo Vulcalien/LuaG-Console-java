@@ -13,6 +13,9 @@ public abstract class Panel {
 	public void init() {
 	}
 
+	public void onShow() {
+	}
+
 	public void remove() {
 	}
 

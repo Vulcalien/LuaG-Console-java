@@ -6,7 +6,7 @@ import vulc.luag.gfx.Screen;
 public class BootPanel extends Panel {
 
 	public Panel nextPanel;
-	private int bootTime = 150;
+	private int bootTime = 135; // 2.25s
 	private boolean hasInit = false;
 	private int animationTicks = 0;
 
@@ -34,7 +34,8 @@ public class BootPanel extends Panel {
 		bootTime--;
 		if(bootTime <= 0) {
 			if(hasInit) {
-				console.currentPanel = nextPanel;
+				console.currentPanel = nextPanel; // cannot call console.switchToPanel because it'd call panel.init() again
+				nextPanel.onShow();
 				screen.clear(0);
 			} else {
 				int animatPhase = animationTicks / 30 % 4;

@@ -23,7 +23,7 @@ public class CmdPanel extends Panel {
 		cmd.cmdPanel = this;
 	}
 
-	public void init() {
+	public void onShow() {
 		console.addKeyListener(listener);
 	}
 
