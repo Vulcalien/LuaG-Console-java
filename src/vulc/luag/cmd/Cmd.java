@@ -14,11 +14,14 @@ public class Cmd {
 	private final int background = 0x000000;
 	private final int foreground = 0xffffff;
 
+	private final int renderedLines = Console.HEIGHT / (Screen.FONT.getHeight() + 1) + 1;
+
 	private final List<String> closedLines = new ArrayList<String>();
 	public final List<CmdChar> charBuffer = new ArrayList<CmdChar>();
 	private String currentLine = "";
 
-	private int animationTicks = 0;
+	private int renderOffset = 0;
+	private int animationTicks = 0; // the _ that appears and disappears
 
 	private Console console;
 	public CmdPanel cmdPanel;
@@ -38,10 +41,15 @@ public class Cmd {
 		}
 
 		console.screen.clear(background);
-		for(int i = 0; i <= closedLines.size(); i++) {
+		for(int i = 0; i < renderedLines; i++) {
+			int line = i + renderOffset;
+			if(line > closedLines.size()) { // if line == closedLines.size() then the cmd will render currentLine
+				break;
+			}
+
 			String text;
-			if(i != closedLines.size()) {
-				text = closedLines.get(i);
+			if(line < closedLines.size()) {
+				text = closedLines.get(line);
 			} else {
 				text = currentLine;
 				if(!writing && animationTicks / 25 % 2 == 1) {
@@ -65,6 +73,8 @@ public class Cmd {
 				if(shouldExecute) execute(currentLine);
 				closedLines.add(currentLine);
 				currentLine = "";
+
+//				renderOffset++; // DEBUG
 				break;
 
 			case '\b':
