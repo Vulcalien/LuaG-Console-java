@@ -15,15 +15,15 @@ x = math.floor(scr_w / 2) - 4
 y = math.floor(scr_h / 2) - 4
 function tick()
 	if key(0) then
-		sfx('test')
+		sfx('a/test')
 		y = y - 1
 	end
 	if key_pressed(1) then
-		sfx_loop('test')
+		sfx_loop('a/test')
 		x = x - 1
 	end
 	if key(2) then
-		sfx_stop('test')
+		sfx_stop('a/test')
 		y = y + 1
 	end
 	if key(3) then x = x + 1 end

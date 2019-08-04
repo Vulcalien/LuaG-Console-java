@@ -1,7 +1,6 @@
 package vulc.luag.game;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Set;
@@ -22,21 +21,8 @@ public class GameSounds {
 			return false;
 		}
 
-		File[] files = sfxDir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.endsWith(".wav");
-			}
-		});
+		readSoundsInFolder(sfxDir, "");
 
-		for(File soundFile : files) {
-			String name = soundFile.getName();
-			name = name.substring(0, name.lastIndexOf('.'));
-			try {
-				list.put(name, new Sound(soundFile.toURI().toURL()));
-			} catch(MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
 		return true;
 	}
 
@@ -48,6 +34,27 @@ public class GameSounds {
 		Set<String> keys = list.keySet();
 		for(String key : keys) {
 			list.get(key).stop();
+		}
+	}
+
+	private void readSoundsInFolder(File folder, String relativeToSfxRoot) {
+		File[] files = folder.listFiles();
+		for(File file : files) {
+			String fileName = file.getName();
+
+			if(file.isDirectory()) {
+				readSoundsInFolder(file, relativeToSfxRoot + fileName + "/");
+			} else {
+				if(fileName.endsWith(".wav")) {
+					String name = relativeToSfxRoot + fileName;
+					name = name.substring(0, name.lastIndexOf('.'));
+					try {
+						list.put(name, new Sound(file.toURI().toURL()));
+					} catch(MalformedURLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 
