@@ -8,10 +8,16 @@ import java.awt.event.MouseWheelListener;
 import vulc.luag.Console;
 import vulc.luag.cmd.Cmd;
 import vulc.luag.cmd.CmdChar;
+import vulc.luag.input.InputHandler;
+import vulc.luag.input.InputHandler.Key;
+import vulc.luag.input.InputHandler.KeyType;
 
 public class CmdPanel extends Panel {
 
 	private final Cmd cmd;
+
+	private final InputHandler input = new InputHandler();
+	public final Key ctrl = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_CONTROL);
 
 	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
@@ -31,15 +37,18 @@ public class CmdPanel extends Panel {
 	}
 
 	public void onShow() {
+		input.init(console);
 		console.addKeyListener(keyListener);
 		console.addMouseWheelListener(mouseScrollListener);
 	}
 
 	public void tick() {
 		cmd.tick();
+		input.tick();
 	}
 
 	public void remove() {
+		input.remove();
 		console.removeKeyListener(keyListener);
 		console.removeMouseWheelListener(mouseScrollListener);
 	}

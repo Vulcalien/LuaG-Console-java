@@ -100,7 +100,16 @@ public class Cmd {
 
 			case '\b':
 				if(currentLine.length() > 0) {
-					currentLine = currentLine.substring(0, currentLine.length() - 1);
+					if(cmdPanel.ctrl.isKeyDown()) {
+						int lastSpace = currentLine.lastIndexOf(' ');
+						if(lastSpace == -1) {
+							currentLine = "";
+						} else {
+							currentLine = currentLine.substring(0, lastSpace);
+						}
+					} else {
+						currentLine = currentLine.substring(0, currentLine.length() - 1);
+					}
 				}
 				break;
 
