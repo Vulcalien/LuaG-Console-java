@@ -3,10 +3,12 @@ package vulc.luag.gfx.panel;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.MapEditor;
+import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
 import vulc.luag.gfx.gui.GUIContainer;
+import vulc.luag.gfx.gui.GUILabel;
 
 public class EditorPanel extends Panel {
 
@@ -15,6 +17,7 @@ public class EditorPanel extends Panel {
 	public Editor currentEditor;
 
 	public Editor mapEditor;
+	public Editor spriteEditor;
 
 	public EditorPanel(Console console) {
 		super(console);
@@ -22,6 +25,10 @@ public class EditorPanel extends Panel {
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
 		guiPanel.background = 0xDD4444;
 		guiPanel.init();
+
+		//
+		//---HEADER---\\
+		//
 
 		GUIButton cmdBtn = new GUIButton(1, 1, Screen.FONT.lengthOf(">_") + 2, 8);
 		cmdBtn.opaque = true;
@@ -33,7 +40,7 @@ public class EditorPanel extends Panel {
 		};
 		guiPanel.add(cmdBtn);
 
-		GUIButton mapEditBtn = new GUIButton(cmdBtn.w + 2, 1, Screen.FONT.lengthOf("Map") + 2, 8);
+		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + 1, 1, Screen.FONT.lengthOf("Map") + 2, 8);
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = 0xAA4444;
 		mapEditBtn.text = "Map";
@@ -42,18 +49,38 @@ public class EditorPanel extends Panel {
 			switchToEditor(mapEditor);
 		};
 		guiPanel.add(mapEditBtn);
+
+		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + 1, 1, Screen.FONT.lengthOf("Spr"), 8);
+		sprEditBtn.opaque = true;
+		sprEditBtn.background = 0xAA4444;
+		sprEditBtn.text = "Spr";
+		sprEditBtn.textColor = 0xffffff;
+		sprEditBtn.action = () -> {
+			switchToEditor(spriteEditor);
+		};
+		guiPanel.add(sprEditBtn);
+
+		//
+		//---FOOTER---\\
+		//
+		GUILabel footerLabel = new GUILabel(1, guiPanel.h - 9, Screen.FONT.lengthOf("Game Editor"), 8);
+		footerLabel.text = "Game Editor";
+		footerLabel.textColor = 0xDDaaaa;
+		guiPanel.add(footerLabel);
 	}
 
 	public void init() {
 		if(!game.initResources()) return;
 
 		mapEditor = new MapEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
+		spriteEditor = new SpriteEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
 
 		switchToEditor(mapEditor);
 	}
 
 	public void remove() {
 		mapEditor.remove();
+		spriteEditor.remove();
 
 		guiPanel.removeInputListeners();
 	}
