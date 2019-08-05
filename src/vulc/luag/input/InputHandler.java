@@ -26,13 +26,15 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
 	private Console console;
 
-	private final List<Key> KEYBOARD_KEYS = new ArrayList<Key>();
-	private final List<Key> MOUSE_KEYS = new ArrayList<Key>();
+	private final List<Key> keys = new ArrayList<Key>();
+	private final List<Key> keyboardKeys = new ArrayList<Key>();
+	private final List<Key> mouseKeys = new ArrayList<Key>();
 
 	public int xMouse = -1, yMouse = -1;
 
 	public void init(Console console) {
 		this.console = console;
+
 		console.addKeyListener(this);
 		console.addMouseListener(this);
 		console.addMouseMotionListener(this);
@@ -41,17 +43,26 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public void remove() {
 		if(console == null) return;
 
+		releaseAll();
+
 		console.removeKeyListener(this);
 		console.removeMouseListener(this);
 		console.removeMouseMotionListener(this);
 	}
 
 	public void tick() {
-		for(int i = 0; i < KEYBOARD_KEYS.size(); i++) {
-			KEYBOARD_KEYS.get(i).tick();
+		for(int i = 0; i < keys.size(); i++) {
+			keys.get(i).tick();
 		}
-		for(int i = 0; i < MOUSE_KEYS.size(); i++) {
-			MOUSE_KEYS.get(i).tick();
+	}
+
+	public void releaseAll() {
+		for(int i = 0; i < keys.size(); i++) {
+			Key key = keys.get(i);
+
+			key.isKeyDown = false;
+			key.wasKeyDown = false;
+			key.isReleased = false;
 		}
 	}
 
@@ -73,10 +84,10 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	private List<Key> getList(KeyType type) {
 		switch(type) {
 			case KEYBOARD:
-				return KEYBOARD_KEYS;
+				return keyboardKeys;
 
 			case MOUSE:
-				return MOUSE_KEYS;
+				return mouseKeys;
 
 			default:
 				return null;
@@ -140,6 +151,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		private void init(KeyType type, int code) {
 			this.type = type;
 			this.code = code;
+
+			keys.add(this);
 			getList(type).add(this);
 		}
 
