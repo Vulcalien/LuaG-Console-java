@@ -13,7 +13,6 @@ import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUILabel;
 import vulc.luag.gfx.gui.GUITextBox;
 import vulc.luag.gfx.panel.EditorPanel;
-import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
 
@@ -25,7 +24,6 @@ public class MapEditor extends Editor {
 	private final Key moveDown;
 	private final Key moveRight;
 
-	private final InputHandler input;
 	private final int editWidth = 128, editHeight = 128;
 
 	private final GUITextBox hTextBox, wTextBox, selectTileTxt;
@@ -36,8 +34,6 @@ public class MapEditor extends Editor {
 
 	public MapEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
 		super(console, panel, x, y, w, h);
-
-		this.input = guiPanel.input;
 
 		mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 		moveUp = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);
