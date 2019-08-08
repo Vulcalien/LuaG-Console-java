@@ -32,7 +32,7 @@ public class GUIComponent {
 		return xm >= x && ym >= y && xm < x + w && ym < y + h;
 	}
 
-	public void press() {
+	public void press(int x, int y) {
 	}
 
 	public void onGainFocus() {
@@ -44,7 +44,7 @@ public class GUIComponent {
 	public void onKeyPress(char character) {
 	}
 
-	public void onRemove(GUIContainer container) {
+	public void onRemove(GUIMainContainer container) {
 	}
 
 }

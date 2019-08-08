@@ -8,7 +8,7 @@ public class GUIButton extends GUILabel {
 		super(x, y, w, h);
 	}
 
-	public void press() {
+	public void press(int x, int y) {
 		if(action != null) action.run();
 	}
 
