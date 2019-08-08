@@ -12,6 +12,10 @@ import vulc.luag.gfx.gui.GUILabel;
 
 public class EditorPanel extends Panel {
 
+	public final int primaryColor = 0xdd4444;
+	public final int secondaryColor = 0xaa4444;
+	public final int textColor = 0xffffff;
+
 	public final Game game;
 	public final GUIContainer guiPanel;
 	public Editor currentEditor;
@@ -23,7 +27,7 @@ public class EditorPanel extends Panel {
 		super(console);
 		this.game = new Game(console);
 		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
-		guiPanel.background = 0xDD4444;
+		guiPanel.background = primaryColor;
 		guiPanel.init();
 
 		//
@@ -32,9 +36,9 @@ public class EditorPanel extends Panel {
 
 		GUIButton cmdBtn = new GUIButton(1, 1, Screen.FONT.lengthOf(">_") + 2, 8);
 		cmdBtn.opaque = true;
-		cmdBtn.background = 0xAA4444;
+		cmdBtn.background = secondaryColor;
 		cmdBtn.text = ">_";
-		cmdBtn.textColor = 0xffffff;
+		cmdBtn.textColor = textColor;
 		cmdBtn.action = () -> {
 			console.switchToPanel(new CmdPanel(console));
 		};
@@ -42,9 +46,9 @@ public class EditorPanel extends Panel {
 
 		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + 1, 1, Screen.FONT.lengthOf("Map") + 2, 8);
 		mapEditBtn.opaque = true;
-		mapEditBtn.background = 0xAA4444;
+		mapEditBtn.background = secondaryColor;
 		mapEditBtn.text = "Map";
-		mapEditBtn.textColor = 0xffffff;
+		mapEditBtn.textColor = textColor;
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
@@ -52,9 +56,9 @@ public class EditorPanel extends Panel {
 
 		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + 1, 1, Screen.FONT.lengthOf("Spr"), 8);
 		sprEditBtn.opaque = true;
-		sprEditBtn.background = 0xAA4444;
+		sprEditBtn.background = secondaryColor;
 		sprEditBtn.text = "Spr";
-		sprEditBtn.textColor = 0xffffff;
+		sprEditBtn.textColor = textColor;
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
@@ -93,7 +97,7 @@ public class EditorPanel extends Panel {
 
 	private void switchToEditor(Editor editor) {
 		if(currentEditor != null) currentEditor.remove();
-		editor.init();
+		editor.onShow();
 		currentEditor = editor;
 	}
 
