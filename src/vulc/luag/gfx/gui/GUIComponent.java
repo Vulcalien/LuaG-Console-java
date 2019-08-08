@@ -44,7 +44,7 @@ public class GUIComponent {
 	public void onKeyPress(char character) {
 	}
 
-	public void onRemove(GUIMainContainer container) {
+	public void onRemove(GUIMainPanel container) {
 	}
 
 }
