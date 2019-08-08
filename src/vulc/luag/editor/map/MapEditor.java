@@ -42,35 +42,35 @@ public class MapEditor extends Editor {
 		moveRight = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D);
 
 		// INTERFACE
-		guiPanel.opaque = true;
-		guiPanel.background = 0x000000;
+		guiMainPanel.opaque = true;
+		guiMainPanel.background = 0x000000;
 
 		GUIComponent levelComponent = new GUIComponent(0, 0, editWidth, editHeight) {
 			public void render(Screen screen) {
 				panel.game.map.render(screen, panel.game, xOffset, yOffset, 1);
 			}
 		};
-		guiPanel.add(levelComponent);
+		guiMainPanel.add(levelComponent);
 
-		GUIComponent p1 = new GUIComponent(editWidth, 0, guiPanel.w - editWidth, guiPanel.h);
+		GUIComponent p1 = new GUIComponent(editWidth, 0, guiMainPanel.w - editWidth, guiMainPanel.h);
 		p1.opaque = true;
 		p1.background = 0x999999;
-		guiPanel.add(p1);
+		guiMainPanel.add(p1);
 
-		GUIComponent p2 = new GUIComponent(0, editHeight, editWidth, guiPanel.h - editHeight);
+		GUIComponent p2 = new GUIComponent(0, editHeight, editWidth, guiMainPanel.h - editHeight);
 		p2.opaque = true;
 		p2.background = 0x999999;
-		guiPanel.add(p2);
+		guiMainPanel.add(p2);
 
-		GUILabel header = new GUILabel(editWidth + 1, 1, guiPanel.w - editWidth - 2, 10);
+		GUILabel header = new GUILabel(editWidth + 1, 1, guiMainPanel.w - editWidth - 2, 10);
 		header.text = "LEVEL";
-		guiPanel.add(header);
+		guiMainPanel.add(header);
 
-		GUILabel wLabel = new GUILabel(editWidth + 1, 22, guiPanel.w - editWidth - 1, 10);
+		GUILabel wLabel = new GUILabel(editWidth + 1, 22, guiMainPanel.w - editWidth - 1, 10);
 		wLabel.text = "Map W";
-		guiPanel.add(wLabel);
+		guiMainPanel.add(wLabel);
 
-		wTextBox = new GUITextBox(editWidth + 1, 32, guiPanel.w - editWidth - 1, 10) {
+		wTextBox = new GUITextBox(editWidth + 1, 32, guiMainPanel.w - editWidth - 1, 10) {
 			public void onLostFocus() {
 				text = panel.game.map.width + "";
 			}
@@ -87,13 +87,13 @@ public class MapEditor extends Editor {
 		wTextBox.numbersOnly = true;
 		wTextBox.opaque = true;
 		wTextBox.text = panel.game.map.width + "";
-		guiPanel.add(wTextBox);
+		guiMainPanel.add(wTextBox);
 
-		GUILabel hLabel = new GUILabel(editWidth + 1, 52, guiPanel.w - editWidth - 1, 10);
+		GUILabel hLabel = new GUILabel(editWidth + 1, 52, guiMainPanel.w - editWidth - 1, 10);
 		hLabel.text = "Map H";
-		guiPanel.add(hLabel);
+		guiMainPanel.add(hLabel);
 
-		hTextBox = new GUITextBox(editWidth + 1, 62, guiPanel.w - editWidth - 1, 10) {
+		hTextBox = new GUITextBox(editWidth + 1, 62, guiMainPanel.w - editWidth - 1, 10) {
 			public void onLostFocus() {
 				text = panel.game.map.height + "";
 			}
@@ -110,10 +110,10 @@ public class MapEditor extends Editor {
 		hTextBox.numbersOnly = true;
 		hTextBox.opaque = true;
 		hTextBox.text = panel.game.map.height + "";
-		guiPanel.add(hTextBox);
+		guiMainPanel.add(hTextBox);
 
-		saveButton = new SaveMapButton(editWidth + 1, 100, guiPanel.w - editWidth - 2, 10, panel);
-		guiPanel.add(saveButton);
+		saveButton = new SaveMapButton(editWidth + 1, 100, guiMainPanel.w - editWidth - 2, 10, panel);
+		guiMainPanel.add(saveButton);
 
 		selectTileTxt = new GUITextBox(1, editHeight + 1, 19, 10) {
 			public void onLostFocus() {
@@ -136,7 +136,7 @@ public class MapEditor extends Editor {
 		selectTileTxt.nChars = 3;
 		selectTileTxt.numbersOnly = true;
 		selectTileTxt.opaque = true;
-		guiPanel.add(selectTileTxt);
+		guiMainPanel.add(selectTileTxt);
 
 		GUIComponent spriteComp = new GUIComponent(21, editHeight + 1, 8, 8) {
 			public void render(Screen screen) {
@@ -144,7 +144,7 @@ public class MapEditor extends Editor {
 				screen.draw(panel.game.getSprite(selectedTile, 1, 1), x, y);
 			}
 		};
-		guiPanel.add(spriteComp);
+		guiMainPanel.add(spriteComp);
 	}
 
 	public void tick() {
@@ -158,8 +158,8 @@ public class MapEditor extends Editor {
 
 		mouse_if:
 		if(mouse1.isKeyDown()) {
-			int xm = (input.xMouse / Console.SCALE) - guiPanel.xParentAbs - guiPanel.x;
-			int ym = (input.yMouse / Console.SCALE) - guiPanel.yParentAbs - guiPanel.y;
+			int xm = (input.xMouse / Console.SCALE) - guiMainPanel.xInputOffset;
+			int ym = (input.yMouse / Console.SCALE) - guiMainPanel.yInputOffset;
 
 			if(xm < 0 || ym < 0 || xm >= editWidth || ym >= editHeight) break mouse_if;
 

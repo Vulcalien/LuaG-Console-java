@@ -9,9 +9,6 @@ public class GUITextBox extends GUILabel {
 		super(x, y, w, h);
 	}
 
-	public void press() {
-	}
-
 	public void onKeyPress(char character) {
 		if(!focused) return;
 		if(character == '\b') {

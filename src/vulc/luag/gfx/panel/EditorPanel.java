@@ -12,8 +12,9 @@ import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
-import vulc.luag.gfx.gui.GUIContainer;
 import vulc.luag.gfx.gui.GUILabel;
+import vulc.luag.gfx.gui.GUIMainContainer;
+import vulc.luag.gfx.gui.GUIPanel;
 
 public class EditorPanel extends Panel {
 
@@ -26,7 +27,7 @@ public class EditorPanel extends Panel {
 	public final GUILabel footerLabel;
 
 	public final Game game;
-	public final GUIContainer guiPanel;
+	public final GUIMainContainer mainPanel;
 	public Editor currentEditor;
 
 	public Editor mapEditor;
@@ -35,13 +36,17 @@ public class EditorPanel extends Panel {
 	public EditorPanel(Console console) {
 		super(console);
 		this.game = new Game(console);
-		guiPanel = new GUIContainer(console, 0, 0, console.screen.width, console.screen.height);
-		guiPanel.background = primaryColor;
-		guiPanel.init();
+		mainPanel = new GUIMainContainer(console, 0, 0, console.screen.width, console.screen.height);
+		mainPanel.background = 0x000000;
+		mainPanel.init();
 
 		//
 		//---HEADER---\\
 		//
+
+		GUIPanel headerPanel = new GUIPanel(0, 0, mainPanel.w, 10);
+		headerPanel.background = primaryColor;
+		mainPanel.add(headerPanel);
 
 		GUIButton cmdBtn = new GUIButton(1, 1, 8, 8);
 		cmdBtn.opaque = true;
@@ -55,7 +60,7 @@ public class EditorPanel extends Panel {
 		cmdBtn.action = () -> {
 			console.switchToPanel(new CmdPanel(console));
 		};
-		guiPanel.add(cmdBtn);
+		headerPanel.add(cmdBtn);
 
 		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
@@ -69,7 +74,7 @@ public class EditorPanel extends Panel {
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
-		guiPanel.add(mapEditBtn);
+		headerPanel.add(mapEditBtn);
 
 		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + btnDist, 1, 8, 8);
 		sprEditBtn.opaque = true;
@@ -83,21 +88,26 @@ public class EditorPanel extends Panel {
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
-		guiPanel.add(sprEditBtn);
+		headerPanel.add(sprEditBtn);
 
 		//
 		//---FOOTER---\\
 		//
-		footerLabel = new GUILabel(1, guiPanel.h - 9, Screen.FONT.lengthOf("Game Editor"), 8);
+
+		GUIPanel footerPanel = new GUIPanel(0, mainPanel.h - 10, mainPanel.w, 10);
+		footerPanel.background = primaryColor;
+		mainPanel.add(footerPanel);
+
+		footerLabel = new GUILabel(1, 1, Screen.FONT.lengthOf("Game Editor"), 8);
 		footerLabel.textColor = 0xDDaaaa;
-		guiPanel.add(footerLabel);
+		footerPanel.add(footerLabel);
 	}
 
 	public void init() {
 		if(!game.initResources()) return;
 
-		mapEditor = new MapEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
-		spriteEditor = new SpriteEditor(console, this, 0, 10, guiPanel.w, guiPanel.h - 20);
+		mapEditor = new MapEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);
+		spriteEditor = new SpriteEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);
 
 		switchToEditor(mapEditor);
 	}
@@ -106,13 +116,13 @@ public class EditorPanel extends Panel {
 		mapEditor.remove();
 		spriteEditor.remove();
 
-		guiPanel.removeInputListeners();
+		mainPanel.removeInputListeners();
 	}
 
 	public void tick() {
 		currentEditor.tick();
-		guiPanel.tick();
-		guiPanel.render(console.screen);
+		mainPanel.tick();
+		mainPanel.render(console.screen);
 	}
 
 	private void switchToEditor(Editor editor) {
