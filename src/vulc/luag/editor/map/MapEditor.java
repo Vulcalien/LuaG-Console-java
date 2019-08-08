@@ -198,4 +198,8 @@ public class MapEditor extends Editor {
 		return newMap;
 	}
 
+	public String getTitle() {
+		return "Map Editor";
+	}
+
 }

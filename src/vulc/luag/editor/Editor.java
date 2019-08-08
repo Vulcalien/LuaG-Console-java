@@ -24,6 +24,8 @@ public abstract class Editor {
 
 	public abstract void tick();
 
+	public abstract String getTitle();
+
 	public void remove() {
 		guiPanel.removeInputListeners();
 	}

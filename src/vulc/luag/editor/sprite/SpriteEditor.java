@@ -32,4 +32,8 @@ public class SpriteEditor extends Editor {
 	public void tick() {
 	}
 
+	public String getTitle() {
+		return "Sprite Editor";
+	}
+
 }

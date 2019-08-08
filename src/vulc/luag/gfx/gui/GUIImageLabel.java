@@ -4,17 +4,14 @@ import vulc.bitmap.Bitmap;
 import vulc.bitmap.BoolBitmap;
 import vulc.luag.gfx.Screen;
 
-public class GUILabel extends GUIComponent {
-
-	public String text = "";
-	public int textColor = 0;
+public class GUIImageLabel extends GUIComponent {
 
 	public BoolBitmap boolImage;
 	public int colorAsBool;
 
 	public Bitmap image;
 
-	public GUILabel(int x, int y, int w, int h) {
+	public GUIImageLabel(int x, int y, int w, int h) {
 		super(x, y, w, h);
 	}
 
@@ -33,8 +30,6 @@ public class GUILabel extends GUIComponent {
 
 	public void render(Screen screen) {
 		super.render(screen);
-		screen.write(text, textColor, x + 1, y + (h - Screen.FONT.getHeight()) / 2);
-
 		if(boolImage != null) {
 			screen.draw(boolImage, colorAsBool,
 			            x + (w - boolImage.width) / 2,
