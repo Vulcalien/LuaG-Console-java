@@ -1,5 +1,10 @@
 package vulc.luag.gfx.panel;
 
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import vulc.bitmap.BoolBitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.MapEditor;
@@ -14,7 +19,11 @@ public class EditorPanel extends Panel {
 
 	public final int primaryColor = 0xdd4444;
 	public final int secondaryColor = 0xaa4444;
-	public final int textColor = 0xffffff;
+	public final int foregroundColor = 0xeecccc;
+
+	public final int btnDist = 3;
+
+	public final GUILabel footerLabel;
 
 	public final Game game;
 	public final GUIContainer guiPanel;
@@ -34,31 +43,43 @@ public class EditorPanel extends Panel {
 		//---HEADER---\\
 		//
 
-		GUIButton cmdBtn = new GUIButton(1, 1, Screen.FONT.lengthOf(">_") + 2, 8);
+		GUIButton cmdBtn = new GUIButton(1, 1, 8, 8);
 		cmdBtn.opaque = true;
 		cmdBtn.background = secondaryColor;
-		cmdBtn.text = ">_";
-		cmdBtn.textColor = textColor;
+		try {
+			cmdBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/cmd.png"))),
+			                foregroundColor);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		cmdBtn.action = () -> {
 			console.switchToPanel(new CmdPanel(console));
 		};
 		guiPanel.add(cmdBtn);
 
-		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + 1, 1, Screen.FONT.lengthOf("Map") + 2, 8);
+		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = secondaryColor;
-		mapEditBtn.text = "Map";
-		mapEditBtn.textColor = textColor;
+		try {
+			mapEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/map_editor.png"))),
+			                    foregroundColor);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
 		guiPanel.add(mapEditBtn);
 
-		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + 1, 1, Screen.FONT.lengthOf("Spr"), 8);
+		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + btnDist, 1, 8, 8);
 		sprEditBtn.opaque = true;
 		sprEditBtn.background = secondaryColor;
-		sprEditBtn.text = "Spr";
-		sprEditBtn.textColor = textColor;
+		try {
+			sprEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/sprite_editor.png"))),
+			                    foregroundColor);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
@@ -67,8 +88,7 @@ public class EditorPanel extends Panel {
 		//
 		//---FOOTER---\\
 		//
-		GUILabel footerLabel = new GUILabel(1, guiPanel.h - 9, Screen.FONT.lengthOf("Game Editor"), 8);
-		footerLabel.text = "Game Editor";
+		footerLabel = new GUILabel(1, guiPanel.h - 9, Screen.FONT.lengthOf("Game Editor"), 8);
 		footerLabel.textColor = 0xDDaaaa;
 		guiPanel.add(footerLabel);
 	}
@@ -99,6 +119,8 @@ public class EditorPanel extends Panel {
 		if(currentEditor != null) currentEditor.remove();
 		editor.onShow();
 		currentEditor = editor;
+
+		footerLabel.text = editor.getTitle();
 	}
 
 }
