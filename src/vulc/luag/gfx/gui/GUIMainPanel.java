@@ -11,7 +11,7 @@ import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
 
-public class GUIMainContainer extends GUIPanel {
+public class GUIMainPanel extends GUIPanel {
 
 	private final Console console;
 	public final InputHandler input = new InputHandler();
@@ -25,7 +25,7 @@ public class GUIMainContainer extends GUIPanel {
 
 	protected final Key mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 
-	public GUIMainContainer(Console console, int x, int y, int w, int h) {
+	public GUIMainPanel(Console console, int x, int y, int w, int h) {
 		super(x, y, w, h);
 		this.console = console;
 	}
@@ -36,14 +36,10 @@ public class GUIMainContainer extends GUIPanel {
 	}
 
 	public void tick() {
-		for(GUIComponent comp : comps) {
-			comp.tick();
-		}
+		super.tick();
 		while(keyBuffer.size() != 0) {
 			char c = keyBuffer.remove(0);
-			for(GUIComponent comp : comps) {
-				comp.onKeyPress(c);
-			}
+			this.onKeyPress(c);
 		}
 		if(mouse1.isKeyDown()) {
 			int xPress = input.xMouse / Console.SCALE - xInputOffset;
@@ -55,7 +51,7 @@ public class GUIMainContainer extends GUIPanel {
 		input.tick();
 	}
 
-	public void onRemove(GUIMainContainer container) {
+	public void onRemove(GUIMainPanel container) {
 		super.onRemove(container);
 		removeInputListeners();
 	}

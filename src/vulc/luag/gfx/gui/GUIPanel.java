@@ -18,6 +18,12 @@ public class GUIPanel extends GUIComponent {
 		this.yInputOffset = y;
 	}
 
+	public void tick() {
+		for(GUIComponent comp : comps) {
+			comp.tick();
+		}
+	}
+
 	public void render(Screen screen) {
 		this.screen.clear(background);
 		for(GUIComponent comp : comps) {
@@ -53,6 +59,12 @@ public class GUIPanel extends GUIComponent {
 				comp.focused = false;
 				if(lostFocus) comp.onLostFocus();
 			}
+		}
+	}
+
+	public void onKeyPress(char character) {
+		for(GUIComponent comp : comps) {
+			comp.onKeyPress(character);
 		}
 	}
 

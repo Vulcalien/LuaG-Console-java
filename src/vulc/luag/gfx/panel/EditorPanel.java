@@ -13,7 +13,7 @@ import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
 import vulc.luag.gfx.gui.GUILabel;
-import vulc.luag.gfx.gui.GUIMainContainer;
+import vulc.luag.gfx.gui.GUIMainPanel;
 import vulc.luag.gfx.gui.GUIPanel;
 
 public class EditorPanel extends Panel {
@@ -27,7 +27,7 @@ public class EditorPanel extends Panel {
 	public final GUILabel footerLabel;
 
 	public final Game game;
-	public final GUIMainContainer mainPanel;
+	public final GUIMainPanel mainPanel;
 	public Editor currentEditor;
 
 	public Editor mapEditor;
@@ -36,7 +36,7 @@ public class EditorPanel extends Panel {
 	public EditorPanel(Console console) {
 		super(console);
 		this.game = new Game(console);
-		mainPanel = new GUIMainContainer(console, 0, 0, console.screen.width, console.screen.height);
+		mainPanel = new GUIMainPanel(console, 0, 0, console.screen.width, console.screen.height);
 		mainPanel.background = 0x000000;
 		mainPanel.init();
 
