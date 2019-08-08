@@ -17,7 +17,7 @@ public abstract class Editor {
 		this.input = guiPanel.input;
 	}
 
-	public void init() {
+	public void onShow() {
 		guiPanel.init();
 		panel.guiPanel.add(this.guiPanel);
 	}

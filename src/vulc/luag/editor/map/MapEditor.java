@@ -150,10 +150,11 @@ public class MapEditor extends Editor {
 	public void tick() {
 		Game game = panel.game;
 
-		if(moveUp.isKeyDown()) yOffset--;
-		if(moveLeft.isKeyDown()) xOffset--;
-		if(moveDown.isKeyDown()) yOffset++;
-		if(moveRight.isKeyDown()) xOffset++;
+		int moveSpeed = 2;
+		if(moveUp.isKeyDown()) yOffset -= moveSpeed;
+		if(moveLeft.isKeyDown()) xOffset -= moveSpeed;
+		if(moveDown.isKeyDown()) yOffset += moveSpeed;
+		if(moveRight.isKeyDown()) xOffset += moveSpeed;
 
 		mouse_if:
 		if(mouse1.isKeyDown()) {
