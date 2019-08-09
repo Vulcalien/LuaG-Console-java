@@ -20,7 +20,9 @@ public class EditorPanel extends Panel {
 
 	public final int primaryColor = 0xdd4444;
 	public final int secondaryColor = 0xaa4444;
-	public final int foregroundColor = 0xeecccc;
+
+	public final int primaryTextColor = 0xeecccc;
+	public final int secondaryTextColor = 0x000000;
 
 	public final int btnDist = 3;
 
@@ -53,7 +55,7 @@ public class EditorPanel extends Panel {
 		cmdBtn.background = secondaryColor;
 		try {
 			cmdBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/cmd.png"))),
-			                foregroundColor);
+			                primaryTextColor);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -67,7 +69,7 @@ public class EditorPanel extends Panel {
 		mapEditBtn.background = secondaryColor;
 		try {
 			mapEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/map_editor.png"))),
-			                    foregroundColor);
+			                    primaryTextColor);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -81,7 +83,7 @@ public class EditorPanel extends Panel {
 		sprEditBtn.background = secondaryColor;
 		try {
 			sprEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/sprite_editor.png"))),
-			                    foregroundColor);
+			                    primaryTextColor);
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -99,7 +101,7 @@ public class EditorPanel extends Panel {
 		mainPanel.add(footerPanel);
 
 		footerLabel = new GUILabel(1, 1, Screen.FONT.lengthOf("Game Editor"), 8);
-		footerLabel.textColor = 0xDDaaaa;
+		footerLabel.textColor = primaryTextColor;
 		footerPanel.add(footerLabel);
 	}
 

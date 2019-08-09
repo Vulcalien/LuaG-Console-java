@@ -1,27 +1,25 @@
 package vulc.luag.editor;
 
 import vulc.luag.Console;
-import vulc.luag.gfx.gui.GUIMainPanel;
+import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.input.InputHandler;
 
 public abstract class Editor {
 
-	protected final EditorPanel panel;
+	protected final EditorPanel editorPanel;
 
-	// guiPanel is an indipendent gui panel
-	protected final GUIMainPanel guiPanel;
+	protected final GUIPanel guiPanel;
 	protected final InputHandler input;
 
-	public Editor(Console console, EditorPanel panel, int x, int y, int w, int h) {
-		this.panel = panel;
-		this.guiPanel = new GUIMainPanel(console, x, y, w, h);
-		this.input = guiPanel.input;
+	public Editor(Console console, EditorPanel editorPanel, int x, int y, int w, int h) {
+		this.editorPanel = editorPanel;
+		this.guiPanel = new GUIPanel(x, y, w, h);
+		this.input = editorPanel.mainPanel.input;
 	}
 
 	public void onShow() {
-		guiPanel.init();
-		panel.mainPanel.add(this.guiPanel);
+		editorPanel.mainPanel.add(this.guiPanel);
 	}
 
 	public abstract void tick();
@@ -29,7 +27,7 @@ public abstract class Editor {
 	public abstract String getTitle();
 
 	public void remove() {
-		guiPanel.removeInputListeners();
+		editorPanel.mainPanel.remove(this.guiPanel);
 	}
 
 }

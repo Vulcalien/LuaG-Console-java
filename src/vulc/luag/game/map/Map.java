@@ -24,8 +24,8 @@ public class Map {
 	public void render(Screen screen, Game game, int xOffset, int yOffset, int scale) {
 		int xt0 = Math.floorDiv(xOffset, 8 * scale);
 		int yt0 = Math.floorDiv(yOffset, 8 * scale);
-		int xt1 = xt0 + (Console.WIDTH / 8);
-		int yt1 = yt0 + (Console.HEIGHT / 8);
+		int xt1 = xt0 + (screen.width / 8) + 1;
+		int yt1 = yt0 + (screen.height / 8) + 1;
 
 		for(int yt = yt0; yt <= yt1; yt++) {
 			if(yt < 0 || yt >= height) continue;

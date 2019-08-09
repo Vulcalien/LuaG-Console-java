@@ -19,17 +19,23 @@ public class GUIPanel extends GUIComponent {
 	}
 
 	public void tick() {
-		for(GUIComponent comp : comps) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
 			comp.tick();
 		}
 	}
 
 	public void render(Screen screen) {
 		this.screen.clear(background);
-		for(GUIComponent comp : comps) {
+		drawComponents();
+		screen.draw(this.screen, x, y);
+	}
+
+	protected void drawComponents() {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
 			comp.render(this.screen);
 		}
-		screen.draw(this.screen, x, y);
 	}
 
 	public void add(GUIComponent comp) {
@@ -55,16 +61,26 @@ public class GUIPanel extends GUIComponent {
 
 				comp.press(xr, yr);
 			} else {
-				boolean lostFocus = comp.focused;
+				boolean losingFocus = comp.focused;
 				comp.focused = false;
-				if(lostFocus) comp.onLostFocus();
+				if(losingFocus) comp.onLostFocus();
 			}
 		}
 	}
 
 	public void onKeyPress(char character) {
-		for(GUIComponent comp : comps) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
 			comp.onKeyPress(character);
+		}
+	}
+
+	public void onLostFocus() {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+			boolean losingFocus = comp.focused;
+			comp.focused = false;
+			if(losingFocus) comp.onLostFocus();
 		}
 	}
 
