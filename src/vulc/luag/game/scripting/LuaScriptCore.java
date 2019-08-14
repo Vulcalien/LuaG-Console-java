@@ -36,9 +36,7 @@ public class LuaScriptCore {
 				globals.get("dofile").call(mainFile.getPath());
 			}
 		} catch(LuaError e) {
-			console.die("Script Error:\n"
-			            + "see the terminal");
-			e.printStackTrace();
+			handleError(e);
 			return;
 		}
 
@@ -63,10 +61,8 @@ public class LuaScriptCore {
 			} else {
 				init.checkfunction().call();
 			}
-		} catch(Exception e) {
-			console.die("Script Error:\n"
-			            + "see the terminal");
-			e.printStackTrace();
+		} catch(LuaError e) {
+			handleError(e);
 			return;
 		}
 	}
@@ -74,11 +70,22 @@ public class LuaScriptCore {
 	public void tick() {
 		try {
 			luaTick.call();
-		} catch(Exception e) {
-			console.die("Script Error:\n"
-			            + "see the terminal");
-			e.printStackTrace();
+		} catch(LuaError e) {
+			handleError(e);
 		}
+	}
+
+	private void handleError(LuaError e) {
+		console.die("Script Error:\n"
+		            + "see the terminal");
+
+		String sep = "[\\\\/]";
+
+		String msg = "LuaError: "
+		             + e.getLocalizedMessage()
+		                .replace("@", "")
+		                .replaceAll("\\.?" + sep + Game.USER_DIR.replace("./", ""), "");
+		System.err.println(msg);
 	}
 
 }
