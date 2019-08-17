@@ -207,10 +207,10 @@ public class LuaInterface {
 	private class maprender extends ThreeArgFunction {
 		public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
 			int scale = arg1.isnil() ? 1 : arg1.checkint();
-			int x = arg2.isnil() ? 0 : arg2.checkint();
-			int y = arg3.isnil() ? 0 : arg3.checkint();
+			int xoff = arg2.isnil() ? 0 : arg2.checkint();
+			int yoff = arg3.isnil() ? 0 : arg3.checkint();
 
-			game.map.render(console.screen, game, x, y, scale);
+			game.map.render(console.screen, game, xoff, yoff, scale);
 			return NIL;
 		}
 	}

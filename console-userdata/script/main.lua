@@ -29,7 +29,7 @@ function tick()
 	if key(3) then x = x + 1 end
 
 	clear(0x555555)
-	--maprender(1, 8, 8)
+	maprender(2, -t, -t)
 
 	pix(5, 5, 0xff0000)
 	pix(8, 8, 0x00ff00, 1, 1)

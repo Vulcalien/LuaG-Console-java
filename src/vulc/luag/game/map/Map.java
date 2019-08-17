@@ -22,15 +22,17 @@ public class Map {
 	}
 
 	public void render(Screen screen, Game game, int xOffset, int yOffset, int scale) {
-		int xt0 = Math.floorDiv(xOffset, 8 * scale);
-		int yt0 = Math.floorDiv(yOffset, 8 * scale);
-		int xt1 = xt0 + (Console.WIDTH / 8);
-		int yt1 = yt0 + (Console.HEIGHT / 8);
+		int tSize = 8 * scale;
 
-		for(int yt = yt0; yt <= yt1; yt++) {
+		int xt0 = Math.floorDiv(xOffset, tSize);
+		int yt0 = Math.floorDiv(yOffset, tSize);
+		int xt1 = xt0 + (Console.WIDTH / tSize) + 1;
+		int yt1 = yt0 + (Console.HEIGHT / tSize) + 1;
+
+		for(int yt = yt0; yt < yt1; yt++) {
 			if(yt < 0 || yt >= height) continue;
 
-			for(int xt = xt0; xt <= xt1; xt++) {
+			for(int xt = xt0; xt < xt1; xt++) {
 				if(xt < 0 || xt >= width) continue;
 
 				int id = getTile(xt, yt);
