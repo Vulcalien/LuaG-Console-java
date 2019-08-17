@@ -23,9 +23,8 @@ public class MapEditor extends Editor {
 	private final Key moveDown;
 	private final Key moveRight;
 
-	// DEBUG removed final
-	private GUITextBox wTextBox, hTextBox, selectTileTextBox;
-	private SaveMapButton saveButton;
+	private final GUITextBox wTextBox, hTextBox, selectTileTextBox;
+	private final SaveMapButton saveButton;
 
 	private int xOffset = 0, yOffset = 0;
 	private int selectedTile = 0;
@@ -43,17 +42,16 @@ public class MapEditor extends Editor {
 		guiPanel.background = 0x000000;
 
 		// sidebar
-
 		GUIPanel sidebar;
 		{
-			int sidebarElementSpace = 2;
+			int sidebarElementSpace = 5;
 
 			int wSidebar = 36;
 			int hSidebar = guiPanel.h - 10;
 
 			sidebar = new GUIPanel(guiPanel.w - wSidebar - 5, 5, wSidebar, hSidebar);
 			sidebar.opaque = true;
-			sidebar.background = editorPanel.primaryColor;
+			sidebar.background = editorPanel.secondaryColor;
 			guiPanel.add(sidebar);
 
 			GUIPanel widthPanel;
@@ -119,7 +117,6 @@ public class MapEditor extends Editor {
 			}
 			sidebar.add(heightPanel);
 
-			// TODO add select tile
 			GUIPanel selectTilePanel;
 			{
 				selectTilePanel = new GUIPanel(1, heightPanel.y + heightPanel.h + sidebarElementSpace,
@@ -153,6 +150,8 @@ public class MapEditor extends Editor {
 				selectTileTextBox.nChars = 3;
 				selectTileTextBox.numbersOnly = true;
 				selectTileTextBox.opaque = true;
+				selectTileTextBox.background = 0xffffff;
+				selectTileTextBox.textColor = 0x000000;
 				selectTilePanel.add(selectTileTextBox);
 
 				GUIComponent tilePreviewComp = new GUIComponent((selectTilePanel.w - 16) / 2,
