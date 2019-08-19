@@ -28,8 +28,8 @@ public class GUIComponent {
 		                       background);
 	}
 
-	public boolean isPressed(int xm, int ym) {
-		return xm >= x && ym >= y && xm < x + w && ym < y + h;
+	public boolean isPressed(int x, int y) {
+		return x >= 0 && x < w && y >= 0 && y < h;
 	}
 
 	public void press(int x, int y) {

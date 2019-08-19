@@ -38,7 +38,6 @@ public class MapEditor extends Editor {
 		moveRight = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_D);
 
 		// INTERFACE
-		guiPanel.opaque = true;
 		guiPanel.background = 0x000000;
 
 		// sidebar
@@ -182,8 +181,8 @@ public class MapEditor extends Editor {
 
 				Game game = editorPanel.game;
 
-				int xt = (x + xOffset - this.x) / 8;
-				int yt = (y + yOffset - this.y) / 8;
+				int xt = (x + xOffset) / 8;
+				int yt = (y + yOffset) / 8;
 
 				if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
 

@@ -36,7 +36,7 @@ public class Map {
 				if(xt < 0 || xt >= width) continue;
 
 				int id = getTile(xt, yt);
-				screen.draw(game.getSprite(id % 16, id / 16, 1, 1).getScaled(scale),
+				screen.draw(game.getSprite(id, 1, 1).getScaled(scale),
 				            xt * 8 * scale - xOffset,
 				            yt * 8 * scale - yOffset);
 			}

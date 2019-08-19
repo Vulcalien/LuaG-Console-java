@@ -42,8 +42,8 @@ public class GUIMainPanel extends GUIPanel {
 			this.onKeyPress(c);
 		}
 		if(mouse1.isKeyDown()) {
-			int xPress = input.xMouse / Console.SCALE - xInputOffset;
-			int yPress = input.yMouse / Console.SCALE - yInputOffset;
+			int xPress = input.xMouse / Console.SCALE - this.x;
+			int yPress = input.yMouse / Console.SCALE - this.y;
 			if(this.isPressed(xPress, yPress)) {
 				this.press(xPress, yPress);
 			}

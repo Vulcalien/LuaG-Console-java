@@ -8,14 +8,11 @@ import vulc.luag.gfx.Screen;
 public class GUIPanel extends GUIComponent {
 
 	protected final List<GUIComponent> comps = new ArrayList<GUIComponent>();
-	public int xInputOffset = 0, yInputOffset = 0;
 	public final Screen screen;
 
 	public GUIPanel(int x, int y, int w, int h) {
 		super(x, y, w, h);
 		this.screen = new Screen(w, h);
-		this.xInputOffset = x;
-		this.yInputOffset = y;
 	}
 
 	public void tick() {
@@ -51,8 +48,8 @@ public class GUIPanel extends GUIComponent {
 			GUIComponent comp = comps.get(i);
 
 			// relative coordinates
-			int xr = x - xInputOffset;
-			int yr = y - yInputOffset;
+			int xr = x - comp.x;
+			int yr = y - comp.y;
 
 			if(comp.isPressed(xr, yr)) {
 				boolean gainFocus = !comp.focused;
