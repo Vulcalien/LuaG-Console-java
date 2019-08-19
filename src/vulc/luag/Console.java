@@ -49,7 +49,7 @@ import vulc.luag.gfx.panel.Panel;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final String NAME = "Vulc's LuaG Console";
+	public static final String NAME = "LuaG Console";
 	public static final String VERSION = "0.6.0 (WIP)";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
