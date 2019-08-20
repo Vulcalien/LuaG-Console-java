@@ -22,7 +22,8 @@ public abstract class Editor {
 		editorPanel.mainPanel.add(this.guiPanel);
 	}
 
-	public abstract void tick();
+	public void tick() {
+	}
 
 	public abstract String getTitle();
 

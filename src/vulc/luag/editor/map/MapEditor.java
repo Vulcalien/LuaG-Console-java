@@ -74,7 +74,7 @@ public class MapEditor extends Editor {
 						resizeMap();
 					}
 				};
-				wTextBox.numbersOnly = true;
+				wTextBox.acceptedText = GUITextBox.DEC_ONLY;
 				wTextBox.nChars = 4;
 				wTextBox.opaque = true;
 				wTextBox.background = 0xffffff;
@@ -106,7 +106,7 @@ public class MapEditor extends Editor {
 						resizeMap();
 					}
 				};
-				hTextBox.numbersOnly = true;
+				hTextBox.acceptedText = GUITextBox.DEC_ONLY;
 				hTextBox.nChars = 4;
 				hTextBox.opaque = true;
 				hTextBox.background = 0xffffff;
@@ -147,7 +147,7 @@ public class MapEditor extends Editor {
 				};
 				selectTileTextBox.text = selectedTile + "";
 				selectTileTextBox.nChars = 3;
-				selectTileTextBox.numbersOnly = true;
+				selectTileTextBox.acceptedText = GUITextBox.DEC_ONLY;
 				selectTileTextBox.opaque = true;
 				selectTileTextBox.background = 0xffffff;
 				selectTileTextBox.textColor = 0x000000;
