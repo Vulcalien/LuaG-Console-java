@@ -4,12 +4,11 @@ import java.awt.event.KeyEvent;
 
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
+import vulc.luag.editor.map.gui.MapPreview;
+import vulc.luag.editor.map.gui.MapSelectTilePanel;
+import vulc.luag.editor.map.gui.MapSizePanel;
 import vulc.luag.editor.map.gui.SaveMapButton;
-import vulc.luag.game.Game;
 import vulc.luag.game.map.Map;
-import vulc.luag.gfx.Screen;
-import vulc.luag.gfx.gui.GUIComponent;
-import vulc.luag.gfx.gui.GUILabel;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
 import vulc.luag.gfx.panel.EditorPanel;
@@ -23,11 +22,11 @@ public class MapEditor extends Editor {
 	private final Key moveDown;
 	private final Key moveRight;
 
-	private final GUITextBox wTextBox, hTextBox, selectTileTextBox;
-	private final SaveMapButton saveButton;
+	public GUITextBox wTextBox, hTextBox, selectTileTextBox;
+	public SaveMapButton saveButton;
 
-	private int xOffset = 0, yOffset = 0;
-	private int selectedTile = 0;
+	public int xOffset = 0, yOffset = 0;
+	public int selectedTile = 0;
 
 	public MapEditor(Console console, EditorPanel editorPanel, int x, int y, int w, int h) {
 		super(console, editorPanel, x, y, w, h);
@@ -53,145 +52,27 @@ public class MapEditor extends Editor {
 			sidebar.background = editorPanel.secondaryColor;
 			guiPanel.add(sidebar);
 
-			GUIPanel widthPanel;
-			{
-				widthPanel = new GUIPanel(1, 1, wSidebar - 2, 23);
-				widthPanel.opaque = true;
-				widthPanel.background = editorPanel.secondaryColor;
-
-				GUILabel widthLabel = new GUILabel(1, 1, widthPanel.w, 10);
-				widthLabel.textColor = editorPanel.secondaryTextColor;
-				widthLabel.text = "Map W";
-				widthPanel.add(widthLabel);
-
-				wTextBox = new GUITextBox(2, widthLabel.h + 1, widthPanel.w - 4, 10) {
-					public void onLostFocus() {
-						text = editorPanel.game.map.width + "";
-					}
-
-					public void onEnterPress() {
-						super.onEnterPress();
-						resizeMap();
-					}
-				};
-				wTextBox.acceptedText = GUITextBox.DEC_ONLY;
-				wTextBox.nChars = 4;
-				wTextBox.opaque = true;
-				wTextBox.background = 0xffffff;
-				wTextBox.textColor = 0x000000;
-				wTextBox.text = editorPanel.game.map.width + "";
-				widthPanel.add(wTextBox);
-			}
+			GUIPanel widthPanel = new MapSizePanel(1, 1,
+			                                       wSidebar - 2, 23,
+			                                       this, MapSizePanel.WIDTH);
 			sidebar.add(widthPanel);
 
-			GUIPanel heightPanel;
-			{
-				heightPanel = new GUIPanel(1, widthPanel.y + widthPanel.h + sidebarElementSpace,
-				                           wSidebar - 2, 23);
-				heightPanel.opaque = true;
-				heightPanel.background = editorPanel.secondaryColor;
-
-				GUILabel heightLabel = new GUILabel(1, 1, heightPanel.w, 10);
-				heightLabel.textColor = editorPanel.secondaryTextColor;
-				heightLabel.text = "Map H";
-				heightPanel.add(heightLabel);
-
-				hTextBox = new GUITextBox(2, heightLabel.h + 1, widthPanel.w - 4, 10) {
-					public void onLostFocus() {
-						text = editorPanel.game.map.height + "";
-					}
-
-					public void onEnterPress() {
-						super.onEnterPress();
-						resizeMap();
-					}
-				};
-				hTextBox.acceptedText = GUITextBox.DEC_ONLY;
-				hTextBox.nChars = 4;
-				hTextBox.opaque = true;
-				hTextBox.background = 0xffffff;
-				hTextBox.textColor = 0x000000;
-				hTextBox.text = editorPanel.game.map.height + "";
-				heightPanel.add(hTextBox);
-			}
+			GUIPanel heightPanel = new MapSizePanel(1, widthPanel.y + widthPanel.h + sidebarElementSpace,
+			                                        wSidebar - 2, 23,
+			                                        this, MapSizePanel.HEIGHT);
 			sidebar.add(heightPanel);
 
-			GUIPanel selectTilePanel;
-			{
-				selectTilePanel = new GUIPanel(1, heightPanel.y + heightPanel.h + sidebarElementSpace,
-				                               wSidebar - 2, 39);
-				selectTilePanel.opaque = true;
-				selectTilePanel.background = editorPanel.secondaryColor;
-
-				GUILabel selectTileLabel = new GUILabel(1, 1, selectTilePanel.w, 10);
-				selectTileLabel.textColor = editorPanel.secondaryTextColor;
-				selectTileLabel.text = "Tile";
-				selectTilePanel.add(selectTileLabel);
-
-				selectTileTextBox = new GUITextBox(2, selectTileLabel.h + 1, selectTilePanel.w - 4, 10) {
-					public void onLostFocus() {
-						text = selectedTile + "";
-					}
-
-					public void onEnterPress() {
-						super.onEnterPress();
-
-						int id;
-						if(selectTileTextBox.text.equals("")) id = 0;
-						else id = Integer.parseInt(selectTileTextBox.text);
-						if(id > 255) id = 255;
-
-						selectedTile = id;
-						text = id + "";
-					}
-				};
-				selectTileTextBox.text = selectedTile + "";
-				selectTileTextBox.nChars = 3;
-				selectTileTextBox.acceptedText = GUITextBox.DEC_ONLY;
-				selectTileTextBox.opaque = true;
-				selectTileTextBox.background = 0xffffff;
-				selectTileTextBox.textColor = 0x000000;
-				selectTilePanel.add(selectTileTextBox);
-
-				GUIComponent tilePreviewComp = new GUIComponent((selectTilePanel.w - 16) / 2,
-				                                                selectTileTextBox.y + selectTileTextBox.h + 1,
-				                                                16,
-				                                                16) {
-					public void render(Screen screen) {
-						super.render(screen);
-						screen.draw(editorPanel.game.getSprite(selectedTile, 1, 1).getScaled(2), x, y);
-					}
-				};
-				selectTilePanel.add(tilePreviewComp);
-			}
+			GUIPanel selectTilePanel = new MapSelectTilePanel(1, heightPanel.y + heightPanel.h + sidebarElementSpace,
+			                                                  wSidebar - 2, 39,
+			                                                  this);
 			sidebar.add(selectTilePanel);
 
 			saveButton = new SaveMapButton(1, hSidebar - 11, wSidebar - 2, 10, editorPanel);
 			sidebar.add(saveButton);
 		}
 
-		GUIPanel levelPanel = new GUIPanel(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10) {
-			protected void drawComponents() {
-				super.drawComponents();
-				editorPanel.game.map.render(this.screen, editorPanel.game, xOffset, yOffset, 1);
-			}
-
-			public void press(int x, int y) {
-				super.press(x, y);
-
-				Game game = editorPanel.game;
-
-				int xt = (x + xOffset) / 8;
-				int yt = (y + yOffset) / 8;
-
-				if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
-
-				game.map.setTile(xt, yt, selectedTile);
-				saveButton.setContentModified(true);
-			}
-		};
-		levelPanel.background = editorPanel.secondaryColor;
-		guiPanel.add(levelPanel);
+		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10, this);
+		guiPanel.add(previewPanel);
 	}
 
 	public void tick() {

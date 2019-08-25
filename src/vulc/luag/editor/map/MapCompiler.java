@@ -1,4 +1,4 @@
-package vulc.luag.editor.map.compiler;
+package vulc.luag.editor.map;
 
 import java.io.File;
 import java.io.FileOutputStream;

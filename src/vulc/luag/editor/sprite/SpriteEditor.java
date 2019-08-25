@@ -15,6 +15,7 @@ import vulc.luag.gfx.panel.EditorPanel;
 public class SpriteEditor extends Editor {
 
 	private final Bitmap atlas;
+	private Bitmap preview;
 	private final int previewScale = 6;
 	private int spriteID = 0;
 	private int scope = 1;
@@ -29,6 +30,8 @@ public class SpriteEditor extends Editor {
 	public SpriteEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
 		super(console, panel, x, y, w, h);
 		this.atlas = panel.game.atlas;
+
+		preview = panel.game.getSprite(spriteID, scope, scope);
 
 		// default palette
 		lastColors.add(0);
@@ -47,13 +50,16 @@ public class SpriteEditor extends Editor {
 		GUIComponent sprPreview = new GUIComponent((guiPanel.w - previewSize) / 2, 5,
 		                                           previewSize, previewSize) {
 			public void render(Screen screen) {
-				screen.draw(panel.game.getSprite(spriteID, scope, scope)
-				                      .getScaled(previewScale),
+				screen.draw(preview.getScaled(previewScale),
 				            x, y);
 			}
 
 			public void press(int x, int y) {
-				// TODO editing sprite with history
+				int xp = x / previewScale;
+				int yp = y / previewScale;
+
+				preview.setPixel(xp, yp, selectedColor);
+				// TODO undo-redo: make history saving
 			}
 		};
 		guiPanel.add(sprPreview);

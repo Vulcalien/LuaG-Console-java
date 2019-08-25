@@ -1,6 +1,6 @@
 package vulc.luag.editor.map.gui;
 
-import vulc.luag.editor.map.compiler.MapCompiler;
+import vulc.luag.editor.map.MapCompiler;
 import vulc.luag.gfx.gui.GUIButton;
 import vulc.luag.gfx.panel.EditorPanel;
 

@@ -7,7 +7,7 @@ import vulc.luag.input.InputHandler;
 
 public abstract class Editor {
 
-	protected final EditorPanel editorPanel;
+	public final EditorPanel editorPanel;
 
 	protected final GUIPanel guiPanel;
 	protected final InputHandler input;
