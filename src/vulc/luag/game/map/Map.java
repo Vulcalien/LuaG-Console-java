@@ -1,5 +1,6 @@
 package vulc.luag.game.map;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -51,14 +52,16 @@ public class Map {
 		tiles[x + y * width] = (byte) (id - 128);
 	}
 
-	public static Map load(InputStream input, Console console) {
+	public static Map load(InputStream inputStream, Console console) {
 		try {
-			int w = (input.read() << 24) | (input.read() << 16) | (input.read() << 8) | input.read();
-			int h = (input.read() << 24) | (input.read() << 16) | (input.read() << 8) | input.read();
+			DataInputStream in = new DataInputStream(inputStream);
+
+			int w = in.readInt();
+			int h = in.readInt();
 			Map map = new Map(w, h);
 
 			for(int i = 0; i < map.tiles.length; i++) {
-				int data = input.read();
+				int data = in.readByte();
 				if(data == -1) {
 					console.die("Error:\n"
 					            + "map file is malformed\n"
@@ -68,6 +71,7 @@ public class Map {
 				map.tiles[i] = (byte) (data - 128);
 			}
 
+			in.close();
 			return map;
 		} catch(IOException e) {
 			throw new RuntimeException(e);
