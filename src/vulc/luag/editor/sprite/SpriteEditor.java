@@ -1,11 +1,17 @@
 package vulc.luag.editor.sprite;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
+import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
@@ -14,6 +20,7 @@ import vulc.luag.gfx.panel.EditorPanel;
 
 public class SpriteEditor extends Editor {
 
+	// preview and atlas
 	private final Bitmap atlas;
 	private Bitmap preview;
 	private final int previewScale = 6;
@@ -21,9 +28,15 @@ public class SpriteEditor extends Editor {
 	private int scope = 1;
 	private int atlasOffset = 0;
 
+	// select color and color history
 	private int selectedColor = 0xffffff;
 	private final List<Integer> lastColors = new ArrayList<Integer>();
 	private final int historyColors = 8;
+
+	// editing history
+	private final int historySize = 100;
+	private final List<Bitmap> history = new ArrayList<Bitmap>();
+	private boolean isSettingPix = false, wasSettingPix = false;
 
 	private final GUITextBox selectColorTxt;
 
@@ -58,8 +71,7 @@ public class SpriteEditor extends Editor {
 				int xp = x / previewScale;
 				int yp = y / previewScale;
 
-				preview.setPixel(xp, yp, selectedColor);
-				// TODO undo-redo: make history saving
+				setPixel(xp, yp);
 			}
 		};
 		guiPanel.add(sprPreview);
@@ -69,6 +81,16 @@ public class SpriteEditor extends Editor {
 		                                             atlas.width, hAtlasPreview) {
 			public void render(Screen screen) {
 				screen.draw(atlas.getSubimage(0, atlasOffset * 8, atlas.width, hAtlasPreview), x, y);
+			}
+
+			public void press(int x, int y) {
+				int xs = x / 8;
+				int ys = y / 8 + atlasOffset;
+
+				int id = xs + ys * 16; // 16 = atlas.width (in sprites)
+				spriteID = id;
+
+				preview = editorPanel.game.getSprite(id, scope, scope);
 			}
 		};
 		guiPanel.add(atlasPreview);
@@ -84,7 +106,6 @@ public class SpriteEditor extends Editor {
 		}
 		guiPanel.add(actionbar);
 
-		// TODO colorbar
 		int xColorbar = sprPreview.x + sprPreview.w + 5;
 		GUIPanel colorbar = new GUIPanel(xColorbar, 5,
 		                                 guiPanel.w - xColorbar - 5, sprPreview.h);
@@ -141,6 +162,20 @@ public class SpriteEditor extends Editor {
 		guiPanel.add(colorbar);
 	}
 
+	public void tick() {
+		boolean shouldSaveHistory = wasSettingPix && !isSettingPix;
+		wasSettingPix = isSettingPix;
+		isSettingPix = false;
+
+		if(shouldSaveHistory) {
+			history.add(preview.getScaled(1)); // clones the img
+			if(history.size() > historySize) {
+				history.remove(0);
+			}
+			atlas.draw(preview, (spriteID % 16) * 8, (spriteID / 16) * 8);
+		}
+	}
+
 	public String getTitle() {
 		return "Sprite Editor";
 	}
@@ -157,6 +192,32 @@ public class SpriteEditor extends Editor {
 			colorString = "0" + colorString;
 		}
 		selectColorTxt.text = colorString;
+	}
+
+	public void setPixel(int x, int y) {
+		// this makes history saves only if setting a different pixel
+		if(preview.getPixel(x, y) != selectedColor) {
+			preview.setPixel(x, y, selectedColor);
+
+			isSettingPix = true;
+		} else if(wasSettingPix) {
+			isSettingPix = true;
+		}
+	}
+
+	public boolean shouldSave() {
+		return false; // TODO shouldSave
+	}
+
+	public void onSave() {
+		try {
+			BufferedImage img = new BufferedImage(atlas.width, atlas.height, BufferedImage.TYPE_INT_RGB);
+			img.setRGB(0, 0, atlas.width, atlas.height, atlas.pixels, 0, atlas.width);
+
+			ImageIO.write(img, "png", new File(Game.ATLAS_FILE));
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

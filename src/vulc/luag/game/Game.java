@@ -32,6 +32,9 @@ import vulc.luag.input.InputHandler.KeyType;
 public class Game {
 
 	public static final String USER_DIR = "./console-userdata";
+	public static final String CONFIG_FILE = USER_DIR + "/config.json";
+	public static final String ATLAS_FILE = USER_DIR + "/atlas.png";
+	public static final String MAP_FILE = USER_DIR + "/map";
 
 	public final Console console;
 	public final LuaScriptCore scriptCore = new LuaScriptCore();
@@ -68,7 +71,7 @@ public class Game {
 		if(!sounds.init(console)) return false;
 
 		// config.json
-		File configFile = new File(USER_DIR + "/config.json");
+		File configFile = new File(CONFIG_FILE);
 		if(configFile.isFile()) {
 			try {
 				JsonElement element = new JsonParser().parse(new FileReader(configFile));
@@ -91,7 +94,7 @@ public class Game {
 		}
 
 		// atlas.png
-		File atlasFile = new File(USER_DIR + "/atlas.png");
+		File atlasFile = new File(ATLAS_FILE);
 		if(atlasFile.isFile()) {
 			try {
 				BufferedImage img = ImageIO.read(atlasFile);
@@ -121,7 +124,7 @@ public class Game {
 		}
 
 		// map
-		File mapFile = new File(USER_DIR + "/map");
+		File mapFile = new File(MAP_FILE);
 		try {
 			map = Map.load(new FileInputStream(mapFile), console);
 			if(map == null) return false;
@@ -169,7 +172,7 @@ public class Game {
 		return getSprite(id % 16, id / 16, sw, sh);
 	}
 
-	private Bitmap getSprite(int x, int y, int w, int h) {
+	public Bitmap getSprite(int x, int y, int w, int h) {
 		return atlas.getSubimage(x * 8, y * 8, w * 8, h * 8);
 	}
 

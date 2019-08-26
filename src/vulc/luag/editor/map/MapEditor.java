@@ -67,7 +67,8 @@ public class MapEditor extends Editor {
 			                                                  this);
 			sidebar.add(selectTilePanel);
 
-			saveButton = new SaveMapButton(1, hSidebar - 11, wSidebar - 2, 10, editorPanel);
+			// TODO remove save button
+			saveButton = new SaveMapButton(1, hSidebar - 11, wSidebar - 2, 10, this);
 			sidebar.add(saveButton);
 		}
 
@@ -115,6 +116,14 @@ public class MapEditor extends Editor {
 		editorPanel.game.map = newMap;
 
 		saveButton.setContentModified(true);
+	}
+
+	public boolean shouldSave() {
+		return false; // TODO mapEditor's shouldSave
+	}
+
+	public void onSave() {
+		MapCompiler.compile(editorPanel.game.map);
 	}
 
 	public String getTitle() {

@@ -31,4 +31,11 @@ public abstract class Editor {
 		editorPanel.mainPanel.remove(this.guiPanel);
 	}
 
+	public boolean shouldSave() {
+		return false;
+	}
+
+	public void onSave() {
+	}
+
 }
