@@ -37,6 +37,7 @@ public class SpriteEditor extends Editor {
 	private final int historySize = 100;
 	private final List<Bitmap> history = new ArrayList<Bitmap>();
 	private boolean isSettingPix = false, wasSettingPix = false;
+	private boolean shouldSaveContent = false;
 
 	private final GUITextBox selectColorTxt;
 
@@ -200,13 +201,14 @@ public class SpriteEditor extends Editor {
 			preview.setPixel(x, y, selectedColor);
 
 			isSettingPix = true;
+			shouldSaveContent = true;
 		} else if(wasSettingPix) {
 			isSettingPix = true;
 		}
 	}
 
 	public boolean shouldSave() {
-		return false; // TODO shouldSave
+		return shouldSaveContent;
 	}
 
 	public void onSave() {
@@ -215,6 +217,7 @@ public class SpriteEditor extends Editor {
 			img.setRGB(0, 0, atlas.width, atlas.height, atlas.pixels, 0, atlas.width);
 
 			ImageIO.write(img, "png", new File(Game.ATLAS_FILE));
+			shouldSaveContent = false;
 		} catch(IOException e) {
 			e.printStackTrace();
 		}

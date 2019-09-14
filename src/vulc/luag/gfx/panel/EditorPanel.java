@@ -1,15 +1,11 @@
 package vulc.luag.gfx.panel;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import vulc.bitmap.BoolBitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.MapEditor;
 import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.game.Game;
+import vulc.luag.gfx.Icons;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
 import vulc.luag.gfx.gui.GUILabel;
@@ -26,6 +22,7 @@ public class EditorPanel extends Panel {
 
 	public final int btnDist = 3;
 
+	public final GUIButton saveBtn;
 	public final GUILabel footerLabel;
 
 	public final Game game;
@@ -53,12 +50,7 @@ public class EditorPanel extends Panel {
 		GUIButton cmdBtn = new GUIButton(1, 1, 8, 8);
 		cmdBtn.opaque = true;
 		cmdBtn.background = secondaryColor;
-		try {
-			cmdBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/cmd.png"))),
-			                primaryTextColor);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		cmdBtn.setImage(Icons.CMD, primaryTextColor);
 		cmdBtn.action = () -> {
 			console.switchToPanel(new CmdPanel(console));
 		};
@@ -67,12 +59,7 @@ public class EditorPanel extends Panel {
 		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = secondaryColor;
-		try {
-			mapEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/map_editor.png"))),
-			                    primaryTextColor);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		mapEditBtn.setImage(Icons.MAP_EDITOR, primaryTextColor);
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
@@ -81,16 +68,21 @@ public class EditorPanel extends Panel {
 		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + btnDist, 1, 8, 8);
 		sprEditBtn.opaque = true;
 		sprEditBtn.background = secondaryColor;
-		try {
-			sprEditBtn.setImage(new BoolBitmap(ImageIO.read(EditorPanel.class.getResourceAsStream("/res/icons/sprite_editor.png"))),
-			                    primaryTextColor);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		sprEditBtn.setImage(Icons.SPRITE_EDITOR, primaryTextColor);
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
 		headerPanel.add(sprEditBtn);
+
+		saveBtn = new GUIButton(headerPanel.w - 9, 1, 8, 8);
+		saveBtn.opaque = true;
+		saveBtn.background = secondaryColor;
+		saveBtn.setImage(Icons.SAVE, primaryTextColor);
+		saveBtn.action = () -> {
+			mapEditor.onSave();
+			spriteEditor.onSave();
+		};
+		headerPanel.add(saveBtn);
 
 		//
 		//---FOOTER---\\
@@ -125,6 +117,13 @@ public class EditorPanel extends Panel {
 		currentEditor.tick();
 		mainPanel.tick();
 		mainPanel.render(console.screen);
+
+		if(mapEditor.shouldSave()
+		   || spriteEditor.shouldSave()) {
+			saveBtn.colorAsBool = 0xffff55;
+		} else {
+			saveBtn.colorAsBool = primaryTextColor;
+		}
 	}
 
 	private void switchToEditor(Editor editor) {

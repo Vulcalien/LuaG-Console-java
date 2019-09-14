@@ -7,7 +7,6 @@ import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.gui.MapPreview;
 import vulc.luag.editor.map.gui.MapSelectTilePanel;
 import vulc.luag.editor.map.gui.MapSizePanel;
-import vulc.luag.editor.map.gui.SaveMapButton;
 import vulc.luag.game.map.Map;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
@@ -23,10 +22,11 @@ public class MapEditor extends Editor {
 	private final Key moveRight;
 
 	public GUITextBox wTextBox, hTextBox, selectTileTextBox;
-	public SaveMapButton saveButton;
 
 	public int xOffset = 0, yOffset = 0;
 	public int selectedTile = 0;
+
+	public boolean shouldSaveContent = false;
 
 	public MapEditor(Console console, EditorPanel editorPanel, int x, int y, int w, int h) {
 		super(console, editorPanel, x, y, w, h);
@@ -66,10 +66,6 @@ public class MapEditor extends Editor {
 			                                                  wSidebar - 2, 39,
 			                                                  this);
 			sidebar.add(selectTilePanel);
-
-			// TODO remove save button
-			saveButton = new SaveMapButton(1, hSidebar - 11, wSidebar - 2, 10, this);
-			sidebar.add(saveButton);
 		}
 
 		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10, this);
@@ -114,16 +110,16 @@ public class MapEditor extends Editor {
 		}
 
 		editorPanel.game.map = newMap;
-
-		saveButton.setContentModified(true);
+		shouldSaveContent = true;
 	}
 
 	public boolean shouldSave() {
-		return false; // TODO mapEditor's shouldSave
+		return shouldSaveContent;
 	}
 
 	public void onSave() {
 		MapCompiler.compile(editorPanel.game.map);
+		shouldSaveContent = false;
 	}
 
 	public String getTitle() {

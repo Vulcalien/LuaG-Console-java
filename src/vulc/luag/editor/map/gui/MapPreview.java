@@ -30,8 +30,10 @@ public class MapPreview extends GUIPanel {
 
 		if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
 
-		game.map.setTile(xt, yt, editor.selectedTile);
-		editor.saveButton.setContentModified(true);
+		if(game.map.getTile(xt, yt) != editor.selectedTile) {
+			game.map.setTile(xt, yt, editor.selectedTile);
+			editor.shouldSaveContent = true;
+		}
 	}
 
 }
