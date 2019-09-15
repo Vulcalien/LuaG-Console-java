@@ -22,11 +22,11 @@ public class MapPreview extends GUIPanel {
 		game.map.render(this.screen, game, editor.xOffset, editor.yOffset, 1);
 	}
 
-	public void press(int x, int y) {
-		super.press(x, y);
+	public void onPress(int xMouse, int yMouse) {
+		super.onPress(xMouse, yMouse);
 
-		int xt = (x + editor.xOffset) / 8;
-		int yt = (y + editor.yOffset) / 8;
+		int xt = (xMouse + editor.xOffset) / 8;
+		int yt = (yMouse + editor.yOffset) / 8;
 
 		if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
 

@@ -3,6 +3,8 @@ package vulc.luag.gfx.gui;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,13 @@ public class GUIMainPanel extends GUIPanel {
 
 	protected final Key mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 
+	protected int wheelRotCount = 0;
+	protected final MouseWheelListener wheelListener = new MouseWheelListener() {
+		public void mouseWheelMoved(MouseWheelEvent e) {
+			wheelRotCount += e.getWheelRotation();
+		}
+	};
+
 	public GUIMainPanel(Console console, int x, int y, int w, int h) {
 		super(x, y, w, h);
 		this.console = console;
@@ -33,21 +42,33 @@ public class GUIMainPanel extends GUIPanel {
 	public void init() {
 		input.init(console);
 		console.addKeyListener(keyListener);
+		console.addMouseWheelListener(wheelListener);
 	}
 
 	public void tick() {
 		super.tick();
+
+		int xMouse = input.xMouse / Console.SCALE - this.x;
+		int yMouse = input.yMouse / Console.SCALE - this.y;
+
 		while(keyBuffer.size() != 0) {
 			char c = keyBuffer.remove(0);
 			this.onKeyPress(c);
 		}
+
 		if(mouse1.isKeyDown()) {
-			int xPress = input.xMouse / Console.SCALE - this.x;
-			int yPress = input.yMouse / Console.SCALE - this.y;
-			if(this.isPressed(xPress, yPress)) {
-				this.press(xPress, yPress);
+			if(this.isPressed(xMouse, yMouse)) {
+				this.onPress(xMouse, yMouse);
 			}
 		}
+
+		if(wheelRotCount != 0) {
+			if(this.isMouseScrolled(xMouse, yMouse, wheelRotCount)) {
+				this.onMouseScroll(xMouse, yMouse, wheelRotCount);
+			}
+			wheelRotCount = 0;
+		}
+
 		input.tick();
 	}
 
@@ -59,6 +80,7 @@ public class GUIMainPanel extends GUIPanel {
 	public void removeInputListeners() {
 		input.remove();
 		console.removeKeyListener(keyListener);
+		console.removeMouseWheelListener(wheelListener);
 	}
 
 }

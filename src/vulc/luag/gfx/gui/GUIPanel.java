@@ -43,20 +43,20 @@ public class GUIPanel extends GUIComponent {
 		comps.remove(comp);
 	}
 
-	public void press(int x, int y) {
+	public void onPress(int xMouse, int yMouse) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
 			// relative coordinates
-			int xr = x - comp.x;
-			int yr = y - comp.y;
+			int xr = xMouse - comp.x;
+			int yr = yMouse - comp.y;
 
 			if(comp.isPressed(xr, yr)) {
 				boolean gainFocus = !comp.focused;
 				comp.focused = true;
 				if(gainFocus) comp.onGainFocus();
 
-				comp.press(xr, yr);
+				comp.onPress(xr, yr);
 			} else {
 				boolean losingFocus = comp.focused;
 				comp.focused = false;
@@ -78,6 +78,20 @@ public class GUIPanel extends GUIComponent {
 			boolean losingFocus = comp.focused;
 			comp.focused = false;
 			if(losingFocus) comp.onLostFocus();
+		}
+	}
+
+	public void onMouseScroll(int xMouse, int yMouse, int count) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+
+			// relative coordinates
+			int xr = xMouse - comp.x;
+			int yr = yMouse - comp.y;
+
+			if(comp.isMouseScrolled(xr, yr, count)) {
+				comp.onMouseScroll(xr, yr, count);
+			}
 		}
 	}
 

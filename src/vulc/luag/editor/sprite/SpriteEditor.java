@@ -68,35 +68,43 @@ public class SpriteEditor extends Editor {
 				            x, y);
 			}
 
-			public void press(int x, int y) {
-				int xp = x / previewScale;
-				int yp = y / previewScale;
+			public void onPress(int xMouse, int yMouse) {
+				int xp = xMouse / previewScale;
+				int yp = yMouse / previewScale;
 
 				setPixel(xp, yp);
 			}
 		};
 		guiPanel.add(sprPreview);
 
-		int hAtlasPreview = 8 * 8;
+		int verticalTiles = 8;
+		int hAtlasPreview = 8 * verticalTiles;
 		GUIComponent atlasPreview = new GUIComponent((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlasPreview - 5,
 		                                             atlas.width, hAtlasPreview) {
 			public void render(Screen screen) {
 				screen.draw(atlas.getSubimage(0, atlasOffset * 8, atlas.width, hAtlasPreview), x, y);
 			}
 
-			public void press(int x, int y) {
-				int xs = x / 8;
-				int ys = y / 8 + atlasOffset;
+			public void onPress(int xMouse, int yMouse) {
+				int xs = xMouse / 8;
+				int ys = yMouse / 8 + atlasOffset;
 
 				int id = xs + ys * 16; // 16 = atlas.width (in sprites)
 				spriteID = id;
 
 				preview = editorPanel.game.getSprite(id, scope, scope);
 			}
+
+			public void onMouseScroll(int xMouse, int yMouse, int count) {
+				System.out.println("s");
+				int newOffset = atlasOffset + count;
+				if(newOffset >= 0 && newOffset + verticalTiles <= 16) {
+					atlasOffset = newOffset;
+				}
+				System.out.println(newOffset + verticalTiles);
+			}
 		};
 		guiPanel.add(atlasPreview);
-
-		// TODO atlas scroll arrows
 
 		// TODO actionbar's items
 		int hActionbar = 9 * 5 + 1;
@@ -151,7 +159,7 @@ public class SpriteEditor extends Editor {
 							screen.fill(x, y, x + w - 1, y + h - 1, lastColors.get(id));
 						}
 
-						public void press(int x, int y) {
+						public void onPress(int xMouse, int yMouse) {
 							selectColor(lastColors.get(id));
 						}
 					};

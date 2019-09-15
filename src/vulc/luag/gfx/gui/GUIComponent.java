@@ -28,11 +28,15 @@ public class GUIComponent {
 		                       background);
 	}
 
-	public boolean isPressed(int x, int y) {
+	protected boolean isPointInside(int x, int y) {
 		return x >= 0 && x < w && y >= 0 && y < h;
 	}
 
-	public void press(int x, int y) {
+	public boolean isPressed(int x, int y) {
+		return isPointInside(x, y);
+	}
+
+	public void onPress(int xMouse, int yMouse) {
 	}
 
 	public void onGainFocus() {
@@ -42,6 +46,14 @@ public class GUIComponent {
 	}
 
 	public void onKeyPress(char character) {
+	}
+
+	public boolean isMouseScrolled(int xMouse, int yMouse, int count) {
+		return isPointInside(xMouse, yMouse);
+	}
+
+	public void onMouseScroll(int xMouse, int yMouse, int count) {
+		System.out.println(this);
 	}
 
 	public void onRemove(GUIMainPanel container) {
