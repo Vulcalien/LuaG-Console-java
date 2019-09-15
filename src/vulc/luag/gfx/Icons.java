@@ -6,11 +6,16 @@ import vulc.bitmap.BoolBitmap;
 
 public abstract class Icons {
 
+	// GENERAL
 	public static final BoolBitmap CMD = loadIcon("/res/icons/cmd.png");
 	public static final BoolBitmap SAVE = loadIcon("/res/icons/save.png");
 
-	public static final BoolBitmap SPRITE_EDITOR = loadIcon("/res/icons/sprite_editor.png");
-	public static final BoolBitmap MAP_EDITOR = loadIcon("/res/icons/map_editor.png");
+	// EDITORS
+	public static final BoolBitmap SPRITE_EDITOR = loadIcon("/res/icons/editor/sprite_editor.png");
+	public static final BoolBitmap MAP_EDITOR = loadIcon("/res/icons/editor/map_editor.png");
+
+	// TOOLS
+	// ...
 
 	private static BoolBitmap loadIcon(String icon) {
 		try {
