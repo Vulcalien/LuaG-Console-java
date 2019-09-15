@@ -183,7 +183,7 @@ public class SpriteEditor extends Editor {
 		return "Sprite Editor";
 	}
 
-	private void selectColor(int color) {
+	public void selectColor(int color) {
 		if(!lastColors.contains(selectedColor)) {
 			lastColors.add(0, selectedColor);
 			lastColors.remove(historyColors);
