@@ -11,6 +11,9 @@ import javax.imageio.ImageIO;
 import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
+import vulc.luag.editor.sprite.gui.SpritePreview;
+import vulc.luag.editor.sprite.tool.PencilTool;
+import vulc.luag.editor.sprite.tool.SpriteTool;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
@@ -21,25 +24,26 @@ import vulc.luag.gfx.panel.EditorPanel;
 public class SpriteEditor extends Editor {
 
 	// preview and atlas
-	private final Bitmap atlas;
-	private Bitmap preview;
-	private final int previewScale = 6;
-	private int spriteID = 0;
-	private int scope = 1;
-	private int atlasOffset = 0;
+	public final Bitmap atlas;
+	public Bitmap preview;
+	public final int previewScale = 6;
+	public int spriteID = 0;
+	public int scope = 1;
+	public int atlasOffset = 0;
+	public SpriteTool currentTool = new PencilTool();
 
 	// select color and color history
-	private int selectedColor = 0xffffff;
-	private final List<Integer> lastColors = new ArrayList<Integer>();
-	private final int historyColors = 8;
+	public int selectedColor = 0xffffff;
+	public final List<Integer> lastColors = new ArrayList<Integer>();
+	public final int historyColors = 8;
 
 	// editing history
-	private final int historySize = 100;
-	private final List<Bitmap> history = new ArrayList<Bitmap>();
-	private boolean isSettingPix = false, wasSettingPix = false;
-	private boolean shouldSaveContent = false;
+	public final int historySize = 100;
+	public final List<Bitmap> history = new ArrayList<Bitmap>();
+	public boolean isEditing = false, wasEditing = false;
+	public boolean shouldSaveContent = false;
 
-	private final GUITextBox selectColorTxt;
+	public final GUITextBox selectColorTxt;
 
 	public SpriteEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
 		super(console, panel, x, y, w, h);
@@ -48,33 +52,22 @@ public class SpriteEditor extends Editor {
 		preview = panel.game.getSprite(spriteID, scope, scope);
 
 		// default palette
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
-		lastColors.add(0);
+		lastColors.add(0x00_00_00);
+		lastColors.add(0xff_ff_ff);
+		lastColors.add(0xff_00_00);
+		lastColors.add(0x00_ff_00);
+		lastColors.add(0x00_00_ff);
+		lastColors.add(0xff_ff_00);
+		lastColors.add(0xff_00_ff);
+		lastColors.add(0x00_ff_ff);
 
 		// INTERFACE
 		guiPanel.background = 0x000000;
 
 		int previewSize = 8 * previewScale;
-		GUIComponent sprPreview = new GUIComponent((guiPanel.w - previewSize) / 2, 5,
-		                                           previewSize, previewSize) {
-			public void render(Screen screen) {
-				screen.draw(preview.getScaled(previewScale),
-				            x, y);
-			}
-
-			public void onPress(int xMouse, int yMouse) {
-				int xp = xMouse / previewScale;
-				int yp = yMouse / previewScale;
-
-				setPixel(xp, yp);
-			}
-		};
+		GUIComponent sprPreview = new SpritePreview((guiPanel.w - previewSize) / 2, 5,
+		                                            previewSize, previewSize,
+		                                            this);
 		guiPanel.add(sprPreview);
 
 		int verticalTiles = 8;
@@ -172,11 +165,12 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void tick() {
-		boolean shouldSaveHistory = wasSettingPix && !isSettingPix;
-		wasSettingPix = isSettingPix;
-		isSettingPix = false;
+		boolean shouldSaveHistory = wasEditing && !isEditing;
+		wasEditing = isEditing;
+		isEditing = false;
 
 		if(shouldSaveHistory) {
+			System.out.println("saving");
 			history.add(preview.getScaled(1)); // clones the img
 			if(history.size() > historySize) {
 				history.remove(0);
@@ -201,18 +195,6 @@ public class SpriteEditor extends Editor {
 			colorString = "0" + colorString;
 		}
 		selectColorTxt.text = colorString;
-	}
-
-	public void setPixel(int x, int y) {
-		// this makes history saves only if setting a different pixel
-		if(preview.getPixel(x, y) != selectedColor) {
-			preview.setPixel(x, y, selectedColor);
-
-			isSettingPix = true;
-			shouldSaveContent = true;
-		} else if(wasSettingPix) {
-			isSettingPix = true;
-		}
 	}
 
 	public boolean shouldSave() {
