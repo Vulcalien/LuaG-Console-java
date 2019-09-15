@@ -5,8 +5,7 @@ import java.awt.event.KeyEvent;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.gui.MapPreview;
-import vulc.luag.editor.map.gui.MapSelectTilePanel;
-import vulc.luag.editor.map.gui.MapSizePanel;
+import vulc.luag.editor.map.gui.MapSidebar;
 import vulc.luag.game.map.Map;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
@@ -40,35 +39,14 @@ public class MapEditor extends Editor {
 		guiPanel.background = 0x000000;
 
 		// sidebar
-		GUIPanel sidebar;
-		{
-			int sidebarElementSpace = 5;
+		int wSidebar = 36;
+		int hSidebar = guiPanel.h - 10;
+		GUIPanel sidebar = new MapSidebar(guiPanel.w - wSidebar - 5, 5, wSidebar, hSidebar,
+		                                  this);
+		guiPanel.add(sidebar);
 
-			int wSidebar = 36;
-			int hSidebar = guiPanel.h - 10;
-
-			sidebar = new GUIPanel(guiPanel.w - wSidebar - 5, 5, wSidebar, hSidebar);
-			sidebar.opaque = true;
-			sidebar.background = editorPanel.secondaryColor;
-			guiPanel.add(sidebar);
-
-			GUIPanel widthPanel = new MapSizePanel(1, 1,
-			                                       wSidebar - 2, 23,
-			                                       this, MapSizePanel.WIDTH);
-			sidebar.add(widthPanel);
-
-			GUIPanel heightPanel = new MapSizePanel(1, widthPanel.y + widthPanel.h + sidebarElementSpace,
-			                                        wSidebar - 2, 23,
-			                                        this, MapSizePanel.HEIGHT);
-			sidebar.add(heightPanel);
-
-			GUIPanel selectTilePanel = new MapSelectTilePanel(1, heightPanel.y + heightPanel.h + sidebarElementSpace,
-			                                                  wSidebar - 2, 39,
-			                                                  this);
-			sidebar.add(selectTilePanel);
-		}
-
-		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10, this);
+		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10,
+		                                       this);
 		guiPanel.add(previewPanel);
 	}
 
