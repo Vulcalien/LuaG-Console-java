@@ -22,7 +22,7 @@ public class SpritePreview extends GUIComponent {
 		int xPix = xMouse / editor.previewScale;
 		int yPix = yMouse / editor.previewScale;
 
-		if(editor.currentTool.onEdit(xPix, yPix, editor, editor.preview)) {
+		if(editor.toolkit.currentTool.onEdit(xPix, yPix, editor, editor.preview)) {
 			editor.isEditing = true;
 			editor.shouldSaveContent = true;
 		} else if(editor.wasEditing) {

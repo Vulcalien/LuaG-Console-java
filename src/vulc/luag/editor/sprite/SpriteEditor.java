@@ -12,8 +12,8 @@ import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.sprite.gui.SpritePreview;
-import vulc.luag.editor.sprite.tool.PencilTool;
-import vulc.luag.editor.sprite.tool.SpriteTool;
+import vulc.luag.editor.sprite.gui.SpriteToolbar;
+import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
@@ -30,7 +30,8 @@ public class SpriteEditor extends Editor {
 	public int spriteID = 0;
 	public int scope = 1;
 	public int atlasOffset = 0;
-	public SpriteTool currentTool = new PencilTool();
+
+	public final SpriteToolkit toolkit = new SpriteToolkit(this);
 
 	// select color and color history
 	public int selectedColor = 0xffffff;
@@ -99,14 +100,11 @@ public class SpriteEditor extends Editor {
 		};
 		guiPanel.add(atlasPreview);
 
-		// TODO actionbar's items
-		int hActionbar = 9 * 5 + 1;
-		GUIPanel actionbar = new GUIPanel(atlasPreview.x, sprPreview.y + (sprPreview.h - hActionbar) / 2,
-		                                  10, hActionbar);
-		{
-			actionbar.background = panel.primaryColor;
-		}
-		guiPanel.add(actionbar);
+		int hToolbar = 9 * 5 + 1;
+		GUIPanel toolbar = new SpriteToolbar(atlasPreview.x, sprPreview.y + (sprPreview.h - hToolbar) / 2,
+		                                     10, hToolbar,
+		                                     this);
+		guiPanel.add(toolbar);
 
 		int xColorbar = sprPreview.x + sprPreview.w + 5;
 		GUIPanel colorbar = new GUIPanel(xColorbar, 5,
@@ -162,6 +160,8 @@ public class SpriteEditor extends Editor {
 			colorbar.add(history);
 		}
 		guiPanel.add(colorbar);
+
+		toolkit.setTool(toolkit.pencil);
 	}
 
 	public void tick() {

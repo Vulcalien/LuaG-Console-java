@@ -19,6 +19,7 @@ public class EditorPanel extends Panel {
 
 	public final int primaryTextColor = 0xeecccc;
 	public final int secondaryTextColor = 0x000000;
+	public final int highlightColor = 0xffff55;
 
 	public final int btnDist = 3;
 
@@ -120,7 +121,7 @@ public class EditorPanel extends Panel {
 
 		if(mapEditor.shouldSave()
 		   || spriteEditor.shouldSave()) {
-			saveBtn.colorAsBool = 0xffff55;
+			saveBtn.colorAsBool = highlightColor;
 		} else {
 			saveBtn.colorAsBool = primaryTextColor;
 		}
