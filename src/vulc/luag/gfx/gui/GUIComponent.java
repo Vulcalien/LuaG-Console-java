@@ -53,7 +53,6 @@ public class GUIComponent {
 	}
 
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
-		System.out.println(this);
 	}
 
 	public void onRemove(GUIMainPanel container) {

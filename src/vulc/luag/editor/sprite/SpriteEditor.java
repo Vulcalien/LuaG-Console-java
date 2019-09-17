@@ -43,6 +43,7 @@ public class SpriteEditor extends Editor {
 	public final List<Bitmap> history = new ArrayList<Bitmap>();
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
+	public int historyIndex = 0;
 
 	public final GUITextBox selectColorTxt;
 
@@ -62,12 +63,15 @@ public class SpriteEditor extends Editor {
 		lastColors.add(0xff_00_ff);
 		lastColors.add(0x00_ff_ff);
 
+		historySave();
+
 		// INTERFACE
 		guiPanel.background = 0x000000;
 
 		int previewSize = 8 * previewScale;
-		GUIComponent sprPreview = new SpritePreview((guiPanel.w - previewSize) / 2, 5,
-		                                            previewSize, previewSize,
+		GUIComponent sprPreview = new SpritePreview((guiPanel.w - previewSize) / 2 - SpritePreview.BORDER, 5,
+		                                            previewSize + SpritePreview.BORDER * 2,
+		                                            previewSize + SpritePreview.BORDER * 2,
 		                                            this);
 		guiPanel.add(sprPreview);
 
@@ -90,12 +94,10 @@ public class SpriteEditor extends Editor {
 			}
 
 			public void onMouseScroll(int xMouse, int yMouse, int count) {
-				System.out.println("s");
 				int newOffset = atlasOffset + count;
 				if(newOffset >= 0 && newOffset + verticalTiles <= 16) {
 					atlasOffset = newOffset;
 				}
-				System.out.println(newOffset + verticalTiles);
 			}
 		};
 		guiPanel.add(atlasPreview);
@@ -170,13 +172,19 @@ public class SpriteEditor extends Editor {
 		isEditing = false;
 
 		if(shouldSaveHistory) {
-			System.out.println("saving");
-			history.add(preview.getScaled(1)); // clones the img
-			if(history.size() > historySize) {
-				history.remove(0);
-			}
+			historySave();
 			atlas.draw(preview, (spriteID % 16) * 8, (spriteID / 16) * 8);
 		}
+	}
+
+	public void historySave() {
+		System.out.println("saving"); // DEGUG
+
+		history.add(preview.getScaled(1)); // clones the img
+		if(history.size() > historySize) {
+			history.remove(0);
+		}
+		historyIndex = history.size();
 	}
 
 	public String getTitle() {
@@ -211,6 +219,14 @@ public class SpriteEditor extends Editor {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void undo() {
+		// TODO undo
+	}
+
+	public void redo() {
+		// TODO redo
 	}
 
 }
