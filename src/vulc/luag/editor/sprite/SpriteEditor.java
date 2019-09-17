@@ -15,6 +15,7 @@ import vulc.luag.editor.sprite.gui.SpritePreview;
 import vulc.luag.editor.sprite.gui.SpriteToolbar;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.game.Game;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
@@ -31,7 +32,7 @@ public class SpriteEditor extends Editor {
 	public int scope = 1;
 	public int atlasOffset = 0;
 
-	public final SpriteToolkit toolkit = new SpriteToolkit(this);
+	public final SpriteToolkit toolkit = new SpriteToolkit();
 
 	// select color and color history
 	public int selectedColor = 0xffffff;
@@ -112,7 +113,7 @@ public class SpriteEditor extends Editor {
 		GUIPanel colorbar = new GUIPanel(xColorbar, 5,
 		                                 guiPanel.w - xColorbar - 5, sprPreview.h);
 		{
-			colorbar.background = panel.primaryColor;
+			colorbar.background = Colors.BACKGROUND_0;
 
 			GUIComponent colorPreview = new GUIComponent((colorbar.w - 16) / 2, 1, 16, 16) {
 				public void render(Screen screen) {
@@ -140,7 +141,7 @@ public class SpriteEditor extends Editor {
 			GUIPanel history = new GUIPanel((colorbar.w - wHistory) / 2, colorbar.h - hHistory - 1,
 			                                wHistory, hHistory);
 			{
-				history.background = panel.secondaryColor;
+				history.background = Colors.BACKGROUND_1;
 
 				for(int i = 0; i < historyColors; i++) {
 					int id = i;

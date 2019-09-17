@@ -3,12 +3,10 @@ package vulc.luag.editor.sprite.tool;
 import java.util.ArrayList;
 import java.util.List;
 
-import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.editor.sprite.gui.SpriteToolButton;
+import vulc.luag.gfx.Colors;
 
 public class SpriteToolkit {
-
-	private final SpriteEditor editor;
 
 	public final List<SpriteToolButton> buttons = new ArrayList<SpriteToolButton>();
 
@@ -18,10 +16,6 @@ public class SpriteToolkit {
 
 	public SpriteTool currentTool;
 
-	public SpriteToolkit(SpriteEditor editor) {
-		this.editor = editor;
-	}
-
 	public void setTool(SpriteTool tool) {
 		currentTool = tool;
 
@@ -29,9 +23,9 @@ public class SpriteToolkit {
 			SpriteToolButton button = buttons.get(i);
 
 			if(button.tool == tool) {
-				button.colorAsBool = editor.editorPanel.highlightColor;
+				button.colorAsBool = Colors.FOREGROUND_HIGHLIGHT;
 			} else {
-				button.colorAsBool = editor.editorPanel.primaryTextColor;
+				button.colorAsBool = Colors.FOREGROUND_0;
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package vulc.luag.editor.sprite.gui;
 
 import vulc.luag.editor.sprite.SpriteEditor;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
 
@@ -15,7 +16,7 @@ public class SpritePreview extends GUIComponent {
 		this.editor = editor;
 
 		this.opaque = true;
-		this.background = editor.editorPanel.primaryColor;
+		this.background = Colors.BACKGROUND_0;
 	}
 
 	public void render(Screen screen) {

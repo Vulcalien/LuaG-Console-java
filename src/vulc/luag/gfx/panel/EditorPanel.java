@@ -5,6 +5,7 @@ import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.MapEditor;
 import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.game.Game;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.Icons;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
@@ -13,13 +14,6 @@ import vulc.luag.gfx.gui.GUIMainPanel;
 import vulc.luag.gfx.gui.GUIPanel;
 
 public class EditorPanel extends Panel {
-
-	public final int primaryColor = 0xdd4444;
-	public final int secondaryColor = 0xaa4444;
-
-	public final int primaryTextColor = 0xeecccc;
-	public final int secondaryTextColor = 0x000000;
-	public final int highlightColor = 0xffff55;
 
 	public final int btnDist = 3;
 
@@ -45,13 +39,13 @@ public class EditorPanel extends Panel {
 		//
 
 		GUIPanel headerPanel = new GUIPanel(0, 0, mainPanel.w, 10);
-		headerPanel.background = primaryColor;
+		headerPanel.background = Colors.BACKGROUND_0;
 		mainPanel.add(headerPanel);
 
 		GUIButton cmdBtn = new GUIButton(1, 1, 8, 8);
 		cmdBtn.opaque = true;
-		cmdBtn.background = secondaryColor;
-		cmdBtn.setImage(Icons.CMD, primaryTextColor);
+		cmdBtn.background = Colors.BACKGROUND_1;
+		cmdBtn.setImage(Icons.CMD, Colors.FOREGROUND_0);
 		cmdBtn.action = () -> {
 			console.switchToPanel(new CmdPanel(console));
 		};
@@ -59,8 +53,8 @@ public class EditorPanel extends Panel {
 
 		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
-		mapEditBtn.background = secondaryColor;
-		mapEditBtn.setImage(Icons.MAP_EDITOR, primaryTextColor);
+		mapEditBtn.background = Colors.BACKGROUND_1;
+		mapEditBtn.setImage(Icons.MAP_EDITOR, Colors.FOREGROUND_0);
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
@@ -68,8 +62,8 @@ public class EditorPanel extends Panel {
 
 		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + btnDist, 1, 8, 8);
 		sprEditBtn.opaque = true;
-		sprEditBtn.background = secondaryColor;
-		sprEditBtn.setImage(Icons.SPRITE_EDITOR, primaryTextColor);
+		sprEditBtn.background = Colors.BACKGROUND_1;
+		sprEditBtn.setImage(Icons.SPRITE_EDITOR, Colors.FOREGROUND_0);
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
@@ -77,8 +71,8 @@ public class EditorPanel extends Panel {
 
 		saveBtn = new GUIButton(headerPanel.w - 9, 1, 8, 8);
 		saveBtn.opaque = true;
-		saveBtn.background = secondaryColor;
-		saveBtn.setImage(Icons.SAVE, primaryTextColor);
+		saveBtn.background = Colors.BACKGROUND_1;
+		saveBtn.setImage(Icons.SAVE, Colors.FOREGROUND_0);
 		saveBtn.action = () -> {
 			mapEditor.onSave();
 			spriteEditor.onSave();
@@ -90,11 +84,11 @@ public class EditorPanel extends Panel {
 		//
 
 		GUIPanel footerPanel = new GUIPanel(0, mainPanel.h - 10, mainPanel.w, 10);
-		footerPanel.background = primaryColor;
+		footerPanel.background = Colors.BACKGROUND_0;
 		mainPanel.add(footerPanel);
 
 		footerLabel = new GUILabel(1, 1, Screen.FONT.lengthOf("Game Editor"), 8);
-		footerLabel.textColor = primaryTextColor;
+		footerLabel.textColor = Colors.FOREGROUND_0;
 		footerPanel.add(footerLabel);
 	}
 
@@ -121,9 +115,9 @@ public class EditorPanel extends Panel {
 
 		if(mapEditor.shouldSave()
 		   || spriteEditor.shouldSave()) {
-			saveBtn.colorAsBool = highlightColor;
+			saveBtn.colorAsBool = Colors.FOREGROUND_HIGHLIGHT;
 		} else {
-			saveBtn.colorAsBool = primaryTextColor;
+			saveBtn.colorAsBool = Colors.FOREGROUND_0;
 		}
 	}
 

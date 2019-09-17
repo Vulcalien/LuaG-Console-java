@@ -1,6 +1,7 @@
 package vulc.luag.editor.map.gui;
 
 import vulc.luag.editor.map.MapEditor;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.gui.GUIPanel;
 
 public class MapSidebar extends GUIPanel {
@@ -11,7 +12,7 @@ public class MapSidebar extends GUIPanel {
 		int sidebarElementSpace = 5;
 
 		this.opaque = true;
-		this.background = editor.editorPanel.secondaryColor;
+		this.background = Colors.BACKGROUND_1;
 
 		GUIPanel widthPanel = new MapSizePanel(1, 1,
 		                                       w - 2, 23,

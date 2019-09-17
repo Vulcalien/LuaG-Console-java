@@ -2,6 +2,7 @@ package vulc.luag.editor.map.gui;
 
 import vulc.luag.editor.map.MapEditor;
 import vulc.luag.game.Game;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.gui.GUIPanel;
 
 public class MapPreview extends GUIPanel {
@@ -14,7 +15,7 @@ public class MapPreview extends GUIPanel {
 		this.editor = editor;
 		this.game = editor.editorPanel.game;
 
-		background = editor.editorPanel.secondaryColor;
+		background = Colors.BACKGROUND_1;
 	}
 
 	protected void drawComponents() {

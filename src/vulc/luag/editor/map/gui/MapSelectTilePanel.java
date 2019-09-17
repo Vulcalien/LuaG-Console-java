@@ -1,6 +1,7 @@
 package vulc.luag.editor.map.gui;
 
 import vulc.luag.editor.map.MapEditor;
+import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUILabel;
 import vulc.luag.gfx.gui.GUIPanel;
@@ -12,10 +13,10 @@ public class MapSelectTilePanel extends GUIPanel {
 		super(x, y, w, h);
 
 		opaque = true;
-		background = editor.editorPanel.secondaryColor;
+		background = Colors.BACKGROUND_1;
 
 		GUILabel label = new GUILabel(1, 1, this.w, 10);
-		label.textColor = editor.editorPanel.secondaryTextColor;
+		label.textColor = Colors.FOREGROUND_1;
 		label.text = "Tile";
 		this.add(label);
 
