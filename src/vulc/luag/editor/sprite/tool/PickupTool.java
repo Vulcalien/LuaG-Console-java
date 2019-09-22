@@ -7,6 +7,10 @@ public class PickupTool extends SpriteTool {
 
 	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap canvas) {
 		editor.selectColor(canvas.getPixel(x, y));
+
+		SpriteToolkit toolkit = editor.toolkit;
+		toolkit.setTool(toolkit.pencil);
+
 		return false;
 	}
 
