@@ -44,7 +44,7 @@ public class SpriteEditor extends Editor {
 	public final List<Bitmap> history = new ArrayList<Bitmap>();
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
-	public int historyIndex = 0;
+	public int nextHistoryIndex = 0;
 
 	public final GUITextBox selectColorTxt;
 
@@ -174,18 +174,25 @@ public class SpriteEditor extends Editor {
 
 		if(shouldSaveHistory) {
 			historySave();
-			atlas.draw(preview, (spriteID % 16) * 8, (spriteID / 16) * 8);
+			updateAtlas();
 		}
 	}
 
 	public void historySave() {
-		System.out.println("saving"); // DEGUG
+		// if UNDOs where done, delete the "future" history
+		for(int i = nextHistoryIndex; i < history.size(); i++) {
+			history.remove(i);
+		}
 
 		history.add(preview.getScaled(1)); // clones the img
 		if(history.size() > historySize) {
 			history.remove(0);
 		}
-		historyIndex = history.size();
+		nextHistoryIndex = history.size();
+	}
+
+	private void updateAtlas() {
+		atlas.draw(preview, (spriteID % 16) * 8, (spriteID / 16) * 8);
 	}
 
 	public String getTitle() {
@@ -223,11 +230,23 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void undo() {
-		// TODO undo
+		if(nextHistoryIndex == 1) return;
+
+		preview = history.get(nextHistoryIndex - 2).getScaled(1); // same as before: clone the bitmap
+		nextHistoryIndex--;
+
+		shouldSaveContent = true;
+		updateAtlas();
 	}
 
 	public void redo() {
-		// TODO redo
+		if(nextHistoryIndex == history.size()) return;
+
+		preview = history.get(nextHistoryIndex).getScaled(1); // clone bitmap
+		nextHistoryIndex++;
+
+		shouldSaveContent = true;
+		updateAtlas();
 	}
 
 }
