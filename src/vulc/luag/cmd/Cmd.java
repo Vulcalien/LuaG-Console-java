@@ -57,6 +57,8 @@ public class Cmd {
 		}
 
 		console.screen.clear(background);
+
+		String textToRender = "";
 		for(int i = 0; i < renderedLines; i++) {
 			int line = i + renderOffset;
 			if(line > closedLines.size()) { // if line == closedLines.size() then the cmd will render currentLine
@@ -72,8 +74,9 @@ public class Cmd {
 					text += "_";
 				}
 			}
-			console.screen.write(text, foreground, 1, 1 + i * (Screen.FONT.getHeight() + 1));
+			textToRender += text + "\n";
 		}
+		console.screen.write(textToRender, foreground, 1, 1);
 	}
 
 	public void init() {

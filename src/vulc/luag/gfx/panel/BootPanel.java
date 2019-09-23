@@ -27,9 +27,10 @@ public class BootPanel extends Panel {
 	public void tick() {
 		Screen screen = console.screen;
 
-		screen.write(Console.NAME, 0xffffff, 1, 1);
-		screen.write(Console.COPYRIGHT, 0xffffff, 1, 11);
-		screen.write("Version: " + Console.VERSION, 0xffffff, 1, 22);
+		screen.write(Console.NAME + "\n"
+		             + Console.COPYRIGHT + "\n"
+		             + "Version: " + Console.VERSION,
+		             0xffffff, 1, 1);
 
 		bootTime--;
 		if(bootTime <= 0) {

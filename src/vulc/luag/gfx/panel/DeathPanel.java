@@ -23,21 +23,7 @@ public class DeathPanel extends Panel {
 		Screen screen = console.screen;
 		screen.clear(background);
 
-		String remaining = text;
-		for(int i = 0; !remaining.isEmpty(); i++) {
-			int newlineIndex = remaining.indexOf('\n');
-
-			String line = "";
-			if(newlineIndex != -1) {
-				line = remaining.substring(0, newlineIndex);
-				remaining = remaining.substring(newlineIndex + 1);
-			} else {
-				line = remaining;
-				remaining = "";
-			}
-
-			screen.write(line, foreground, 1, 1 + (Screen.FONT.getHeight() + 1) * i);
-		}
+		screen.write(text, foreground, 1, 1);
 	}
 
 }

@@ -184,7 +184,7 @@ public class SpriteEditor extends Editor {
 			history.remove(i);
 		}
 
-		history.add(preview.getScaled(1)); // clones the img
+		history.add(preview.getCopy());
 		if(history.size() > historySize) {
 			history.remove(0);
 		}
@@ -237,7 +237,7 @@ public class SpriteEditor extends Editor {
 	public void undo() {
 		if(nextHistoryIndex == 1) return;
 
-		preview = history.get(nextHistoryIndex - 2).getScaled(1); // same as before: clone the bitmap
+		preview = history.get(nextHistoryIndex - 2).getCopy();
 		nextHistoryIndex--;
 
 		shouldSaveContent = true;
@@ -247,7 +247,7 @@ public class SpriteEditor extends Editor {
 	public void redo() {
 		if(nextHistoryIndex == history.size()) return;
 
-		preview = history.get(nextHistoryIndex).getScaled(1); // clone bitmap
+		preview = history.get(nextHistoryIndex).getCopy();
 		nextHistoryIndex++;
 
 		shouldSaveContent = true;
