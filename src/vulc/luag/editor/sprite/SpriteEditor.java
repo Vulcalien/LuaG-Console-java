@@ -41,7 +41,7 @@ public class SpriteEditor extends Editor {
 
 	// editing history
 	public final int historySize = 100;
-	public final List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
+	public List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
 	public int nextHistoryIndex = 0;
@@ -179,10 +179,8 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void historySave() {
-		// if UNDOs where done, delete the "future" history
-		for(int i = nextHistoryIndex; i < history.size(); i++) {
-			history.remove(i);
-		}
+		// if UNDOs where done, clear the "future" history
+		history = history.subList(0, nextHistoryIndex);
 
 		history.add(preview.getCopy());
 		if(history.size() > historySize) {
