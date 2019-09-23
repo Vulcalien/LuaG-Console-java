@@ -29,7 +29,7 @@ public class LuaInterface {
 		env.set("scr_h", console.screen.height);
 
 		// FONT
-		env.set("font_w", Screen.FONT.lengthOf(' '));
+		env.set("font_w", Screen.FONT.widthOf(' '));
 		env.set("font_h", Screen.FONT.getHeight());
 
 		// MAP

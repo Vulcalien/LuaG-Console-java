@@ -5,7 +5,7 @@ import vulc.luag.editor.sprite.SpriteEditor;
 
 public class PickupTool extends SpriteTool {
 
-	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap canvas) {
+	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap<Integer> canvas) {
 		editor.selectColor(canvas.getPixel(x, y));
 
 		SpriteToolkit toolkit = editor.toolkit;

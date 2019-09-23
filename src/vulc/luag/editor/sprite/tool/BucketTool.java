@@ -5,7 +5,7 @@ import vulc.luag.editor.sprite.SpriteEditor;
 
 public class BucketTool extends SpriteTool {
 
-	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap canvas) {
+	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap<Integer> canvas) {
 		boolean[][] checked = new boolean[canvas.width][canvas.height];
 
 		int newColor = editor.selectedColor;
@@ -17,7 +17,7 @@ public class BucketTool extends SpriteTool {
 		return true;
 	}
 
-	private void fill(int x, int y, Bitmap canvas, int backgroundColor, int newColor, boolean[][] checked) {
+	private void fill(int x, int y, Bitmap<Integer> canvas, int backgroundColor, int newColor, boolean[][] checked) {
 		if(x < 0 || y < 0 || x >= canvas.width || y >= canvas.height) return;
 		if(checked[x][y]) return;
 

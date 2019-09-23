@@ -1,22 +1,21 @@
 package vulc.luag.gfx;
 
-import vulc.bitmap.Bitmap;
-import vulc.bitmap.Font;
+import vulc.bitmap.IntBitmap;
+import vulc.bitmap.font.Font;
 
-public class Screen extends Bitmap {
+public class Screen extends IntBitmap {
 
 	public static final Font FONT;
 	static {
-		FONT = new Font(Screen.class.getResourceAsStream("/res/font.lwfont"));
+		FONT = new Font(Screen.class.getResourceAsStream("/res/font.fv3"));
+
 		FONT.setLetterSpacing(1);
+		FONT.setLineSpacing(1);
 	}
 
 	public Screen(int width, int height) {
 		super(width, height);
-	}
-
-	public void write(String text, int color, int x, int y) {
-		FONT.write(text, color, this, x, y);
+		setFont(FONT);
 	}
 
 }

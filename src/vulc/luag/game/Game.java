@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import vulc.bitmap.Bitmap;
+import vulc.bitmap.IntBitmap;
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
 import vulc.luag.editor.map.MapCompiler;
@@ -42,7 +43,7 @@ public class Game {
 
 	public JsonObject jsonConfig;
 	public InputHandler input = new InputHandler();
-	public Bitmap atlas;
+	public Bitmap<Integer> atlas;
 
 	public Map map;
 
@@ -99,7 +100,7 @@ public class Game {
 			try {
 				BufferedImage img = ImageIO.read(atlasFile);
 				if(img != null) {
-					atlas = new Bitmap(img);
+					atlas = new IntBitmap(img);
 					if(atlas.width != 128 || atlas.height != 128) {
 						console.die("Error:\n"
 						            + "atlas must be\n"
@@ -168,11 +169,11 @@ public class Game {
 		input.tick();
 	}
 
-	public Bitmap getSprite(int id, int sw, int sh) {
+	public Bitmap<Integer> getSprite(int id, int sw, int sh) {
 		return getSprite(id % 16, id / 16, sw, sh);
 	}
 
-	public Bitmap getSprite(int x, int y, int w, int h) {
+	public Bitmap<Integer> getSprite(int x, int y, int w, int h) {
 		return atlas.getSubimage(x * 8, y * 8, w * 8, h * 8);
 	}
 

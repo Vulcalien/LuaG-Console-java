@@ -25,8 +25,8 @@ import vulc.luag.gfx.panel.EditorPanel;
 public class SpriteEditor extends Editor {
 
 	// preview and atlas
-	public final Bitmap atlas;
-	public Bitmap preview;
+	public final Bitmap<Integer> atlas;
+	public Bitmap<Integer> preview;
 	public final int previewScale = 6;
 	public int spriteID = 0;
 	public int scope = 1;
@@ -41,7 +41,7 @@ public class SpriteEditor extends Editor {
 
 	// editing history
 	public final int historySize = 100;
-	public final List<Bitmap> history = new ArrayList<Bitmap>();
+	public final List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
 	public int nextHistoryIndex = 0;
@@ -219,8 +219,13 @@ public class SpriteEditor extends Editor {
 
 	public void onSave() {
 		try {
+			int[] pixels = new int[atlas.width * atlas.height];
+			for(int i = 0; i < atlas.pixels.length; i++) {
+				pixels[i] = atlas.pixels[i];
+			}
+
 			BufferedImage img = new BufferedImage(atlas.width, atlas.height, BufferedImage.TYPE_INT_RGB);
-			img.setRGB(0, 0, atlas.width, atlas.height, atlas.pixels, 0, atlas.width);
+			img.setRGB(0, 0, atlas.width, atlas.height, pixels, 0, atlas.width);
 
 			ImageIO.write(img, "png", new File(Game.ATLAS_FILE));
 			shouldSaveContent = false;

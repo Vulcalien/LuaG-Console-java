@@ -87,7 +87,7 @@ public class EditorPanel extends Panel {
 		footerPanel.background = Colors.BACKGROUND_0;
 		mainPanel.add(footerPanel);
 
-		footerLabel = new GUILabel(1, 1, Screen.FONT.lengthOf("Game Editor"), 8);
+		footerLabel = new GUILabel(1, 1, Screen.FONT.widthOf("Game Editor"), 8);
 		footerLabel.textColor = Colors.FOREGROUND_0;
 		footerPanel.add(footerLabel);
 	}
