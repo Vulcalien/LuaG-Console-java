@@ -12,7 +12,7 @@ import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.sprite.gui.SpriteAtlasPreview;
-import vulc.luag.editor.sprite.gui.SpriteColorBar;
+import vulc.luag.editor.sprite.gui.SpriteColorbar;
 import vulc.luag.editor.sprite.gui.SpritePreview;
 import vulc.luag.editor.sprite.gui.SpriteToolbar;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
@@ -37,7 +37,7 @@ public class SpriteEditor extends Editor {
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();
 
-	// select color and color history
+	// select color and last colors
 	public int selectedColor = 0xffffff;
 	public final List<Integer> lastColors = new ArrayList<Integer>();
 
@@ -90,7 +90,7 @@ public class SpriteEditor extends Editor {
 		guiPanel.add(toolbar);
 
 		int xColorbar = sprPreview.x + sprPreview.w + 5;
-		GUIPanel colorbar = new SpriteColorBar(xColorbar, 5,
+		GUIPanel colorbar = new SpriteColorbar(xColorbar, 5,
 		                                       guiPanel.w - xColorbar - 5, sprPreview.h,
 		                                       this);
 		guiPanel.add(colorbar);

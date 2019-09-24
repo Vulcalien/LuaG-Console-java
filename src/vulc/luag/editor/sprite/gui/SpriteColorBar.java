@@ -7,9 +7,9 @@ import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
 
-public class SpriteColorBar extends GUIPanel {
+public class SpriteColorbar extends GUIPanel {
 
-	public SpriteColorBar(int x, int y, int w, int h, SpriteEditor editor) {
+	public SpriteColorbar(int x, int y, int w, int h, SpriteEditor editor) {
 		super(x, y, w, h);
 
 		this.background = Colors.BACKGROUND_0;
@@ -38,7 +38,7 @@ public class SpriteColorBar extends GUIPanel {
 		int historyColumns = 4;
 		int hHistory = 9 * (SpriteEditor.PALETTE_SIZE / historyColumns) + 1;
 		int wHistory = 9 * historyColumns + 1;
-		GUIPanel history = new SpriteColorBarHistory((w - wHistory) / 2, h - hHistory - 1,
+		GUIPanel history = new SpriteColorbarPalette((w - wHistory) / 2, h - hHistory - 1,
 		                                             wHistory, hHistory,
 		                                             editor, historyColumns);
 		this.add(history);

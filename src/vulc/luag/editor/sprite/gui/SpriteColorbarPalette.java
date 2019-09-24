@@ -6,9 +6,9 @@ import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
 
-public class SpriteColorBarHistory extends GUIPanel {
+public class SpriteColorbarPalette extends GUIPanel {
 
-	public SpriteColorBarHistory(int x, int y, int w, int h, SpriteEditor editor, int columns) {
+	public SpriteColorbarPalette(int x, int y, int w, int h, SpriteEditor editor, int columns) {
 		super(x, y, w, h);
 
 		this.background = Colors.BACKGROUND_1;
@@ -23,6 +23,9 @@ public class SpriteColorBarHistory extends GUIPanel {
 					screen.fill(x, y, x + w - 1, y + h - 1, editor.lastColors.get(id));
 				}
 
+				// BUG If a new color is added, the colors will slide. (And it's normal)
+				//     But this causes the user to select the color that now occupies the
+				//     position of the previous color.
 				public void onPress(int xMouse, int yMouse) {
 					editor.selectColor(editor.lastColors.get(id));
 				}
