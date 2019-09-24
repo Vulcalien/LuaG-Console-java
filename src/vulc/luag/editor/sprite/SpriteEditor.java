@@ -11,18 +11,21 @@ import javax.imageio.ImageIO;
 import vulc.bitmap.Bitmap;
 import vulc.luag.Console;
 import vulc.luag.editor.Editor;
+import vulc.luag.editor.sprite.gui.SpriteAtlasPreview;
+import vulc.luag.editor.sprite.gui.SpriteColorBar;
 import vulc.luag.editor.sprite.gui.SpritePreview;
 import vulc.luag.editor.sprite.gui.SpriteToolbar;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.game.Game;
-import vulc.luag.gfx.Colors;
-import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
 import vulc.luag.gfx.panel.EditorPanel;
 
 public class SpriteEditor extends Editor {
+
+	public static final int PALETTE_SIZE = 8;
+	public static final int HISTORY_SIZE = 100;
 
 	// preview and atlas
 	public final Bitmap<Integer> atlas;
@@ -37,16 +40,14 @@ public class SpriteEditor extends Editor {
 	// select color and color history
 	public int selectedColor = 0xffffff;
 	public final List<Integer> lastColors = new ArrayList<Integer>();
-	public final int historyColors = 8;
 
 	// editing history
-	public final int historySize = 100;
 	public List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
 	public int nextHistoryIndex = 0;
 
-	public final GUITextBox selectColorTxt;
+	public GUITextBox selectColorTxt;
 
 	public SpriteEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
 		super(console, panel, x, y, w, h);
@@ -76,31 +77,10 @@ public class SpriteEditor extends Editor {
 		                                            this);
 		guiPanel.add(sprPreview);
 
-		int verticalTiles = 8;
-		int hAtlasPreview = 8 * verticalTiles;
-		GUIComponent atlasPreview = new GUIComponent((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlasPreview - 5,
-		                                             atlas.width, hAtlasPreview) {
-			public void render(Screen screen) {
-				screen.draw(atlas.getSubimage(0, atlasOffset * 8, atlas.width, hAtlasPreview), x, y);
-			}
-
-			public void onPress(int xMouse, int yMouse) {
-				int xs = xMouse / 8;
-				int ys = yMouse / 8 + atlasOffset;
-
-				int id = xs + ys * 16; // 16 = atlas.width (in sprites)
-				spriteID = id;
-
-				preview = editorPanel.game.getSprite(id, scope, scope);
-			}
-
-			public void onMouseScroll(int xMouse, int yMouse, int count) {
-				int newOffset = atlasOffset + count;
-				if(newOffset >= 0 && newOffset + verticalTiles <= 16) {
-					atlasOffset = newOffset;
-				}
-			}
-		};
+		int hAtlas = 8 * SpriteAtlasPreview.VERTICAL_TILES;
+		GUIComponent atlasPreview = new SpriteAtlasPreview((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlas - 5,
+		                                                   atlas.width, hAtlas,
+		                                                   this);
 		guiPanel.add(atlasPreview);
 
 		int hToolbar = 9 * 5 + 1;
@@ -110,58 +90,9 @@ public class SpriteEditor extends Editor {
 		guiPanel.add(toolbar);
 
 		int xColorbar = sprPreview.x + sprPreview.w + 5;
-		GUIPanel colorbar = new GUIPanel(xColorbar, 5,
-		                                 guiPanel.w - xColorbar - 5, sprPreview.h);
-		{
-			colorbar.background = Colors.BACKGROUND_0;
-
-			GUIComponent colorPreview = new GUIComponent((colorbar.w - 16) / 2, 1, 16, 16) {
-				public void render(Screen screen) {
-					screen.fill(x, y, x + w - 1, y + h - 1, selectedColor);
-				}
-			};
-			colorbar.add(colorPreview);
-
-			selectColorTxt = new GUITextBox(1, 18, colorbar.w - 2, 10) {
-				public void onEnterPress() {
-					super.onEnterPress();
-					selectColor(Integer.parseInt(text, 16));
-				}
-			};
-			selectColorTxt.opaque = true;
-			selectColorTxt.background = 0xffffff;
-			selectColorTxt.textColor = 0x000000;
-			selectColorTxt.nChars = 6;
-			selectColorTxt.acceptedText = GUITextBox.HEX_ONLY;
-			colorbar.add(selectColorTxt);
-
-			int historyColumns = 4;
-			int hHistory = 9 * (historyColors / historyColumns) + 1;
-			int wHistory = 9 * historyColumns + 1;
-			GUIPanel history = new GUIPanel((colorbar.w - wHistory) / 2, colorbar.h - hHistory - 1,
-			                                wHistory, hHistory);
-			{
-				history.background = Colors.BACKGROUND_1;
-
-				for(int i = 0; i < historyColors; i++) {
-					int id = i;
-					int xt = (id % historyColumns);
-					int yt = (id / historyColumns);
-
-					GUIComponent comp = new GUIComponent(1 + xt * 9, 1 + yt * 9, 8, 8) {
-						public void render(Screen screen) {
-							screen.fill(x, y, x + w - 1, y + h - 1, lastColors.get(id));
-						}
-
-						public void onPress(int xMouse, int yMouse) {
-							selectColor(lastColors.get(id));
-						}
-					};
-					history.add(comp);
-				}
-			}
-			colorbar.add(history);
-		}
+		GUIPanel colorbar = new SpriteColorBar(xColorbar, 5,
+		                                       guiPanel.w - xColorbar - 5, sprPreview.h,
+		                                       this);
 		guiPanel.add(colorbar);
 
 		toolkit.setTool(toolkit.pencil);
@@ -183,7 +114,7 @@ public class SpriteEditor extends Editor {
 		history = history.subList(0, nextHistoryIndex);
 
 		history.add(preview.getCopy());
-		if(history.size() > historySize) {
+		if(history.size() > HISTORY_SIZE) {
 			history.remove(0);
 		}
 		nextHistoryIndex = history.size();
@@ -200,7 +131,7 @@ public class SpriteEditor extends Editor {
 	public void selectColor(int color) {
 		if(!lastColors.contains(selectedColor)) {
 			lastColors.add(0, selectedColor);
-			lastColors.remove(historyColors);
+			lastColors.remove(PALETTE_SIZE);
 		}
 		this.selectedColor = color;
 
