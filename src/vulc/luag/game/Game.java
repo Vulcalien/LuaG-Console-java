@@ -37,6 +37,8 @@ public class Game {
 	public static final String ATLAS_FILE = USER_DIR + "/atlas.png";
 	public static final String MAP_FILE = USER_DIR + "/map";
 
+	public static final int SPR_SIZE = 8;
+
 	public final Console console;
 	public final LuaScriptCore scriptCore = new LuaScriptCore();
 	public final GameSounds sounds = new GameSounds();
@@ -174,7 +176,7 @@ public class Game {
 	}
 
 	public Bitmap<Integer> getSprite(int x, int y, int w, int h) {
-		return atlas.getSubimage(x * 8, y * 8, w * 8, h * 8);
+		return atlas.getSubimage(x * SPR_SIZE, y * SPR_SIZE, w * SPR_SIZE, h * SPR_SIZE);
 	}
 
 }

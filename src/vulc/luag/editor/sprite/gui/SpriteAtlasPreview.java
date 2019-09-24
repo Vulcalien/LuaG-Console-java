@@ -17,12 +17,12 @@ public class SpriteAtlasPreview extends GUIComponent {
 	}
 
 	public void render(Screen screen) {
-		screen.draw(editor.atlas.getSubimage(0, editor.atlasOffset * 8, w, h), x, y);
+		screen.draw(editor.atlas.getSubimage(0, editor.atlasOffset * Game.SPR_SIZE, w, h), x, y);
 	}
 
 	public void onPress(int xMouse, int yMouse) {
-		int xs = xMouse / 8;
-		int ys = yMouse / 8 + editor.atlasOffset;
+		int xs = xMouse / Game.SPR_SIZE;
+		int ys = yMouse / Game.SPR_SIZE + editor.atlasOffset;
 
 		int id = xs + ys * 16; // 16 = atlas.width (in sprites)
 		editor.spriteID = id;
@@ -33,7 +33,7 @@ public class SpriteAtlasPreview extends GUIComponent {
 
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
 		int newOffset = editor.atlasOffset + count;
-		if(newOffset >= 0 && newOffset + h / 8 <= 16) {
+		if(newOffset >= 0 && newOffset + h / Game.SPR_SIZE <= 16) {
 			editor.atlasOffset = newOffset;
 		}
 	}

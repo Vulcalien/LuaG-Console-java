@@ -26,8 +26,8 @@ public class MapPreview extends GUIPanel {
 	public void onPress(int xMouse, int yMouse) {
 		super.onPress(xMouse, yMouse);
 
-		int xt = (xMouse + editor.xOffset) / 8;
-		int yt = (yMouse + editor.yOffset) / 8;
+		int xt = (xMouse + editor.xOffset) / Game.SPR_SIZE;
+		int yt = (yMouse + editor.yOffset) / Game.SPR_SIZE;
 
 		if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
 

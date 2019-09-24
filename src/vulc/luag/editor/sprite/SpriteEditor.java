@@ -70,7 +70,7 @@ public class SpriteEditor extends Editor {
 		// INTERFACE
 		guiPanel.background = 0x000000;
 
-		int previewSize = 8 * previewScale;
+		int previewSize = Game.SPR_SIZE * previewScale;
 		GUIComponent sprPreview = new SpritePreview((guiPanel.w - previewSize) / 2 - SpritePreview.BORDER, 5,
 		                                            previewSize + SpritePreview.BORDER * 2,
 		                                            previewSize + SpritePreview.BORDER * 2,
@@ -121,7 +121,7 @@ public class SpriteEditor extends Editor {
 	}
 
 	private void updateAtlas() {
-		atlas.draw(preview, (spriteID % 16) * 8, (spriteID / 16) * 8);
+		atlas.draw(preview, (spriteID % 16) * Game.SPR_SIZE, (spriteID / 16) * Game.SPR_SIZE);
 	}
 
 	public String getTitle() {

@@ -23,7 +23,7 @@ public class Map {
 	}
 
 	public void render(Screen screen, Game game, int xOffset, int yOffset, int scale) {
-		int tSize = 8 * scale;
+		int tSize = Game.SPR_SIZE * scale;
 
 		int xt0 = Math.floorDiv(xOffset, tSize);
 		int yt0 = Math.floorDiv(yOffset, tSize);
@@ -38,8 +38,8 @@ public class Map {
 
 				int id = getTile(xt, yt);
 				screen.draw(game.getSprite(id, 1, 1).getScaled(scale),
-				            xt * 8 * scale - xOffset,
-				            yt * 8 * scale - yOffset);
+				            xt * Game.SPR_SIZE * scale - xOffset,
+				            yt * Game.SPR_SIZE * scale - yOffset);
 			}
 		}
 	}
