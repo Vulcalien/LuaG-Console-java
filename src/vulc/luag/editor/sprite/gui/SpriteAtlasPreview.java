@@ -20,7 +20,7 @@ public class SpriteAtlasPreview extends GUIComponent {
 		screen.draw(editor.atlas.getSubimage(0, editor.atlasOffset * Game.SPR_SIZE, w, h), x, y);
 	}
 
-	public void onPress(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse) {
 		int xs = xMouse / Game.SPR_SIZE;
 		int ys = yMouse / Game.SPR_SIZE + editor.atlasOffset;
 

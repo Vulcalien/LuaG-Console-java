@@ -8,7 +8,7 @@ public class GUIButton extends GUILabel {
 		super(x, y, w, h);
 	}
 
-	public void onPress(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse) {
 		if(action != null) action.run();
 	}
 

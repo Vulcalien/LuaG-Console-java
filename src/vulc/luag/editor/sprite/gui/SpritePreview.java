@@ -25,7 +25,7 @@ public class SpritePreview extends GUIComponent {
 		            x + BORDER, y + BORDER);
 	}
 
-	public void onPress(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse) {
 		int xPix = (xMouse - BORDER) / editor.previewScale;
 		int yPix = (yMouse - BORDER) / editor.previewScale;
 

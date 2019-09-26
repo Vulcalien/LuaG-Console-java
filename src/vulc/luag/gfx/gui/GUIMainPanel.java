@@ -57,8 +57,8 @@ public class GUIMainPanel extends GUIPanel {
 		}
 
 		if(mouse1.isKeyDown()) {
-			if(this.isPressed(xMouse, yMouse)) {
-				this.onPress(xMouse, yMouse);
+			if(this.isPointInside(xMouse, yMouse)) {
+				this.onMouseDown(xMouse, yMouse);
 			}
 		}
 

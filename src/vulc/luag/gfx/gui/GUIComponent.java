@@ -32,11 +32,7 @@ public class GUIComponent {
 		return x >= 0 && x < w && y >= 0 && y < h;
 	}
 
-	public boolean isPressed(int x, int y) {
-		return isPointInside(x, y);
-	}
-
-	public void onPress(int xMouse, int yMouse) {
+	public void onMouseDown(int xMouse, int yMouse) {
 	}
 
 	public void onGainFocus() {
