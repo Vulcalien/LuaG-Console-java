@@ -32,7 +32,7 @@ public class SpriteEditor extends Editor {
 	public Bitmap<Integer> preview;
 	public final int previewScale = 6;
 	public int spriteID = 0;
-	public int scope = 1;
+	public int scope = 1; // TODO this can only be set to 1 at the moment
 	public int atlasOffset = 0;
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();

@@ -61,6 +61,17 @@ public class GUIMainPanel extends GUIPanel {
 				this.onMouseDown(xMouse, yMouse);
 			}
 		}
+		// TODO when onMousePress and onMouseRelease will be added
+//		if(mouse1.isPressed()) {
+//			if(this.isPointInside(xMouse, yMouse)) {
+//				this.onMousePress(xMouse, yMouse);
+//			}
+//		}
+//		if(mouse1.isReleased()) {
+//			if(this.isPointInside(xMouse, yMouse)) {
+//				this.onMouseRelease(xMouse, yMouse);
+//			}
+//		}
 
 		if(wheelRotCount != 0) {
 			if(this.isMouseScrolled(xMouse, yMouse, wheelRotCount)) {
