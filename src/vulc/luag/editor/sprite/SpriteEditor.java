@@ -43,9 +43,9 @@ public class SpriteEditor extends Editor {
 
 	// editing history
 	public List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
+	public int nextHistoryIndex = 0;
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
-	public int nextHistoryIndex = 0;
 
 	public GUITextBox selectColorTxt;
 
@@ -118,6 +118,13 @@ public class SpriteEditor extends Editor {
 			history.remove(0);
 		}
 		nextHistoryIndex = history.size();
+	}
+
+	public void resetHistory() {
+		history.clear();
+		nextHistoryIndex = 0;
+
+		historySave(); // save the first sprite
 	}
 
 	private void updateAtlas() {

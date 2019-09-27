@@ -29,6 +29,8 @@ public class SpriteAtlasPreview extends GUIComponent {
 
 		Game game = editor.editorPanel.game;
 		editor.preview = game.getSprite(id, editor.scope, editor.scope);
+
+		editor.resetHistory();
 	}
 
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
