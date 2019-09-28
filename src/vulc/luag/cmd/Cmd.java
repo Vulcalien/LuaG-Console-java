@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vulc.luag.Console;
+import vulc.luag.cmd.command.CmdCommand;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.CmdPanel;
-import vulc.luag.gfx.panel.EditorPanel;
-import vulc.luag.gfx.panel.GamePanel;
 
 public class Cmd {
 
@@ -25,7 +24,7 @@ public class Cmd {
 	private int renderOffset = 0;
 	private int animationTicks = 0; // the _ that appears and disappears
 
-	private Console console;
+	public Console console;
 	public CmdPanel cmdPanel;
 
 	public Cmd(Console console) {
@@ -130,40 +129,16 @@ public class Cmd {
 		}
 	}
 
-	public void execute(String command) {
-		command = command.trim();
-		switch(command) {
-			case "run":
-				console.switchToPanel(new GamePanel(console));
-				break;
+	public void clear() {
+		closedLines.clear();
+		currentLine = "";
+		renderOffset = 0;
+	}
 
-			case "edit":
-			case "editor":
-				console.switchToPanel(new EditorPanel(console));
-				break;
-
-			case "cls":
-				closedLines.clear();
-				currentLine = "";
-				renderOffset = 0;
-				break;
-
-			case "ver":
-			case "version":
-				write(Console.VERSION + " - By Vulcalien\n\n");
-				break;
-
-			case "help":
-				write("run: runs the game\n");
-				write("edit: opens the editor\n");
-				write("cls: clears the cmd\n");
-				write("ver: prints version\n");
-				write("help: prints this list\n\n");
-				break;
-
-			default:
-				write("unknown command\n\n");
-				break;
+	public void execute(String line) {
+		line = line.trim();
+		if(!CmdCommand.execute(this, line)) {
+			write("unknown command\n\n");
 		}
 	}
 
