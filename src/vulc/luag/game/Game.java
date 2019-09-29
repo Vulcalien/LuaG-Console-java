@@ -5,10 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import javax.imageio.ImageIO;
 import javax.swing.KeyStroke;
@@ -46,7 +48,6 @@ public class Game {
 	public JsonObject jsonConfig;
 	public InputHandler input = new InputHandler();
 	public Bitmap<Integer> atlas;
-
 	public Map map;
 
 	public final List<Key> keys = new ArrayList<Key>();
@@ -60,6 +61,9 @@ public class Game {
 		}
 	}
 
+	// init as console-userdata
+	// resources and scripts are loaded on different moments because
+	// the developer may want to restart the game changing the script
 	public boolean initResources() {
 		// root
 		File rootFolder = new File(USER_DIR);
@@ -74,56 +78,33 @@ public class Game {
 		if(!sounds.init(console)) return false;
 
 		// config.json
-		File configFile = new File(CONFIG_FILE);
-		if(configFile.isFile()) {
-			try {
-				JsonElement element = new JsonParser().parse(new FileReader(configFile));
-				if(element.isJsonObject()) {
-					jsonConfig = element.getAsJsonObject();
-				} else {
-					console.die("Error:\n"
-					            + "'config.json'\n"
-					            + "must be a json object");
-					return false;
-				}
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		} else {
+		try {
+			InputStream in = new FileInputStream(CONFIG_FILE);
+			boolean error = !loadJsonConfig(in);
+			in.close();
+			if(error) return false;
+		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
 			            + "'config.json'\n"
 			            + "file not found");
 			return false;
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 
 		// atlas.png
-		File atlasFile = new File(ATLAS_FILE);
-		if(atlasFile.isFile()) {
-			try {
-				BufferedImage img = ImageIO.read(atlasFile);
-				if(img != null) {
-					atlas = new IntBitmap(img);
-					if(atlas.width != 128 || atlas.height != 128) {
-						console.die("Error:\n"
-						            + "atlas must be\n"
-						            + "128x128 pixels\n"
-						            + "(256 sprites)");
-						return false;
-					}
-				} else {
-					console.die("Error:\n"
-					            + "'atlas.png'\n"
-					            + "is not an image");
-					return false;
-				}
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		} else {
+		try {
+			InputStream in = new FileInputStream(ATLAS_FILE);
+			boolean error = !loadAtlas(in);
+			in.close();
+			if(error) return false;
+		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
 			            + "'atlas.png'\n"
 			            + "file not found");
 			return false;
+		} catch(IOException e) {
+			e.printStackTrace();
 		}
 
 		// map
@@ -139,6 +120,7 @@ public class Game {
 		return true;
 	}
 
+	// init as console-userdata
 	public boolean initScript() {
 		JsonElement keysElement = jsonConfig.get("keys");
 		if(keysElement != null && keysElement.isJsonArray()) {
@@ -158,6 +140,54 @@ public class Game {
 		input.init(console);
 		scriptCore.init(console, this);
 
+		return true;
+	}
+
+	// init as cartridge assiming that there is no missing file
+	public void initAsCartridge(String cartridge) {
+		try {
+			ZipFile zip = new ZipFile(cartridge);
+
+		} catch(Exception e) {
+			console.die("Error:\n"
+			            + "cartridge is damaged");
+		}
+	}
+
+	private boolean loadJsonConfig(InputStream in) {
+		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
+		if(element.isJsonObject()) {
+			jsonConfig = element.getAsJsonObject();
+		} else {
+			console.die("Error:\n"
+			            + "'config.json'\n"
+			            + "must be a json object");
+			return false;
+		}
+		return true;
+	}
+
+	private boolean loadAtlas(InputStream in) {
+		try {
+			BufferedImage img = ImageIO.read(in);
+			if(img != null) {
+				atlas = new IntBitmap(img);
+				if(atlas.width != 128 || atlas.height != 128) {
+					console.die("Error:\n"
+					            + "atlas must be\n"
+					            + "128x128 pixels\n"
+					            + "(256 sprites)");
+					return false;
+				}
+			} else {
+				console.die("Error:\n"
+				            + "'atlas.png'\n"
+				            + "is not an image");
+				return false;
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		return true;
 	}
 

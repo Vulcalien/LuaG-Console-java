@@ -12,6 +12,17 @@ public class GameSounds {
 
 	private final HashMap<String, Sound> list = new HashMap<String, Sound>();
 
+	public Sound get(String name) {
+		return list.get(name);
+	}
+
+	public void remove() {
+		Set<String> keys = list.keySet();
+		for(String key : keys) {
+			list.get(key).stop();
+		}
+	}
+
 	public boolean init(Console console) {
 		File sfxDir = new File(Game.USER_DIR + "/sfx");
 		if(!sfxDir.isDirectory()) {
@@ -24,17 +35,6 @@ public class GameSounds {
 		readSoundsInFolder(sfxDir, "");
 
 		return true;
-	}
-
-	public Sound get(String name) {
-		return list.get(name);
-	}
-
-	public void remove() {
-		Set<String> keys = list.keySet();
-		for(String key : keys) {
-			list.get(key).stop();
-		}
 	}
 
 	private void readSoundsInFolder(File folder, String relativeToSfxRoot) {
