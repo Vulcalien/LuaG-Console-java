@@ -13,7 +13,11 @@ public class GamePanel extends Panel {
 	}
 
 	public void init() {
-		if(!game.initResources()) return;
+		if(console.cartridge != null) {
+			if(!game.initCartridgeResources()) return;
+		} else {
+			if(!game.initResources()) return;
+		}
 		game.initScript();
 	}
 

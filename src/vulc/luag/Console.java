@@ -61,6 +61,8 @@ public class Console extends Canvas implements Runnable {
 	public Cmd cmd;
 	public Panel currentPanel;
 
+	public String cartridge;
+
 	public enum Mode {
 		USER, DEVELOPER
 	}
@@ -102,15 +104,11 @@ public class Console extends Canvas implements Runnable {
 		requestFocus();
 
 		if(args.length > 0) {
-			switch(args[0]) {
-				case "-dev":
-					mode = Mode.DEVELOPER;
-					break;
-
-				default:
-					switchToPanel(new DeathPanel(this, "Error:\n"
-					                                   + "invalid boot argument"));
-					return;
+			if(args[0].equals("-dev")) {
+				mode = Mode.DEVELOPER;
+			} else {
+				cartridge = args[0];
+				mode = Mode.USER;
 			}
 		} else {
 			mode = Mode.USER;

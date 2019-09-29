@@ -1,6 +1,11 @@
 package vulc.luag.game.scripting;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.zip.ZipEntry;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaError;
@@ -26,14 +31,39 @@ public class LuaScriptCore {
 		luaInterface.init(console, game, globals);
 
 		try {
-			File mainFile = new File(Game.USER_DIR + "/script/main.lua");
-			if(!mainFile.exists()) {
-				console.die("Error:\n"
-				            + "'script/main.lua' does\n"
-				            + "not exist");
-				return;
+			if(console.cartridge == null) {
+				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
+				if(!mainFile.exists()) {
+					console.die("Error:\n"
+					            + "'" + Game.SCRIPT_NAME + "/main.lua'"
+					            + "file not found");
+					return;
+				} else {
+					globals.loadfile(mainFile.getPath()).call();
+				}
 			} else {
-				globals.get("dofile").call(mainFile.getPath());
+				ZipEntry mainLuaEntry = game.cartridgeFile.getEntry("script/main.lua");
+				if(mainLuaEntry == null || mainLuaEntry.isDirectory()) {
+					console.die("Cartridge Error:\n"
+					            + "'" + Game.SCRIPT_NAME + "/main.lua'"
+					            + "file not found");
+					return;
+				} else {
+					String buffer = "";
+					try {
+						InputStream in = game.cartridgeFile.getInputStream(mainLuaEntry);
+						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+						String line = "";
+						while((line = reader.readLine()) != null) {
+							buffer += line + '\n';
+						}
+					} catch(IOException e) {
+						e.printStackTrace();
+					}
+
+					globals.load(buffer).call();
+				}
 			}
 		} catch(LuaError e) {
 			handleError(e);

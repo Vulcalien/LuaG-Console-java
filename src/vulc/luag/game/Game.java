@@ -10,7 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import javax.imageio.ImageIO;
 import javax.swing.KeyStroke;
@@ -34,10 +36,18 @@ import vulc.luag.input.InputHandler.KeyType;
 
 public class Game {
 
+	public static final String SCRIPT_NAME = "script";
+	public static final String SFX_NAME = "sfx";
+	public static final String CONFIG_NAME = "config.json";
+	public static final String ATLAS_NAME = "atlas.png";
+	public static final String MAP_NAME = "map";
+
 	public static final String USER_DIR = "./console-userdata";
-	public static final String CONFIG_FILE = USER_DIR + "/config.json";
-	public static final String ATLAS_FILE = USER_DIR + "/atlas.png";
-	public static final String MAP_FILE = USER_DIR + "/map";
+	public static final String SCRIPT_DIR = USER_DIR + "/" + SCRIPT_NAME;
+	public static final String SFX_DIR = USER_DIR + "/" + SFX_NAME;
+	public static final String CONFIG_FILE = USER_DIR + "/" + CONFIG_NAME;
+	public static final String ATLAS_FILE = USER_DIR + "/" + ATLAS_NAME;
+	public static final String MAP_FILE = USER_DIR + "/" + MAP_NAME;
 
 	public static final int SPR_SIZE = 8;
 
@@ -49,6 +59,8 @@ public class Game {
 	public InputHandler input = new InputHandler();
 	public Bitmap<Integer> atlas;
 	public Map map;
+
+	public ZipFile cartridgeFile;
 
 	public final List<Key> keys = new ArrayList<Key>();
 
@@ -85,7 +97,7 @@ public class Game {
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
-			            + "'config.json'\n"
+			            + "'" + Game.CONFIG_NAME + "'\n"
 			            + "file not found");
 			return false;
 		} catch(IOException e) {
@@ -100,7 +112,7 @@ public class Game {
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
-			            + "'atlas.png'\n"
+			            + "'" + Game.ATLAS_NAME + "'\n"
 			            + "file not found");
 			return false;
 		} catch(IOException e) {
@@ -120,11 +132,85 @@ public class Game {
 		return true;
 	}
 
-	// init as console-userdata
+	// init as cartridge assiming that there is no missing file
+	public boolean initCartridgeResources() {
+		try {
+			String cartridge = console.cartridge;
+
+			try {
+				cartridgeFile = new ZipFile(cartridge);
+			} catch(FileNotFoundException e) {
+				console.die("Error:\n"
+				            + "'" + cartridge + "'\n"
+				            + "cartridge not found");
+				return false;
+			}
+			List<ZipEntry> entries = new ArrayList<ZipEntry>();
+			{
+				ZipInputStream zipIn = new ZipInputStream(new FileInputStream(cartridge));
+				while(true) {
+					ZipEntry entry = zipIn.getNextEntry();
+					if(entry != null) {
+						entries.add(entry);
+					} else {
+						break;
+					}
+				}
+				zipIn.close();
+			}
+
+			// sound
+			if(!sounds.initAsCartridge(cartridgeFile, entries)) return false;
+
+			// config.json
+			ZipEntry configEntry = cartridgeFile.getEntry(CONFIG_NAME);
+			if(configEntry != null) {
+				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
+					throw new RuntimeException();
+				}
+			} else {
+				console.die("Cartridge Error:"
+				            + "'" + CONFIG_NAME + "'\n"
+				            + "file not found");
+				return false;
+			}
+
+			// atlas.png
+			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_NAME);
+			if(atlasEntry != null) {
+				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
+					throw new Exception();
+				}
+			} else {
+				console.die("Cartirdge Error:\n"
+				            + "'" + ATLAS_NAME + "'\n"
+				            + "file not found");
+				return false;
+			}
+
+			// map
+			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_NAME);
+			if(mapEntry != null) {
+				this.map = Map.load(cartridgeFile.getInputStream(mapEntry), console);
+				if(map == null) return false;
+			} else {
+				console.die("Cartirdge Error:\n"
+				            + "'" + MAP_NAME + "'\n"
+				            + "file not found");
+				return false;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
 	public boolean initScript() {
 		JsonElement keysElement = jsonConfig.get("keys");
 		if(keysElement != null && keysElement.isJsonArray()) {
 			JsonArray keyArray = keysElement.getAsJsonArray();
+
 			for(int i = 0; i < keyArray.size(); i++) {
 				String key = keyArray.get(i).getAsString().toUpperCase();
 				keys.add(input.new Key(KeyType.KEYBOARD,
@@ -132,7 +218,7 @@ public class Game {
 			}
 		} else {
 			console.die("Error:\n"
-			            + "'config.json'\n"
+			            + "'" + CONFIG_NAME + "'\n"
 			            + "must contain\n"
 			            + "a string array 'keys'");
 			return false;
@@ -143,24 +229,13 @@ public class Game {
 		return true;
 	}
 
-	// init as cartridge assiming that there is no missing file
-	public void initAsCartridge(String cartridge) {
-		try {
-			ZipFile zip = new ZipFile(cartridge);
-
-		} catch(Exception e) {
-			console.die("Error:\n"
-			            + "cartridge is damaged");
-		}
-	}
-
 	private boolean loadJsonConfig(InputStream in) {
 		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
 		if(element.isJsonObject()) {
 			jsonConfig = element.getAsJsonObject();
 		} else {
 			console.die("Error:\n"
-			            + "'config.json'\n"
+			            + "'" + Game.CONFIG_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
@@ -181,7 +256,7 @@ public class Game {
 				}
 			} else {
 				console.die("Error:\n"
-				            + "'atlas.png'\n"
+				            + "'" + Game.ATLAS_NAME + "'\n"
 				            + "is not an image");
 				return false;
 			}

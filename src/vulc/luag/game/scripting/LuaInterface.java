@@ -1,5 +1,11 @@
 package vulc.luag.game.scripting;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.zip.ZipFile;
+
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
@@ -69,7 +75,26 @@ public class LuaInterface {
 
 	private class loadscript extends OneArgFunction {
 		public LuaValue call(LuaValue script) {
-			env.get("dofile").call(Game.USER_DIR + "/script/" + script);
+			if(console.cartridge == null) {
+				env.loadfile(Game.SCRIPT_DIR + "/" + script).call();
+			} else {
+				String buffer = "";
+				try {
+					ZipFile cartridgeFile = game.cartridgeFile;
+					InputStream in = cartridgeFile.getInputStream(cartridgeFile.getEntry(Game.SCRIPT_NAME
+					                                                                     + "/" + script));
+					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+					String line = "";
+					while((line = reader.readLine()) != null) {
+						buffer += line + '\n';
+					}
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+
+				env.load(buffer).call();
+			}
 			return NIL;
 		}
 	}
