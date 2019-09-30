@@ -73,7 +73,6 @@ public class GameSounds {
 
 			String sfxName = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf('.'));
 			try {
-				System.out.println("sfxname: " + sfxName);
 				list.put(sfxName, new Sound(new BufferedInputStream(zipFile.getInputStream(entry))));
 			} catch(IOException e) {
 				e.printStackTrace();
