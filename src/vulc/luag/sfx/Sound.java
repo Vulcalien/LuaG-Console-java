@@ -4,7 +4,7 @@
  ******************************************************************************/
 package vulc.luag.sfx;
 
-import java.net.URL;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -14,9 +14,9 @@ public class Sound {
 
 	private Clip clip;
 
-	public Sound(URL url) {
+	public Sound(InputStream in) {
 		try {
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			AudioInputStream ais = AudioSystem.getAudioInputStream(in);
 			Clip clip = AudioSystem.getClip();
 			clip.open(ais);
 			this.clip = clip;

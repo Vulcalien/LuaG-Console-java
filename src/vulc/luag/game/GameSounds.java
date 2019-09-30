@@ -1,6 +1,8 @@
 package vulc.luag.game;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +54,8 @@ public class GameSounds {
 					String name = relativeToSfxRoot + fileName;
 					name = name.substring(0, name.lastIndexOf('.'));
 					try {
-						list.put(name, new Sound(file.toURI().toURL()));
+						list.put(name,
+						         new Sound(new BufferedInputStream(new FileInputStream(file))));
 					} catch(IOException e) {
 						e.printStackTrace();
 					}
@@ -62,21 +65,21 @@ public class GameSounds {
 	}
 
 	public boolean initAsCartridge(ZipFile zipFile, List<ZipEntry> entries) {
+		for(ZipEntry entry : entries) {
+			String fileName = entry.getName();
+
+			if(!fileName.startsWith(Game.SFX_NAME)
+			   || !fileName.endsWith(".wav")) continue;
+
+			String sfxName = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf('.'));
+			try {
+				System.out.println("sfxname: " + sfxName);
+				list.put(sfxName, new Sound(new BufferedInputStream(zipFile.getInputStream(entry))));
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
 		return true;
-		// TODO sound from cartridges
-//		for(ZipEntry entry : entries) {
-//			String fileName = entry.getName();
-//
-//			if(!fileName.startsWith(Game.SFX_NAME)
-//			   || !fileName.endsWith(".wav")) continue;
-//
-//			String sfxName = fileName.substring(fileName.indexOf("/") + 1);
-//			try {
-//				list.put(sfxName, new Sound(zipFile.getInputStream(entry)));
-//			} catch(IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
 
 }
