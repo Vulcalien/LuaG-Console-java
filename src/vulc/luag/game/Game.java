@@ -36,18 +36,20 @@ import vulc.luag.input.InputHandler.KeyType;
 
 public class Game {
 
-	public static final String SCRIPT_NAME = "script";
-	public static final String SFX_NAME = "sfx";
-	public static final String CONFIG_NAME = "config.json";
-	public static final String ATLAS_NAME = "atlas.png";
-	public static final String MAP_NAME = "map";
+	public static final String SCRIPT_DIR_NAME = "script";
+	public static final String SFX_DIR_NAME = "sfx";
+	public static final String CONFIG_FILE_NAME = "config.json";
+	public static final String ATLAS_FILE_NAME = "atlas.png";
+	public static final String MAP_FILE_NAME = "map";
 
-	public static final String USER_DIR = "./console-userdata";
-	public static final String SCRIPT_DIR = USER_DIR + "/" + SCRIPT_NAME;
-	public static final String SFX_DIR = USER_DIR + "/" + SFX_NAME;
-	public static final String CONFIG_FILE = USER_DIR + "/" + CONFIG_NAME;
-	public static final String ATLAS_FILE = USER_DIR + "/" + ATLAS_NAME;
-	public static final String MAP_FILE = USER_DIR + "/" + MAP_NAME;
+	public static final String USERDATA_DIR = "./console-userdata";
+	public static final String SCRIPT_DIR = USERDATA_DIR + "/" + SCRIPT_DIR_NAME;
+	public static final String SFX_DIR = USERDATA_DIR + "/" + SFX_DIR_NAME;
+	public static final String CONFIG_FILE = USERDATA_DIR + "/" + CONFIG_FILE_NAME;
+	public static final String ATLAS_FILE = USERDATA_DIR + "/" + ATLAS_FILE_NAME;
+	public static final String MAP_FILE = USERDATA_DIR + "/" + MAP_FILE_NAME;
+
+	public static final String CARTRIDGE_EXTENSION = "luag";
 
 	public static final int SPR_SIZE = 8;
 
@@ -78,10 +80,10 @@ public class Game {
 	// the developer may want to restart the game changing the script
 	public boolean initResources() {
 		// root
-		File rootFolder = new File(USER_DIR);
+		File rootFolder = new File(USERDATA_DIR);
 		if(!rootFolder.isDirectory()) {
 			console.die("Error:\n"
-			            + "'" + USER_DIR.replaceFirst("./", "") + "'\n"
+			            + "'" + USERDATA_DIR.replaceFirst("./", "") + "'\n"
 			            + "folder not found");
 			return false;
 		}
@@ -97,7 +99,7 @@ public class Game {
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
-			            + "'" + Game.CONFIG_NAME + "'\n"
+			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "file not found");
 			return false;
 		} catch(IOException e) {
@@ -112,7 +114,7 @@ public class Game {
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			console.die("Error:\n"
-			            + "'" + Game.ATLAS_NAME + "'\n"
+			            + "'" + Game.ATLAS_FILE_NAME + "'\n"
 			            + "file not found");
 			return false;
 		} catch(IOException e) {
@@ -132,7 +134,6 @@ public class Game {
 		return true;
 	}
 
-	// init as cartridge assiming that there is no missing file
 	public boolean initCartridgeResources() {
 		try {
 			String cartridge = console.cartridge;
@@ -163,39 +164,39 @@ public class Game {
 			if(!sounds.initAsCartridge(cartridgeFile, entries)) return false;
 
 			// config.json
-			ZipEntry configEntry = cartridgeFile.getEntry(CONFIG_NAME);
+			ZipEntry configEntry = cartridgeFile.getEntry(CONFIG_FILE_NAME);
 			if(configEntry != null) {
 				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
 					throw new RuntimeException();
 				}
 			} else {
 				console.die("Cartridge Error:"
-				            + "'" + CONFIG_NAME + "'\n"
+				            + "'" + CONFIG_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
 			}
 
 			// atlas.png
-			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_NAME);
+			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_FILE_NAME);
 			if(atlasEntry != null) {
 				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
 					throw new Exception();
 				}
 			} else {
 				console.die("Cartirdge Error:\n"
-				            + "'" + ATLAS_NAME + "'\n"
+				            + "'" + ATLAS_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
 			}
 
 			// map
-			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_NAME);
+			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_FILE_NAME);
 			if(mapEntry != null) {
 				this.map = Map.load(cartridgeFile.getInputStream(mapEntry), console);
 				if(map == null) return false;
 			} else {
 				console.die("Cartirdge Error:\n"
-				            + "'" + MAP_NAME + "'\n"
+				            + "'" + MAP_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
 			}
@@ -218,7 +219,7 @@ public class Game {
 			}
 		} else {
 			console.die("Error:\n"
-			            + "'" + CONFIG_NAME + "'\n"
+			            + "'" + CONFIG_FILE_NAME + "'\n"
 			            + "must contain\n"
 			            + "a string array 'keys'");
 			return false;
@@ -235,7 +236,7 @@ public class Game {
 			jsonConfig = element.getAsJsonObject();
 		} else {
 			console.die("Error:\n"
-			            + "'" + Game.CONFIG_NAME + "'\n"
+			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
@@ -256,7 +257,7 @@ public class Game {
 				}
 			} else {
 				console.die("Error:\n"
-				            + "'" + Game.ATLAS_NAME + "'\n"
+				            + "'" + Game.ATLAS_FILE_NAME + "'\n"
 				            + "is not an image");
 				return false;
 			}

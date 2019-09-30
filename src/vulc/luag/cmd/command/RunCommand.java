@@ -2,6 +2,7 @@ package vulc.luag.cmd.command;
 
 import vulc.luag.Console;
 import vulc.luag.cmd.Cmd;
+import vulc.luag.game.Game;
 import vulc.luag.gfx.panel.GamePanel;
 
 public class RunCommand extends CmdCommand {
@@ -13,7 +14,7 @@ public class RunCommand extends CmdCommand {
 	public void run(Cmd cmd, String[] args) {
 		Console console = cmd.console;
 		if(args.length >= 1) {
-			console.cartridge = args[0];
+			console.cartridge = args[0] + "." + Game.CARTRIDGE_EXTENSION;
 		}
 
 		console.switchToPanel(new GamePanel(console));

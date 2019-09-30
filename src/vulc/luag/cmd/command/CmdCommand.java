@@ -15,6 +15,7 @@ public abstract class CmdCommand {
 	public static final CmdCommand CLS = new ClsCommand();
 	public static final CmdCommand VER = new VerCommand();
 	public static final CmdCommand HELP = new HelpCommand();
+	public static final CmdCommand PACK = new PackCommand();
 
 	public final String[] names;
 

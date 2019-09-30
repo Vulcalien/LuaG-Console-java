@@ -35,7 +35,7 @@ public class LuaScriptCore {
 				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
 				if(!mainFile.exists()) {
 					console.die("Error:\n"
-					            + "'" + Game.SCRIPT_NAME + "/main.lua'"
+					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return;
 				} else {
@@ -45,7 +45,7 @@ public class LuaScriptCore {
 				ZipEntry mainLuaEntry = game.cartridgeFile.getEntry("script/main.lua");
 				if(mainLuaEntry == null || mainLuaEntry.isDirectory()) {
 					console.die("Cartridge Error:\n"
-					            + "'" + Game.SCRIPT_NAME + "/main.lua'"
+					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return;
 				} else {
@@ -114,7 +114,7 @@ public class LuaScriptCore {
 		String msg = "LuaError: "
 		             + e.getLocalizedMessage()
 		                .replace("@", "")
-		                .replaceAll("\\.?" + sep + Game.USER_DIR.replace("./", ""), "");
+		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR.replace("./", ""), "");
 		System.err.println(msg);
 	}
 

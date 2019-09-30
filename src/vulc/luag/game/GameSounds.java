@@ -32,7 +32,7 @@ public class GameSounds {
 		File sfxDir = new File(Game.SFX_DIR);
 		if(!sfxDir.isDirectory()) {
 			console.die("Error:\n"
-			            + "'" + Game.SFX_NAME + "'\n"
+			            + "'" + Game.SFX_DIR_NAME + "'\n"
 			            + "folder not found");
 			return false;
 		}
@@ -68,7 +68,7 @@ public class GameSounds {
 		for(ZipEntry entry : entries) {
 			String fileName = entry.getName();
 
-			if(!fileName.startsWith(Game.SFX_NAME)
+			if(!fileName.startsWith(Game.SFX_DIR_NAME)
 			   || !fileName.endsWith(".wav")) continue;
 
 			String sfxName = fileName.substring(fileName.indexOf("/") + 1, fileName.lastIndexOf('.'));

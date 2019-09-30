@@ -81,7 +81,7 @@ public class LuaInterface {
 				String buffer = "";
 				try {
 					ZipFile cartridgeFile = game.cartridgeFile;
-					InputStream in = cartridgeFile.getInputStream(cartridgeFile.getEntry(Game.SCRIPT_NAME
+					InputStream in = cartridgeFile.getInputStream(cartridgeFile.getEntry(Game.SCRIPT_DIR_NAME
 					                                                                     + "/" + script));
 					BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 

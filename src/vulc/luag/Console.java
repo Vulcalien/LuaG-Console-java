@@ -104,14 +104,10 @@ public class Console extends Canvas implements Runnable {
 		requestFocus();
 
 		if(args.length > 0) {
-			if(args[0].equals("-dev")) {
-				mode = Mode.DEVELOPER;
-			} else {
-				cartridge = args[0];
-				mode = Mode.USER;
-			}
-		} else {
+			cartridge = args[0];
 			mode = Mode.USER;
+		} else {
+			mode = Mode.DEVELOPER;
 		}
 
 		Panel nextPanel = null;
@@ -170,7 +166,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		JFrame frame = new JFrame(NAME + " " + VERSION);
+		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 
@@ -191,6 +187,8 @@ public class Console extends Canvas implements Runnable {
 
 		instance.init(args);
 
+		frame.setTitle(NAME + " " + VERSION
+		               + (instance.mode == Mode.DEVELOPER ? " - dev mode" : ""));
 		frame.setVisible(true);
 		new Thread(instance).start();
 	}
