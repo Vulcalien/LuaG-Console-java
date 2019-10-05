@@ -29,6 +29,11 @@ public class Cmd {
 
 	public Cmd(Console console) {
 		this.console = console;
+
+		write(Console.NAME + "\n");
+		write(Console.COPYRIGHT + "\n");
+		write("Version: " + Console.VERSION + "\n");
+		write("\n");
 	}
 
 	public void tick() {
@@ -76,13 +81,6 @@ public class Cmd {
 			textToRender += text + "\n";
 		}
 		console.screen.write(textToRender, foreground, 1, 1);
-	}
-
-	public void init() {
-		write(Console.NAME + "\n");
-		write(Console.COPYRIGHT + "\n");
-		write("Version: " + Console.VERSION + "\n");
-		write("\n");
 	}
 
 	public void receiveInput(char character, boolean shouldExecute) {

@@ -64,7 +64,7 @@ public class Console extends Canvas implements Runnable {
 	public String cartridge;
 
 	public enum Mode {
-		USER, DEVELOPER
+		USER, USER_CMD, DEVELOPER
 	}
 
 	public Mode mode;
@@ -103,26 +103,21 @@ public class Console extends Canvas implements Runnable {
 	private void init(String[] args) {
 		requestFocus();
 
-		if(args.length > 0 && args[0].equals("-dev")) {
-			mode = Mode.DEVELOPER;
+		if(args.length > 0) {
+			if(args[0].equals("-dev")) {
+				mode = Mode.DEVELOPER;
+			} else {
+				cartridge = args[0];
+				mode = Mode.USER;
+			}
 		} else {
-			mode = Mode.USER;
+			mode = Mode.USER_CMD;
 		}
-
-		// this code allows to run cartridges passing an argument to the jar file
-		// this also sets the Developer mode as default
-//		if(args.length > 0) {
-//			cartridge = args[0];
-//			mode = Mode.USER;
-//		} else {
-//			mode = Mode.DEVELOPER;
-//		}
 
 		Panel nextPanel = null;
 
-		if(mode == Mode.DEVELOPER) {
+		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
 			cmd = new Cmd(this);
-			cmd.init();
 			nextPanel = new CmdPanel(this);
 		} else if(mode == Mode.USER) {
 			nextPanel = new GamePanel(this);
@@ -165,7 +160,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public void die(String text) {
-		if(mode == Mode.DEVELOPER) {
+		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
 			switchToPanel(new CmdPanel(this));
 			cmd.write(text + "\n\n");
 		} else {

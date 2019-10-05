@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import vulc.luag.Console.Mode;
 import vulc.luag.cmd.Cmd;
 import vulc.luag.game.Game;
 
@@ -18,38 +19,47 @@ public class PackCommand extends CmdCommand {
 	}
 
 	public void run(Cmd cmd, String[] args) {
+		if(cmd.console.mode != Mode.DEVELOPER) {
+			cmd.write("Error:\n"
+			          + "only developers can\n"
+			          + "use this command\n\n");
+			return;
+		}
+
 		if(args.length < 1) {
 			cmd.write("Error: missing arguments\n"
 			          + "pack [cartridge-name]\n\n");
-		} else {
-			File consoleUserdata = new File(Game.USERDATA_DIR);
-			if(!consoleUserdata.isDirectory()) {
-				cmd.write("Error:\n"
-				          + "'" + Game.USERDATA_DIR + "'\n"
-				          + "folder not found\n\n");
-				return;
-			}
-
-			File cartridge = new File("./" + args[0] + "." + Game.CARTRIDGE_EXTENSION);
-			if(cartridge.exists()) {
-				cmd.write("Error:\n"
-				          + "'" + cartridge + "'\n"
-				          + "file already exists\n\n");
-				return;
-			}
-
-			try {
-				cartridge.createNewFile();
-				ZipOutputStream out = new ZipOutputStream(new FileOutputStream(cartridge));
-				File[] files = new File(Game.USERDATA_DIR).listFiles();
-				for(File f : files) {
-					addToZip(out, "", f);
-				}
-				out.close();
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+			return;
 		}
+
+		File consoleUserdata = new File(Game.USERDATA_DIR);
+		if(!consoleUserdata.isDirectory()) {
+			cmd.write("Error:\n"
+			          + "'" + Game.USERDATA_DIR + "'\n"
+			          + "folder not found\n\n");
+			return;
+		}
+
+		File cartridge = new File("./" + args[0] + "." + Game.CARTRIDGE_EXTENSION);
+		if(cartridge.exists()) {
+			cmd.write("Error:\n"
+			          + "'" + cartridge + "'\n"
+			          + "file already exists\n\n");
+			return;
+		}
+
+		try {
+			cartridge.createNewFile();
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(cartridge));
+			File[] files = new File(Game.USERDATA_DIR).listFiles();
+			for(File f : files) {
+				addToZip(out, "", f);
+			}
+			out.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	private void addToZip(ZipOutputStream zip, String folder, File file) throws IOException {

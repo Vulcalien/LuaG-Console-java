@@ -14,7 +14,8 @@ public class HelpCommand extends CmdCommand {
 		cmd.write("pack: packs the game\n");
 		cmd.write("cls: clears the cmd\n");
 		cmd.write("ver: prints version\n");
-		cmd.write("help: prints this list\n\n");
+		cmd.write("help: prints this list\n");
+		cmd.write("mode: changes console mode\n\n");
 	}
 
 }
