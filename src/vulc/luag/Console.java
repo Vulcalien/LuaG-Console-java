@@ -103,12 +103,20 @@ public class Console extends Canvas implements Runnable {
 	private void init(String[] args) {
 		requestFocus();
 
-		if(args.length > 0) {
-			cartridge = args[0];
-			mode = Mode.USER;
-		} else {
+		if(args.length > 0 && args[0].equals("-dev")) {
 			mode = Mode.DEVELOPER;
+		} else {
+			mode = Mode.USER;
 		}
+
+		// this code allows to run cartridges passing an argument to the jar file
+		// this also sets the Developer mode as default
+//		if(args.length > 0) {
+//			cartridge = args[0];
+//			mode = Mode.USER;
+//		} else {
+//			mode = Mode.DEVELOPER;
+//		}
 
 		Panel nextPanel = null;
 
@@ -187,8 +195,7 @@ public class Console extends Canvas implements Runnable {
 
 		instance.init(args);
 
-		frame.setTitle(NAME + " " + VERSION
-		               + (instance.mode == Mode.DEVELOPER ? " - dev mode" : ""));
+		frame.setTitle(NAME + " " + VERSION);
 		frame.setVisible(true);
 		new Thread(instance).start();
 	}
