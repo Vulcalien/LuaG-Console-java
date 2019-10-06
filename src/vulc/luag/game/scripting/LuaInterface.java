@@ -1,10 +1,8 @@
 package vulc.luag.game.scripting;
 
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.zip.ZipFile;
 
 import org.luaj.vm2.Globals;
@@ -88,16 +86,8 @@ public class LuaInterface {
 					                                                            + "/" + script));
 				}
 
-				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-
-				String code = "";
-				String line = "";
-				while((line = reader.readLine()) != null) {
-					code += line + '\n';
-				}
-				reader.close();
-
-				env.load(code).call();
+				env.load(input, "@" + script, "t", env).call();
+				input.close();
 			} catch(IOException e) {
 				throw new LuaError(e);
 			}

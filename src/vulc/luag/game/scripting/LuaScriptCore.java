@@ -1,11 +1,9 @@
 package vulc.luag.game.scripting;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 
 import org.luaj.vm2.Globals;
@@ -31,6 +29,7 @@ public class LuaScriptCore {
 
 		luaInterface.init(console, game, globals);
 
+		// READ main.lua
 		try {
 			InputStream input;
 
@@ -56,16 +55,8 @@ public class LuaScriptCore {
 				input = game.cartridgeFile.getInputStream(mainLuaEntry);
 			}
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-
-			String code = "";
-			String line = "";
-			while((line = reader.readLine()) != null) {
-				code += line + '\n';
-			}
-			reader.close();
-
-			globals.load(code).call();
+			globals.load(input, "@main.lua", "t", globals).call();
+			input.close();
 		} catch(LuaError e) {
 			handleError(e);
 			return;
@@ -110,7 +101,6 @@ public class LuaScriptCore {
 	}
 
 	private void handleError(LuaError e) {
-		// BUG errors will print the code, not the file name
 		console.die("Script Error:\n"
 		            + "see the terminal");
 
