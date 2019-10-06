@@ -30,9 +30,9 @@ public class LuaScriptCore {
 		luaInterface.init(console, game, globals);
 
 		// READ main.lua
+		boolean error = false;
+		InputStream input = null;
 		try {
-			InputStream input;
-
 			if(console.cartridge == null) {
 				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
 				if(!mainFile.exists()) {
@@ -56,14 +56,20 @@ public class LuaScriptCore {
 			}
 
 			globals.load(input, "@main.lua", "t", globals).call();
-			input.close();
 		} catch(LuaError e) {
 			handleError(e);
-			return;
+			error = true;
 		} catch(IOException e) {
 			e.printStackTrace();
-			return;
+			error = true;
 		}
+
+		try {
+			input.close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		if(error) return;
 
 		// LOAD TICK FUNCTION
 		try {

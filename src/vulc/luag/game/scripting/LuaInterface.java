@@ -75,8 +75,7 @@ public class LuaInterface {
 
 	private class loadscript extends OneArgFunction {
 		public LuaValue call(LuaValue script) {
-			InputStream input;
-
+			InputStream input = null;
 			try {
 				if(console.cartridge == null) {
 					input = new FileInputStream(Game.SCRIPT_DIR + "/" + script);
@@ -87,10 +86,16 @@ public class LuaInterface {
 				}
 
 				env.load(input, "@" + script, "t", env).call();
-				input.close();
 			} catch(IOException e) {
 				throw new LuaError(e);
+			} finally {
+				try {
+					input.close();
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
 			}
+
 			return NIL;
 		}
 	}
