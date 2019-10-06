@@ -268,13 +268,14 @@ public class Game {
 	}
 
 	public void tick() {
+		input.tick();
+
 		scriptCore.tick();
 		if(console.mode == Mode.DEVELOPER) {
 			if(debugGotoCMD.isPressed()) {
 				console.switchToPanel(new CmdPanel(console));
 			}
 		}
-		input.tick();
 	}
 
 	public Bitmap<Integer> getSprite(int id, int sw, int sh) {

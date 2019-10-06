@@ -48,6 +48,8 @@ public class GUIMainPanel extends GUIPanel {
 	public void tick() {
 		super.tick();
 
+		input.tick();
+
 		int xMouse = input.xMouse / Console.SCALE - this.x;
 		int yMouse = input.yMouse / Console.SCALE - this.y;
 
@@ -79,8 +81,6 @@ public class GUIMainPanel extends GUIPanel {
 			}
 			wheelRotCount = 0;
 		}
-
-		input.tick();
 	}
 
 	public void onRemove(GUIMainPanel container) {

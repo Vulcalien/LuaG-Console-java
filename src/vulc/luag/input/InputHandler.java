@@ -73,9 +73,9 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 			if(key.code == code) {
 
 				if(action == KeyAction.PRESS) {
-					key.isKeyDown = true;
+					key.shouldStayDown = true;
 				} else if(action == KeyAction.RELEASE) {
-					key.isReleased = true;
+					key.shouldRelease = true;
 				}
 			}
 		}
@@ -137,9 +137,13 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		private KeyType type;
 		private int code;
 
+		private boolean shouldStayDown = false;
+		private boolean shouldRelease = false;
+
 		private boolean isKeyDown = false;
 		private boolean wasKeyDown = false;
 		private boolean isReleased = false;
+		private boolean isPressed = false;
 
 		public Key() {
 		}
@@ -157,10 +161,14 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		}
 
 		private void tick() {
+			isKeyDown = shouldStayDown;
+			isPressed = !wasKeyDown && isKeyDown;
+			isReleased = wasKeyDown && !isKeyDown;
 			wasKeyDown = isKeyDown;
-			if(isReleased) {
-				isKeyDown = false;
-				isReleased = false;
+
+			if(shouldRelease) {
+				shouldRelease = false;
+				shouldStayDown = false;
 			}
 		}
 
@@ -174,11 +182,11 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		}
 
 		public boolean isPressed() {
-			return !wasKeyDown && isKeyDown;
+			return isPressed;
 		}
 
 		public boolean isReleased() {
-			return wasKeyDown && !isKeyDown;
+			return isReleased;
 		}
 
 	}

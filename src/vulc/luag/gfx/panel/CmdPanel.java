@@ -43,8 +43,8 @@ public class CmdPanel extends Panel {
 	}
 
 	public void tick() {
-		cmd.tick();
 		input.tick();
+		cmd.tick();
 	}
 
 	public void remove() {
