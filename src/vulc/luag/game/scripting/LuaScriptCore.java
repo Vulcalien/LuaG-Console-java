@@ -2,6 +2,7 @@ package vulc.luag.game.scripting;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -31,6 +32,8 @@ public class LuaScriptCore {
 		luaInterface.init(console, game, globals);
 
 		try {
+			InputStream input;
+
 			if(console.cartridge == null) {
 				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
 				if(!mainFile.exists()) {
@@ -38,9 +41,9 @@ public class LuaScriptCore {
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return;
-				} else {
-					globals.loadfile(mainFile.getPath()).call();
 				}
+
+				input = new FileInputStream(mainFile);
 			} else {
 				ZipEntry mainLuaEntry = game.cartridgeFile.getEntry("script/main.lua");
 				if(mainLuaEntry == null || mainLuaEntry.isDirectory()) {
@@ -48,25 +51,26 @@ public class LuaScriptCore {
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return;
-				} else {
-					String buffer = "";
-					try {
-						InputStream in = game.cartridgeFile.getInputStream(mainLuaEntry);
-						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-						String line = "";
-						while((line = reader.readLine()) != null) {
-							buffer += line + '\n';
-						}
-					} catch(IOException e) {
-						e.printStackTrace();
-					}
-
-					globals.load(buffer).call();
 				}
+
+				input = game.cartridgeFile.getInputStream(mainLuaEntry);
 			}
+
+			BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+
+			String code = "";
+			String line = "";
+			while((line = reader.readLine()) != null) {
+				code += line + '\n';
+			}
+			reader.close();
+
+			globals.load(code).call();
 		} catch(LuaError e) {
 			handleError(e);
+			return;
+		} catch(IOException e) {
+			e.printStackTrace();
 			return;
 		}
 
@@ -106,6 +110,7 @@ public class LuaScriptCore {
 	}
 
 	private void handleError(LuaError e) {
+		// BUG errors will print the code, not the file name
 		console.die("Script Error:\n"
 		            + "see the terminal");
 

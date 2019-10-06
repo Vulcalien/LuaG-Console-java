@@ -40,7 +40,7 @@ public class PackCommand extends CmdCommand {
 			return;
 		}
 
-		File cartridge = new File("./" + args[0] + "." + Game.CARTRIDGE_EXTENSION);
+		File cartridge = new File(args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
 			cmd.write("Error:\n"
 			          + "'" + cartridge + "'\n"

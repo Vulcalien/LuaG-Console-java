@@ -24,8 +24,10 @@ public class GameSounds {
 	public void remove() {
 		Set<String> keys = list.keySet();
 		for(String key : keys) {
-			list.get(key).stop();
+			list.get(key).onRemove();
 		}
+
+		list.clear();
 	}
 
 	public boolean init(Console console) {

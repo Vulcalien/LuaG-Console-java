@@ -75,9 +75,7 @@ public class Game {
 		}
 	}
 
-	// init as console-userdata
-	// resources and scripts are loaded on different moments because
-	// the developer may want to restart the game changing the script
+	// init resources as console-userdata
 	public boolean initResources() {
 		// root
 		File rootFolder = new File(USERDATA_DIR);
@@ -275,6 +273,20 @@ public class Game {
 			if(debugGotoCMD.isPressed()) {
 				console.switchToPanel(new CmdPanel(console));
 			}
+		}
+	}
+
+	public void remove() {
+		input.remove();
+		sounds.remove();
+
+		if(cartridgeFile != null) {
+			try {
+				cartridgeFile.close();
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+			cartridgeFile = null;
 		}
 	}
 
