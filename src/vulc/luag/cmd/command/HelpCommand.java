@@ -9,13 +9,14 @@ public class HelpCommand extends CmdCommand {
 	}
 
 	public void run(Cmd cmd, String[] args) {
-		cmd.write("run: runs the game\n");
-		cmd.write("edit: opens the editor\n");
-		cmd.write("pack: packs the game\n");
-		cmd.write("cls: clears the cmd\n");
+		cmd.write("run: runs game\n");
+		cmd.write("edit: opens editor\n");
+		cmd.write("pack: packs game\n");
+		cmd.write("cls: clears cmd\n");
 		cmd.write("ver: prints version\n");
 		cmd.write("help: prints this list\n");
-		cmd.write("mode: changes console mode\n\n");
+		cmd.write("mode: changes console mode\n");
+		cmd.write("files: opens game folder\n\n");
 	}
 
 }
