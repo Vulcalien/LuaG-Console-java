@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import vulc.luag.Console.Mode;
 import vulc.luag.cmd.Cmd;
 
 public abstract class CmdCommand {
@@ -17,8 +18,10 @@ public abstract class CmdCommand {
 	public static final CmdCommand VER = new VerCommand();
 	public static final CmdCommand HELP = new HelpCommand();
 	public static final CmdCommand MODE = new ModeCommand();
+	public static final CmdCommand FILES = new FilesCommand();
 
 	public final String[] names;
+	protected boolean isDevelopersOnly = false;
 
 	public CmdCommand(String... names) {
 		this.names = names;
@@ -38,7 +41,13 @@ public abstract class CmdCommand {
 		for(CmdCommand command : COMMAND_LIST) {
 			for(int i = 0; i < command.names.length; i++) {
 				if(name.equals(command.names[i])) {
-					command.run(cmd, args);
+					if(command.isDevelopersOnly && cmd.console.mode != Mode.DEVELOPER) {
+						cmd.write("Error:\n"
+						          + "only developers can\n"
+						          + "use this command\n\n");
+					} else {
+						command.run(cmd, args);
+					}
 					return true;
 				}
 			}

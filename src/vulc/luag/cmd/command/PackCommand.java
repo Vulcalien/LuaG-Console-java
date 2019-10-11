@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import vulc.luag.Console.Mode;
 import vulc.luag.cmd.Cmd;
 import vulc.luag.game.Game;
 
@@ -16,16 +15,11 @@ public class PackCommand extends CmdCommand {
 
 	public PackCommand() {
 		super("pack");
+
+		isDevelopersOnly = true;
 	}
 
 	public void run(Cmd cmd, String[] args) {
-		if(cmd.console.mode != Mode.DEVELOPER) {
-			cmd.write("Error:\n"
-			          + "only developers can\n"
-			          + "use this command\n\n");
-			return;
-		}
-
 		if(args.length < 1) {
 			cmd.write("Error: missing arguments\n"
 			          + "pack [cartridge-name]\n\n");
