@@ -1,30 +1,25 @@
 ![icon](res/res/icon.png)
 # LuaG Console
-LuaG is a virtual console that allows you to build a game very quickly using lua.  
-The console comes with an integrated game editor.
+LuaG is a virtual console that allows you to build a game very quickly using the lua language.  
+The console offers tools for developers, like the integrated editors for the map and the sprites!
 
 ## Getting Started
-Just [download](https://github.com/Vulcalien/LuaG-Console/wiki/Download) a release and start programming your game!  
-Releases contain blank game files, so you can start programming without caring about setting up files and folders.
+First of all, [download the console](https://github.com/Vulcalien/LuaG-Console/wiki/Download).  
+**If you are a developer** open the console, type `mode d` and then `setup`. Now you have blank game files, so you can start programming!  
+Just type `files`, find the `script` folder and there will go all your code!
 
-## Running
-When you run the console, you have to choose what mode you want it to run.  
-There are `dev` mode and `user` mode.  
-User mode is **default**, so just double-click the jar and it will open the game.  
-But if you are creating/editing a game, you have to pass the argument `-dev` like in the example.
-
-```batch
-java -jar console-{version}.jar -dev
-```
-
-Dev mode allows you to use the game editor and restart your game without closing the console.  
-If you open the console in this mode its cmd will show up. There you can write commands such as `run` and `edit`. (Use `help` for a list of commands)
+**If you want to play** download a game cartridge, put it in the same folder of the *.jar* file, type `run {cartridge-name}` in the console and enjoy!
 
 ## How to create a Game
-Your game files are all stored inside `console-userdata` folder. You can read about [Files and Folders](https://github.com/Vulcalien/LuaG-Console/wiki/Files-and-Folders) and [Game Lua Script](https://github.com/Vulcalien/LuaG-Console/wiki/Lua-Script) in the [wiki](https://github.com/Vulcalien/LuaG-Console/wiki).
+Creating a Game in LuaG is very easy!  
+All Game files are stored inside the folder `console-userdata` (the one you open with the `files` command). Read the [documentation](https://github.com/Vulcalien/LuaG-Console/wiki/Lua-Script) about the game scripting.  
+You can use useful tools, such as the integrated editors (map and sprites). Just remember to switch to *developer mode* using `mode d`.  
+In this mode you can **run the game directly** without packing it into a cartridge. You can also exit the game pressing `F8`.  
+Type `help` to get a list of all the commands you can use.
 
 ## Game Deployment
-To deploy a game you can pack the console and your game's files inside a *.zip file* and send it.
+To deploy a LuaG game, you have first to create a `cartridge`. You can do this using `pack {cartridge-name}`.
+Now, just publish the cartridge! (I suggest you to leave a link to the [download page](https://github.com/Vulcalien/LuaG-Console/wiki/Download) of LuaG console).
 
 ## License
 The Console is released under Apache 2.0 license. See [License](LICENSE).
