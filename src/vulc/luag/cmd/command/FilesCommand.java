@@ -18,8 +18,17 @@ public class FilesCommand extends CmdCommand {
 	public void run(Cmd cmd, String[] args) {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
+
+			File folder = new File(Game.USERDATA_DIR);
+			if(!folder.isDirectory()) {
+				cmd.write("Error:\n"
+				          + "'" + Game.USERDATA_DIR_NAME + "'\n"
+				          + "folder not found\n\n");
+				return;
+			}
+
 			try {
-				desktop.open(new File(Game.USERDATA_DIR));
+				desktop.open(folder);
 			} catch(IOException e) {
 				e.printStackTrace();
 			}

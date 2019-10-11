@@ -19,6 +19,7 @@ public abstract class CmdCommand {
 	public static final CmdCommand HELP = new HelpCommand();
 	public static final CmdCommand MODE = new ModeCommand();
 	public static final CmdCommand FILES = new FilesCommand();
+	public static final CmdCommand SETUP = new SetupCommand();
 
 	public final String[] names;
 	protected boolean isDevelopersOnly = false;
