@@ -38,7 +38,7 @@ public class SpriteEditor extends Editor {
 	public final SpriteToolkit toolkit = new SpriteToolkit();
 
 	// select color and last colors
-	public int selectedColor = 0xffffff;
+	public int selectedColor = 0x000000; // this value will change in constructor
 	public final List<Integer> lastColors = new ArrayList<Integer>();
 
 	// editing history
@@ -96,6 +96,7 @@ public class SpriteEditor extends Editor {
 		guiPanel.add(colorbar);
 
 		toolkit.setTool(toolkit.pencil);
+		selectColor(0xffffff);
 	}
 
 	public void tick() {
