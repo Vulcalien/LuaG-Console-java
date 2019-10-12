@@ -102,6 +102,8 @@ public class EditorPanel extends Panel {
 	}
 
 	public void remove() {
+		game.remove();
+
 		if(mapEditor != null) mapEditor.remove();
 		if(spriteEditor != null) spriteEditor.remove();
 
