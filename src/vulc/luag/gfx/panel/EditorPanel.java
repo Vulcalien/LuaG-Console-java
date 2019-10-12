@@ -73,7 +73,9 @@ public class EditorPanel extends Panel {
 		saveBtn.opaque = true;
 		saveBtn.background = Colors.BACKGROUND_1;
 		saveBtn.setImage(Icons.SAVE, Colors.FOREGROUND_0);
-		saveBtn.action = () -> {
+		saveBtn.action = () -> { // BUG saving if holding the mouse. Should be only once per click
+			Console.LOGGER.info("saving");
+
 			mapEditor.onSave();
 			spriteEditor.onSave();
 		};

@@ -126,6 +126,8 @@ public class Console extends Canvas implements Runnable {
 			mode = Mode.USER_CMD;
 		}
 
+		LOGGER.info("Startup mode: " + mode);
+
 		Panel nextPanel = null;
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
@@ -165,6 +167,8 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public void switchToPanel(Panel panel) {
+		LOGGER.info("switching to panel: " + panel.getClass().getSimpleName());
+
 		if(currentPanel != null) currentPanel.remove();
 		currentPanel = panel;
 		panel.init();
@@ -189,6 +193,8 @@ public class Console extends Canvas implements Runnable {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+
+		LOGGER.info("Starting Console...");
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
