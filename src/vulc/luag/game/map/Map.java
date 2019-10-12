@@ -61,7 +61,7 @@ public class Map {
 			Map map = new Map(w, h);
 
 			for(int i = 0; i < map.tiles.length; i++) {
-				int data = in.readByte();
+				int data = in.read();
 				if(data == -1) {
 					console.die("Error:\n"
 					            + "map file is malformed\n"
