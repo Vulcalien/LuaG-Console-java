@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 
 import org.luaj.vm2.Globals;
@@ -108,7 +109,7 @@ public class LuaScriptCore {
 
 	private void handleError(LuaError e) {
 		console.die("Script Error:\n"
-		            + "see the terminal");
+		            + "see the log file");
 
 		String sep = "[\\\\/]";
 
@@ -116,7 +117,7 @@ public class LuaScriptCore {
 		             + e.getLocalizedMessage()
 		                .replace("@", "")
 		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR.replace("./", ""), "");
-		System.err.println(msg);
+		Console.LOGGER.log(Level.WARNING, msg);
 	}
 
 }

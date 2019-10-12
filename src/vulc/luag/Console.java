@@ -22,6 +22,11 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -48,6 +53,8 @@ import vulc.luag.gfx.panel.Panel;
  */
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
+
+	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 
 	public static final String NAME = "LuaG Console";
 	public static final String VERSION = "0.6.0 (WIP)";
@@ -89,7 +96,12 @@ public class Console extends Canvas implements Runnable {
 			while(unprocessedNanos >= nanosPerTick) {
 				unprocessedNanos -= nanosPerTick;
 
-				tick();
+				try {
+					tick();
+				} catch(Throwable e) {
+					LOGGER.log(Level.WARNING, "Console Error", e);
+					System.exit(1);
+				}
 			}
 
 			try {
@@ -169,6 +181,15 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
+		Locale.setDefault(Locale.ENGLISH);
+		try {
+			FileHandler fh = new FileHandler("luag.log");
+			fh.setFormatter(new SimpleFormatter());
+			LOGGER.addHandler(fh);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
