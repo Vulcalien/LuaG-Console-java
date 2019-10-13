@@ -16,7 +16,7 @@ public class GamePanel extends Panel {
 		if(console.cartridge != null) {
 			if(!game.initCartridgeResources()) return;
 		} else {
-			if(!game.initResources()) return;
+			if(!game.initDevResources()) return;
 		}
 		game.initScript();
 	}

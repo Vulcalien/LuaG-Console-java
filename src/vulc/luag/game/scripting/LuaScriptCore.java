@@ -24,7 +24,8 @@ public class LuaScriptCore {
 
 	private LuaFunction luaTick;
 
-	public void init(Console console, Game game) {
+	// return true if init was successfully, else false
+	public boolean init(Console console, Game game) {
 		this.console = console;
 		Globals globals = JsePlatform.standardGlobals();
 
@@ -34,13 +35,14 @@ public class LuaScriptCore {
 		boolean error = false;
 		InputStream input = null;
 		try {
+			Console.LOGGER.info("Load 'main.lua'");
 			if(console.cartridge == null) {
 				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
 				if(!mainFile.exists()) {
 					console.die("Error:\n"
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
-					return;
+					return false;
 				}
 
 				input = new FileInputStream(mainFile);
@@ -50,7 +52,7 @@ public class LuaScriptCore {
 					console.die("Cartridge Error:\n"
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
-					return;
+					return false;
 				}
 
 				input = game.cartridgeFile.getInputStream(mainLuaEntry);
@@ -70,7 +72,7 @@ public class LuaScriptCore {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		if(error) return;
+		if(error) return false;
 
 		// LOAD TICK FUNCTION
 		try {
@@ -79,24 +81,26 @@ public class LuaScriptCore {
 				console.die("Error:\n"
 				            + "'main.lua' must contain\n"
 				            + "a function 'tick()'");
-				return;
+				return false;
 			} else {
 				luaTick = tick.checkfunction();
 			}
 
+			Console.LOGGER.info("Calling 'init' function");
 			LuaValue init = globals.get("init");
 			if(init == LuaValue.NIL || !init.isfunction()) {
 				console.die("Error:\n"
 				            + "'main.lua' must contain\n"
 				            + "a function 'init()'");
-				return;
+				return false;
 			} else {
 				init.checkfunction().call();
 			}
 		} catch(LuaError e) {
 			handleError(e);
-			return;
+			return false;
 		}
+		return true;
 	}
 
 	public void tick() {
@@ -108,16 +112,17 @@ public class LuaScriptCore {
 	}
 
 	private void handleError(LuaError e) {
-		console.die("Script Error:\n"
-		            + "see the log file");
-
 		String sep = "[\\\\/]";
 
 		String msg = "LuaError: "
 		             + e.getLocalizedMessage()
 		                .replace("@", "")
 		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR.replace("./", ""), "");
-		Console.LOGGER.log(Level.WARNING, msg);
+
+		Console.LOGGER.log(Level.SEVERE, msg);
+
+		console.die("Script Error:\n"
+		            + "see the log file");
 	}
 
 }

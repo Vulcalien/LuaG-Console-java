@@ -76,8 +76,10 @@ public class Game {
 		}
 	}
 
-	// init resources as console-userdata
-	public boolean initResources() {
+	// init resources in console-userdata
+	public boolean initDevResources() {
+		Console.LOGGER.info("Loading '" + USERDATA_DIR_NAME + "' files...");
+
 		// root
 		File rootFolder = new File(USERDATA_DIR);
 		if(!rootFolder.isDirectory()) {
@@ -88,9 +90,11 @@ public class Game {
 		}
 
 		// sounds
+		Console.LOGGER.info("Load '" + SFX_DIR_NAME + "'");
 		if(!sounds.init(console)) return false;
 
 		// config.json
+		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
 		try {
 			InputStream in = new FileInputStream(CONFIG_FILE);
 			boolean error = !loadJsonConfig(in);
@@ -106,6 +110,7 @@ public class Game {
 		}
 
 		// atlas.png
+		Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
 		try {
 			InputStream in = new FileInputStream(ATLAS_FILE);
 			boolean error = !loadAtlas(in);
@@ -121,11 +126,14 @@ public class Game {
 		}
 
 		// map
+		Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 		File mapFile = new File(MAP_FILE);
 		try {
 			map = Map.load(new FileInputStream(mapFile), console);
 			if(map == null) return false;
 		} catch(FileNotFoundException e) {
+			Console.LOGGER.info("Missing map file: generating new");
+
 			map = new Map(10, 10);
 			MapCompiler.compile(map);
 		}
@@ -136,6 +144,7 @@ public class Game {
 	public boolean initCartridgeResources() {
 		try {
 			String cartridge = console.cartridge;
+			Console.LOGGER.info("Loading cartridge '" + cartridge + "'...");
 
 			try {
 				cartridgeFile = new ZipFile(cartridge);
@@ -160,13 +169,15 @@ public class Game {
 			}
 
 			// sound
+			Console.LOGGER.info("Load '" + SFX_DIR_NAME + "'");
 			if(!sounds.initAsCartridge(cartridgeFile, entries)) return false;
 
 			// config.json
+			Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
 			ZipEntry configEntry = cartridgeFile.getEntry(CONFIG_FILE_NAME);
 			if(configEntry != null) {
 				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
-					throw new RuntimeException();
+					throw new Exception();
 				}
 			} else {
 				console.die("Cartridge Error:"
@@ -176,6 +187,7 @@ public class Game {
 			}
 
 			// atlas.png
+			Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
 			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_FILE_NAME);
 			if(atlasEntry != null) {
 				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
@@ -189,6 +201,7 @@ public class Game {
 			}
 
 			// map
+			Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_FILE_NAME);
 			if(mapEntry != null) {
 				this.map = Map.load(cartridgeFile.getInputStream(mapEntry), console);
@@ -207,6 +220,8 @@ public class Game {
 	}
 
 	public boolean initScript() {
+		Console.LOGGER.info("Loading scripts");
+
 		JsonElement keysElement = jsonConfig.get("keys");
 		if(keysElement != null && keysElement.isJsonArray()) {
 			JsonArray keyArray = keysElement.getAsJsonArray();
@@ -224,7 +239,9 @@ public class Game {
 			return false;
 		}
 		input.init(console);
-		scriptCore.init(console, this);
+		if(scriptCore.init(console, this)) {
+			Console.LOGGER.info("Game Started");
+		}
 
 		return true;
 	}
@@ -272,6 +289,7 @@ public class Game {
 		scriptCore.tick();
 		if(console.mode == Mode.DEVELOPER) {
 			if(debugGotoCMD.isPressed()) {
+				Console.LOGGER.info("Closing Game");
 				console.switchToPanel(new CmdPanel(console));
 			}
 		}

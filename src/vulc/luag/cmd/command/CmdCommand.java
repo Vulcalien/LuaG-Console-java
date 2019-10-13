@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import vulc.luag.Console;
 import vulc.luag.Console.Mode;
 import vulc.luag.cmd.Cmd;
 
@@ -34,9 +35,11 @@ public abstract class CmdCommand {
 
 	// returns true if could find a command, else false
 	public static boolean execute(Cmd cmd, String line) {
+		Console.LOGGER.info("Cmd execute: '" + line + "'");
+
 		String[] splittedLine = line.split(" ");
 
-		String name = splittedLine[0];
+		String name = splittedLine[0].toLowerCase();
 		String[] args = Arrays.copyOfRange(splittedLine, 1, splittedLine.length);
 
 		for(CmdCommand command : COMMAND_LIST) {

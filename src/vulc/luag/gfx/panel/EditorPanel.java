@@ -95,7 +95,7 @@ public class EditorPanel extends Panel {
 	}
 
 	public void init() {
-		if(!game.initResources()) return;
+		if(!game.initDevResources()) return;
 
 		mapEditor = new MapEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);
 		spriteEditor = new SpriteEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);

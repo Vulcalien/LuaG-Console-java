@@ -75,6 +75,8 @@ public class LuaInterface {
 
 	private class loadscript extends OneArgFunction {
 		public LuaValue call(LuaValue script) {
+			Console.LOGGER.info("Loading script '" + script + "'");
+
 			InputStream input = null;
 			try {
 				if(console.cartridge == null) {

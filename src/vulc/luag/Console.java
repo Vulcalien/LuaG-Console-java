@@ -99,7 +99,7 @@ public class Console extends Canvas implements Runnable {
 				try {
 					tick();
 				} catch(Throwable e) {
-					LOGGER.log(Level.WARNING, "Console Error", e);
+					LOGGER.log(Level.SEVERE, "Console Error", e);
 					System.exit(1);
 				}
 			}
@@ -167,7 +167,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public void switchToPanel(Panel panel) {
-		LOGGER.info("switching to panel: " + panel.getClass().getSimpleName());
+		LOGGER.info("Switching to panel: " + panel.getClass().getSimpleName());
 
 		if(currentPanel != null) currentPanel.remove();
 		currentPanel = panel;
@@ -176,6 +176,8 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public void die(String text) {
+		LOGGER.severe("Console die:\n" + text);
+
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
 			switchToPanel(new CmdPanel(this));
 			cmd.write(text + "\n\n");
@@ -185,6 +187,7 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
+		LOGGER.setLevel(Level.ALL);
 		Locale.setDefault(Locale.ENGLISH);
 		try {
 			FileHandler fh = new FileHandler("luag.log");
@@ -198,6 +201,11 @@ public class Console extends Canvas implements Runnable {
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				LOGGER.info("Shutting down Console");
+			}
+		});
 		frame.setResizable(false);
 
 		Console instance = new Console();
