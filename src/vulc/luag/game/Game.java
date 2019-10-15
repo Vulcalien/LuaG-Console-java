@@ -78,7 +78,7 @@ public class Game {
 
 	// init resources in console-userdata
 	public boolean initDevResources() {
-		Console.LOGGER.info("Loading '" + USERDATA_DIR_NAME + "' files...");
+		Console.LOGGER.info("Loading '" + USERDATA_DIR_NAME + "' resources...");
 
 		// root
 		File rootFolder = new File(USERDATA_DIR);
@@ -144,7 +144,7 @@ public class Game {
 	public boolean initCartridgeResources() {
 		try {
 			String cartridge = console.cartridge;
-			Console.LOGGER.info("Loading cartridge '" + cartridge + "'...");
+			Console.LOGGER.info("Loading cartridge '" + cartridge + "' resources...");
 
 			try {
 				cartridgeFile = new ZipFile(cartridge);
