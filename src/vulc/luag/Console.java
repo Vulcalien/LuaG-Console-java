@@ -54,11 +54,11 @@ import vulc.luag.gfx.panel.Panel;
 public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
-	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
-
 	public static final String NAME = "LuaG Console";
-	public static final String VERSION = "0.6.0 (WIP)";
+	public static final String VERSION = "0.6.0";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
+
+	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
