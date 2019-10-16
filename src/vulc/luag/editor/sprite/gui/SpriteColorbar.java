@@ -7,9 +7,9 @@ import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
 
-public class SpriteColorbar_ extends GUIPanel {
+public class SpriteColorbar extends GUIPanel {
 
-	public SpriteColorbar_(int x, int y, int w, int h, SpriteEditor editor) {
+	public SpriteColorbar(int x, int y, int w, int h, SpriteEditor editor) {
 		super(x, y, w, h);
 
 		this.background = Colors.BACKGROUND_0;
