@@ -2,7 +2,6 @@ package vulc.luag.editor.map;
 
 import java.awt.event.KeyEvent;
 
-import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.gui.MapPreview;
 import vulc.luag.editor.map.gui.MapSidebar;
@@ -27,8 +26,8 @@ public class MapEditor extends Editor {
 
 	public boolean shouldSaveContent = false;
 
-	public MapEditor(Console console, EditorPanel editorPanel, int x, int y, int w, int h) {
-		super(console, editorPanel, x, y, w, h);
+	public MapEditor(EditorPanel editorPanel, int x, int y, int w, int h) {
+		super(editorPanel, x, y, w, h);
 
 		moveUp = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_W);
 		moveLeft = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_A);

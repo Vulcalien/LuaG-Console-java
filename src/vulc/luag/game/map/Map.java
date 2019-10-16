@@ -52,7 +52,7 @@ public class Map {
 		tiles[x + y * width] = (byte) (id - 128);
 	}
 
-	public static Map load(InputStream inputStream, Console console) {
+	public static Map load(InputStream inputStream) {
 		try {
 			DataInputStream in = new DataInputStream(inputStream);
 
@@ -63,7 +63,7 @@ public class Map {
 			for(int i = 0; i < map.tiles.length; i++) {
 				int data = in.read();
 				if(data == -1) {
-					console.die("Error:\n"
+					Console.die("Error:\n"
 					            + "map file is malformed\n"
 					            + "(not enought tile data)");
 					return null;

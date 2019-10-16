@@ -46,7 +46,7 @@ public abstract class CmdCommand {
 		for(CmdCommand command : COMMAND_LIST) {
 			for(int i = 0; i < command.names.length; i++) {
 				if(name.equals(command.names[i])) {
-					if(command.isDevelopersOnly && cmd.console.mode != Mode.DEVELOPER) {
+					if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
 						cmd.write("Error:\n"
 						          + "only developers can\n"
 						          + "use this command\n\n");

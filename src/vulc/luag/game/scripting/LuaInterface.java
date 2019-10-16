@@ -21,18 +21,16 @@ import vulc.luag.sfx.Sound;
 
 public class LuaInterface {
 
-	private Console console;
 	private Game game;
 	private Globals env;
 
-	public void init(Console console, Game game, Globals env) {
-		this.console = console;
+	public void init(Game game, Globals env) {
 		this.game = game;
 		this.env = env;
 
 		// SCREEN
-		env.set("scr_w", console.screen.width);
-		env.set("scr_h", console.screen.height);
+		env.set("scr_w", Console.SCREEN.width);
+		env.set("scr_h", Console.SCREEN.height);
 
 		// FONT
 		env.set("font_w", Screen.FONT.widthOf(' '));
@@ -79,7 +77,7 @@ public class LuaInterface {
 
 			InputStream input = null;
 			try {
-				if(console.cartridge == null) {
+				if(Console.cartridge == null) {
 					input = new FileInputStream(Game.SCRIPT_DIR + "/" + script);
 				} else {
 					ZipFile cartridgeFile = game.cartridgeFile;
@@ -164,14 +162,14 @@ public class LuaInterface {
 
 	private class settransparent extends OneArgFunction {
 		public LuaValue call(LuaValue color) {
-			console.screen.setTransparent(color.checkint());
+			Console.SCREEN.setTransparent(color.checkint());
 			return NIL;
 		}
 	}
 
 	private class clear extends OneArgFunction {
 		public LuaValue call(LuaValue color) {
-			console.screen.clear(color.checkint());
+			Console.SCREEN.clear(color.checkint());
 			return NIL;
 		}
 	}
@@ -184,7 +182,7 @@ public class LuaInterface {
 			int w = args.arg(4).isnil() ? 1 : args.arg(4).checkint();
 			int h = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 
-			console.screen.fill(x, y, x + w - 1, y + h - 1, color);
+			Console.SCREEN.fill(x, y, x + w - 1, y + h - 1, color);
 			return NIL;
 		}
 	}
@@ -196,7 +194,7 @@ public class LuaInterface {
 			int x = args.arg(3).checkint();
 			int y = args.arg(4).checkint();
 
-			console.screen.write(text, color, x, y);
+			Console.SCREEN.write(text, color, x, y);
 			return NIL;
 		}
 	}
@@ -212,7 +210,7 @@ public class LuaInterface {
 			int sw = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 			int sh = args.arg(6).isnil() ? 1 : args.arg(6).checkint();
 
-			console.screen.draw(game.getSprite(id, sw, sh).getScaled(scale), x, y);
+			Console.SCREEN.draw(game.getSprite(id, sw, sh).getScaled(scale), x, y);
 			return NIL;
 		}
 	}
@@ -238,7 +236,7 @@ public class LuaInterface {
 			int xoff = arg2.isnil() ? 0 : arg2.checkint();
 			int yoff = arg3.isnil() ? 0 : arg3.checkint();
 
-			game.map.render(console.screen, game, xoff, yoff, scale);
+			game.map.render(Console.SCREEN, game, xoff, yoff, scale);
 			return NIL;
 		}
 	}

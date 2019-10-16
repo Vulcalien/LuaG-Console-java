@@ -54,7 +54,6 @@ public class Game {
 
 	public static final int SPR_SIZE = 8;
 
-	public final Console console;
 	public final LuaScriptCore scriptCore = new LuaScriptCore();
 	public final GameSounds sounds = new GameSounds();
 
@@ -69,9 +68,8 @@ public class Game {
 
 	private Key debugGotoCMD = null;
 
-	public Game(Console console) {
-		this.console = console;
-		if(console.mode == Mode.DEVELOPER) {
+	public Game() {
+		if(Console.mode == Mode.DEVELOPER) {
 			debugGotoCMD = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F8);
 		}
 	}
@@ -83,7 +81,7 @@ public class Game {
 		// root
 		File rootFolder = new File(USERDATA_DIR);
 		if(!rootFolder.isDirectory()) {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + USERDATA_DIR_NAME + "'\n"
 			            + "folder not found");
 			return false;
@@ -91,7 +89,7 @@ public class Game {
 
 		// sounds
 		Console.LOGGER.info("Load '" + SFX_DIR_NAME + "'");
-		if(!sounds.init(console)) return false;
+		if(!sounds.init()) return false;
 
 		// config.json
 		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
@@ -101,7 +99,7 @@ public class Game {
 			in.close();
 			if(error) return false;
 		} catch(FileNotFoundException e) {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "file not found");
 			return false;
@@ -117,7 +115,7 @@ public class Game {
 			in.close();
 			if(error) return false;
 		} catch(FileNotFoundException e) {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.ATLAS_FILE_NAME + "'\n"
 			            + "file not found");
 			return false;
@@ -129,7 +127,7 @@ public class Game {
 		Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 		File mapFile = new File(MAP_FILE);
 		try {
-			map = Map.load(new FileInputStream(mapFile), console);
+			map = Map.load(new FileInputStream(mapFile));
 			if(map == null) return false;
 		} catch(FileNotFoundException e) {
 			Console.LOGGER.info("Missing map file: generating new");
@@ -143,13 +141,13 @@ public class Game {
 
 	public boolean initCartridgeResources() {
 		try {
-			String cartridge = console.cartridge;
+			String cartridge = Console.cartridge;
 			Console.LOGGER.info("Loading cartridge '" + cartridge + "' resources...");
 
 			try {
 				cartridgeFile = new ZipFile(cartridge);
 			} catch(FileNotFoundException e) {
-				console.die("Error:\n"
+				Console.die("Error:\n"
 				            + "'" + cartridge + "'\n"
 				            + "cartridge not found");
 				return false;
@@ -180,7 +178,7 @@ public class Game {
 					throw new Exception();
 				}
 			} else {
-				console.die("Cartridge Error:"
+				Console.die("Cartridge Error:"
 				            + "'" + CONFIG_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
@@ -194,7 +192,7 @@ public class Game {
 					throw new Exception();
 				}
 			} else {
-				console.die("Cartirdge Error:\n"
+				Console.die("Cartirdge Error:\n"
 				            + "'" + ATLAS_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
@@ -204,10 +202,10 @@ public class Game {
 			Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_FILE_NAME);
 			if(mapEntry != null) {
-				this.map = Map.load(cartridgeFile.getInputStream(mapEntry), console);
+				this.map = Map.load(cartridgeFile.getInputStream(mapEntry));
 				if(map == null) return false;
 			} else {
-				console.die("Cartirdge Error:\n"
+				Console.die("Cartirdge Error:\n"
 				            + "'" + MAP_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
@@ -232,14 +230,14 @@ public class Game {
 				                       KeyStroke.getKeyStroke(key).getKeyCode()));
 			}
 		} else {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + CONFIG_FILE_NAME + "'\n"
 			            + "must contain\n"
 			            + "a string array 'keys'");
 			return false;
 		}
-		input.init(console);
-		if(scriptCore.init(console, this)) {
+		input.init();
+		if(scriptCore.init(this)) {
 			Console.LOGGER.info("Game Started");
 		}
 
@@ -251,7 +249,7 @@ public class Game {
 		if(element.isJsonObject()) {
 			jsonConfig = element.getAsJsonObject();
 		} else {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "must be a json object");
 			return false;
@@ -265,14 +263,14 @@ public class Game {
 			if(img != null) {
 				atlas = new IntBitmap(img);
 				if(atlas.width != 128 || atlas.height != 128) {
-					console.die("Error:\n"
+					Console.die("Error:\n"
 					            + "atlas must be\n"
 					            + "128x128 pixels\n"
 					            + "(256 sprites)");
 					return false;
 				}
 			} else {
-				console.die("Error:\n"
+				Console.die("Error:\n"
 				            + "'" + Game.ATLAS_FILE_NAME + "'\n"
 				            + "is not an image");
 				return false;
@@ -287,10 +285,10 @@ public class Game {
 		input.tick();
 
 		scriptCore.tick();
-		if(console.mode == Mode.DEVELOPER) {
+		if(Console.mode == Mode.DEVELOPER) {
 			if(debugGotoCMD.isPressed()) {
 				Console.LOGGER.info("Closing Game");
-				console.switchToPanel(new CmdPanel(console));
+				Console.switchToPanel(new CmdPanel());
 			}
 		}
 	}

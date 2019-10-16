@@ -7,13 +7,12 @@ public class GamePanel extends Panel {
 
 	private final Game game;
 
-	public GamePanel(Console console) {
-		super(console);
-		this.game = new Game(console);
+	public GamePanel() {
+		this.game = new Game();
 	}
 
 	public void init() {
-		if(console.cartridge != null) {
+		if(Console.cartridge != null) {
 			if(!game.initCartridgeResources()) return;
 		} else {
 			if(!game.initDevResources()) return;
@@ -26,7 +25,7 @@ public class GamePanel extends Panel {
 
 		// Game's interface can set screen's transparent colors.
 		// This will reset it.
-		console.screen.setTransparent();
+		Console.SCREEN.setTransparent();
 	}
 
 	public void tick() {

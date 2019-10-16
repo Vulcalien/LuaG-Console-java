@@ -30,14 +30,15 @@ public class CmdPanel extends Panel {
 		}
 	};
 
-	public CmdPanel(Console console) {
-		super(console);
-		this.cmd = console.cmd;
+	public CmdPanel() {
+		this.cmd = Console.cmd;
 		cmd.cmdPanel = this;
 	}
 
 	public void onShow() {
-		input.init(console);
+		Console console = Console.instance;
+
+		input.init();
 		console.addKeyListener(keyListener);
 		console.addMouseWheelListener(mouseScrollListener);
 	}
@@ -48,6 +49,8 @@ public class CmdPanel extends Panel {
 	}
 
 	public void remove() {
+		Console console = Console.instance;
+
 		input.remove();
 		console.removeKeyListener(keyListener);
 		console.removeMouseWheelListener(mouseScrollListener);

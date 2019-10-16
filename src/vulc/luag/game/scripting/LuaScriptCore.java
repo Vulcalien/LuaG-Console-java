@@ -20,26 +20,23 @@ public class LuaScriptCore {
 
 	private final LuaInterface luaInterface = new LuaInterface();
 
-	private Console console;
-
 	private LuaFunction luaTick;
 
 	// return true if init was successfully, else false
-	public boolean init(Console console, Game game) {
-		this.console = console;
+	public boolean init(Game game) {
 		Globals globals = JsePlatform.standardGlobals();
 
-		luaInterface.init(console, game, globals);
+		luaInterface.init(game, globals);
 
 		// READ main.lua
 		boolean error = false;
 		InputStream input = null;
 		try {
 			Console.LOGGER.info("Load 'main.lua'");
-			if(console.cartridge == null) {
+			if(Console.cartridge == null) {
 				File mainFile = new File(Game.SCRIPT_DIR + "/main.lua");
 				if(!mainFile.exists()) {
-					console.die("Error:\n"
+					Console.die("Error:\n"
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return false;
@@ -49,7 +46,7 @@ public class LuaScriptCore {
 			} else {
 				ZipEntry mainLuaEntry = game.cartridgeFile.getEntry("script/main.lua");
 				if(mainLuaEntry == null || mainLuaEntry.isDirectory()) {
-					console.die("Cartridge Error:\n"
+					Console.die("Cartridge Error:\n"
 					            + "'" + Game.SCRIPT_DIR_NAME + "/main.lua'"
 					            + "file not found");
 					return false;
@@ -78,7 +75,7 @@ public class LuaScriptCore {
 		try {
 			LuaValue tick = globals.get("tick");
 			if(tick == LuaValue.NIL || !tick.isfunction()) {
-				console.die("Error:\n"
+				Console.die("Error:\n"
 				            + "'main.lua' must contain\n"
 				            + "a function 'tick()'");
 				return false;
@@ -89,7 +86,7 @@ public class LuaScriptCore {
 			Console.LOGGER.info("Calling 'init' function");
 			LuaValue init = globals.get("init");
 			if(init == LuaValue.NIL || !init.isfunction()) {
-				console.die("Error:\n"
+				Console.die("Error:\n"
 				            + "'main.lua' must contain\n"
 				            + "a function 'init()'");
 				return false;
@@ -121,7 +118,7 @@ public class LuaScriptCore {
 
 		Console.LOGGER.log(Level.SEVERE, msg);
 
-		console.die("Script Error:\n"
+		Console.die("Script Error:\n"
 		            + "see the log file");
 	}
 

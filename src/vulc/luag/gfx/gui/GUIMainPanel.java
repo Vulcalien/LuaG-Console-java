@@ -15,7 +15,6 @@ import vulc.luag.input.InputHandler.KeyType;
 
 public class GUIMainPanel extends GUIPanel {
 
-	private final Console console;
 	public final InputHandler input = new InputHandler();
 
 	protected final List<Character> keyBuffer = new ArrayList<Character>();
@@ -34,13 +33,14 @@ public class GUIMainPanel extends GUIPanel {
 		}
 	};
 
-	public GUIMainPanel(Console console, int x, int y, int w, int h) {
+	public GUIMainPanel(int x, int y, int w, int h) {
 		super(x, y, w, h);
-		this.console = console;
 	}
 
 	public void init() {
-		input.init(console);
+		Console console = Console.instance;
+
+		input.init();
 		console.addKeyListener(keyListener);
 		console.addMouseWheelListener(wheelListener);
 	}
@@ -89,6 +89,8 @@ public class GUIMainPanel extends GUIPanel {
 	}
 
 	public void removeInputListeners() {
+		Console console = Console.instance;
+
 		input.remove();
 		console.removeKeyListener(keyListener);
 		console.removeMouseWheelListener(wheelListener);

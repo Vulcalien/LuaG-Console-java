@@ -10,9 +10,8 @@ public class BootPanel extends Panel {
 	private boolean hasInit = false;
 	private int animationTicks = 0;
 
-	public BootPanel(Console console) {
-		super(console);
-		console.screen.clear(0);
+	public BootPanel() {
+		Console.SCREEN.clear(0);
 	}
 
 	public void init() {
@@ -25,7 +24,7 @@ public class BootPanel extends Panel {
 	}
 
 	public void tick() {
-		Screen screen = console.screen;
+		Screen screen = Console.SCREEN;
 
 		screen.write(Console.NAME + "\n"
 		             + Console.COPYRIGHT + "\n"
@@ -35,7 +34,7 @@ public class BootPanel extends Panel {
 		bootTime--;
 		if(bootTime <= 0) {
 			if(hasInit) {
-				console.currentPanel = nextPanel; // cannot call console.switchToPanel because it'd call panel.init() again
+				Console.currentPanel = nextPanel; // cannot call console.switchToPanel because it'd call panel.init() again
 				nextPanel.onShow();
 				screen.clear(0);
 			} else {
@@ -46,8 +45,8 @@ public class BootPanel extends Panel {
 				else if(animatPhase == 2) text = "Loading..";
 				else if(animatPhase == 3) text = "Loading...";
 
-				console.screen.clear(0);
-				console.screen.write(text, 0xffffff, 1, 1);
+				Console.SCREEN.clear(0);
+				Console.SCREEN.write(text, 0xffffff, 1, 1);
 
 				animationTicks++;
 			}

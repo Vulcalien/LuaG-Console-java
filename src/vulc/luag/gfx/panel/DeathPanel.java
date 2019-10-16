@@ -11,8 +11,7 @@ public class DeathPanel extends Panel {
 	private final String text;
 	private boolean hasTicked = false;
 
-	public DeathPanel(Console console, String text) {
-		super(console);
+	public DeathPanel(String text) {
 		this.text = text;
 	}
 
@@ -20,7 +19,7 @@ public class DeathPanel extends Panel {
 		if(hasTicked) return;
 		hasTicked = true;
 
-		Screen screen = console.screen;
+		Screen screen = Console.SCREEN;
 		screen.clear(background);
 
 		screen.write(text, foreground, 1, 1);

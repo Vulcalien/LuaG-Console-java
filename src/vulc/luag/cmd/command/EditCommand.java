@@ -13,8 +13,7 @@ public class EditCommand extends CmdCommand {
 	}
 
 	public void run(Cmd cmd, String[] args) {
-		Console console = cmd.console;
-		console.switchToPanel(new EditorPanel(console));
+		Console.switchToPanel(new EditorPanel());
 	}
 
 }

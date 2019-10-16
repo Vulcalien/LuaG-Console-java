@@ -9,7 +9,6 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import vulc.bitmap.Bitmap;
-import vulc.luag.Console;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.sprite.gui.SpriteAtlasPreview;
 import vulc.luag.editor.sprite.gui.SpriteColorbar;
@@ -49,8 +48,8 @@ public class SpriteEditor extends Editor {
 
 	public GUITextBox selectColorTxt;
 
-	public SpriteEditor(Console console, EditorPanel panel, int x, int y, int w, int h) {
-		super(console, panel, x, y, w, h);
+	public SpriteEditor(EditorPanel panel, int x, int y, int w, int h) {
+		super(panel, x, y, w, h);
 		this.atlas = panel.game.atlas;
 
 		preview = panel.game.getSprite(spriteID, scope, scope);

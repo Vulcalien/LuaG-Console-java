@@ -30,10 +30,10 @@ public class GameSounds {
 		list.clear();
 	}
 
-	public boolean init(Console console) {
+	public boolean init() {
 		File sfxDir = new File(Game.SFX_DIR);
 		if(!sfxDir.isDirectory()) {
-			console.die("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.SFX_DIR_NAME + "'\n"
 			            + "folder not found");
 			return false;

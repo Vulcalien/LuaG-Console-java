@@ -53,30 +53,33 @@ import vulc.luag.gfx.panel.Panel;
  * </ul>
  */
 public class Console extends Canvas implements Runnable {
+
+	public static enum Mode {
+		USER, USER_CMD, DEVELOPER
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "LuaG Console";
 	public static final String VERSION = "Post-0.6.0";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
+	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
+
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
 
-	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
+	public static final Screen SCREEN = new Screen(WIDTH, HEIGHT);
+	public static Cmd cmd;
+	public static Panel currentPanel;
+
+	public static String cartridge;
+	public static Mode mode;
+
+	public static Console instance;
+
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
-
-	public final Screen screen = new Screen(WIDTH, HEIGHT);
-	public Cmd cmd;
-	public Panel currentPanel;
-
-	public String cartridge;
-
-	public enum Mode {
-		USER, USER_CMD, DEVELOPER
-	}
-
-	public Mode mode;
 
 	public void run() {
 		int ticksPerSecond = 60;
@@ -133,13 +136,13 @@ public class Console extends Canvas implements Runnable {
 		Panel nextPanel = null;
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
-			cmd = new Cmd(this);
-			nextPanel = new CmdPanel(this);
+			cmd = new Cmd();
+			nextPanel = new CmdPanel();
 		} else if(mode == Mode.USER) {
-			nextPanel = new GamePanel(this);
+			nextPanel = new GamePanel();
 		}
 
-		BootPanel bootPanel = new BootPanel(this);
+		BootPanel bootPanel = new BootPanel();
 		bootPanel.nextPanel = nextPanel;
 		currentPanel = bootPanel;
 		currentPanel.init();
@@ -159,7 +162,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = screen.pixels[i];
+			pixels[i] = SCREEN.pixels[i];
 		}
 
 		Graphics g = bs.getDrawGraphics();
@@ -168,7 +171,7 @@ public class Console extends Canvas implements Runnable {
 		bs.show();
 	}
 
-	public void switchToPanel(Panel panel) {
+	public static void switchToPanel(Panel panel) {
 		LOGGER.info("Switching to panel: " + panel.getClass().getSimpleName());
 
 		if(currentPanel != null) currentPanel.remove();
@@ -177,14 +180,14 @@ public class Console extends Canvas implements Runnable {
 		panel.onShow();
 	}
 
-	public void die(String text) {
+	public static void die(String text) {
 		LOGGER.severe("Console die:\n" + text);
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
-			switchToPanel(new CmdPanel(this));
+			switchToPanel(new CmdPanel());
 			cmd.write(text + "\n\n");
 		} else {
-			switchToPanel(new DeathPanel(this, text));
+			switchToPanel(new DeathPanel(text));
 		}
 	}
 
@@ -196,7 +199,7 @@ public class Console extends Canvas implements Runnable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 
-		Console instance = new Console();
+		instance = new Console();
 		instance.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		instance.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		instance.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));

@@ -24,16 +24,14 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		PRESS, RELEASE
 	}
 
-	private Console console;
-
 	private final List<Key> keys = new ArrayList<Key>();
 	private final List<Key> keyboardKeys = new ArrayList<Key>();
 	private final List<Key> mouseKeys = new ArrayList<Key>();
 
 	public int xMouse = -1, yMouse = -1;
 
-	public void init(Console console) {
-		this.console = console;
+	public void init() {
+		Console console = Console.instance;
 
 		console.addKeyListener(this);
 		console.addMouseListener(this);
@@ -41,7 +39,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	}
 
 	public void remove() {
-		if(console == null) return;
+		Console console = Console.instance;
 
 		releaseAll();
 

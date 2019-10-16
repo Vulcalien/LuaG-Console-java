@@ -27,10 +27,9 @@ public class EditorPanel extends Panel {
 	public Editor mapEditor;
 	public Editor spriteEditor;
 
-	public EditorPanel(Console console) {
-		super(console);
-		this.game = new Game(console);
-		mainPanel = new GUIMainPanel(console, 0, 0, console.screen.width, console.screen.height);
+	public EditorPanel() {
+		this.game = new Game();
+		mainPanel = new GUIMainPanel(0, 0, Console.SCREEN.width, Console.SCREEN.height);
 		mainPanel.background = 0x000000;
 		mainPanel.init();
 
@@ -47,7 +46,7 @@ public class EditorPanel extends Panel {
 		cmdBtn.background = Colors.BACKGROUND_1;
 		cmdBtn.setImage(Icons.CMD, Colors.FOREGROUND_0);
 		cmdBtn.action = () -> {
-			console.switchToPanel(new CmdPanel(console));
+			Console.switchToPanel(new CmdPanel());
 		};
 		headerPanel.add(cmdBtn);
 
@@ -97,8 +96,8 @@ public class EditorPanel extends Panel {
 	public void init() {
 		if(!game.initDevResources()) return;
 
-		mapEditor = new MapEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);
-		spriteEditor = new SpriteEditor(console, this, 0, 10, mainPanel.w, mainPanel.h - 20);
+		mapEditor = new MapEditor(this, 0, 10, mainPanel.w, mainPanel.h - 20);
+		spriteEditor = new SpriteEditor(this, 0, 10, mainPanel.w, mainPanel.h - 20);
 
 		switchToEditor(mapEditor);
 	}
@@ -115,7 +114,7 @@ public class EditorPanel extends Panel {
 	public void tick() {
 		currentEditor.tick();
 		mainPanel.tick();
-		mainPanel.render(console.screen);
+		mainPanel.render(Console.SCREEN);
 
 		if(mapEditor.shouldSave()
 		   || spriteEditor.shouldSave()) {

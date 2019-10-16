@@ -24,12 +24,9 @@ public class Cmd {
 	private int renderOffset = 0;
 	private int animationTicks = 0; // the _ that appears and disappears
 
-	public Console console;
 	public CmdPanel cmdPanel;
 
-	public Cmd(Console console) {
-		this.console = console;
-
+	public Cmd() {
 		write(Console.NAME + "\n");
 		write(Console.COPYRIGHT + "\n");
 		write("Version: " + Console.VERSION + "\n");
@@ -60,7 +57,7 @@ public class Cmd {
 			scrollBuffer = 0;
 		}
 
-		console.screen.clear(background);
+		Console.SCREEN.clear(background);
 
 		String textToRender = "";
 		for(int i = 0; i < renderedLines; i++) {
@@ -80,7 +77,7 @@ public class Cmd {
 			}
 			textToRender += text + "\n";
 		}
-		console.screen.write(textToRender, foreground, 1, 1);
+		Console.SCREEN.write(textToRender, foreground, 1, 1);
 	}
 
 	public void receiveInput(char character, boolean shouldExecute) {
