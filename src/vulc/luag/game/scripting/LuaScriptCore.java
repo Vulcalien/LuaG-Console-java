@@ -117,7 +117,7 @@ public class LuaScriptCore {
 		String msg = "LuaError: "
 		             + e.getLocalizedMessage()
 		                .replace("@", "")
-		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR.replace("./", ""), "");
+		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR_NAME, "");
 
 		Console.LOGGER.log(Level.SEVERE, msg);
 

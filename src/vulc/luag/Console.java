@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.logging.FileHandler;
@@ -59,6 +60,7 @@ public class Console extends Canvas implements Runnable {
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
+	public static String rootDirectory;
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -187,25 +189,11 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		LOGGER.setLevel(Level.ALL);
-		Locale.setDefault(Locale.ENGLISH);
-		try {
-			FileHandler fh = new FileHandler("luag.log");
-			fh.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(fh);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
+		startupOperations();
 		LOGGER.info("Starting Console...");
 
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				LOGGER.info("Shutting down Console");
-			}
-		});
 		frame.setResizable(false);
 
 		Console instance = new Console();
@@ -228,6 +216,35 @@ public class Console extends Canvas implements Runnable {
 		frame.setTitle(NAME + " " + VERSION);
 		frame.setVisible(true);
 		new Thread(instance).start();
+	}
+
+	public static void startupOperations() {
+		if(Console.class.getResource("Console.class").toString().startsWith("jar")) {
+			File jarFile = new File(Console.class.getProtectionDomain()
+			                                     .getCodeSource()
+			                                     .getLocation()
+			                                     .getPath());
+			rootDirectory = jarFile.getParent() + "/";
+		} else {
+			rootDirectory = "./";
+		}
+
+		// setup LOGGER
+		LOGGER.setLevel(Level.ALL);
+		Locale.setDefault(Locale.ENGLISH);
+		try {
+			FileHandler fh = new FileHandler(rootDirectory + "luag.log");
+			fh.setFormatter(new SimpleFormatter());
+			LOGGER.addHandler(fh);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				LOGGER.info("Shutting down Console");
+			}
+		});
 	}
 
 }

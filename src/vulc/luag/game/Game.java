@@ -43,7 +43,7 @@ public class Game {
 	public static final String ATLAS_FILE_NAME = "atlas.png";
 	public static final String MAP_FILE_NAME = "map";
 
-	public static final String USERDATA_DIR = "./" + USERDATA_DIR_NAME;
+	public static final String USERDATA_DIR = Console.rootDirectory + USERDATA_DIR_NAME;
 	public static final String SCRIPT_DIR = USERDATA_DIR + "/" + SCRIPT_DIR_NAME;
 	public static final String SFX_DIR = USERDATA_DIR + "/" + SFX_DIR_NAME;
 	public static final String CONFIG_FILE = USERDATA_DIR + "/" + CONFIG_FILE_NAME;
