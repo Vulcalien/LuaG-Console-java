@@ -6,6 +6,7 @@ import java.util.List;
 
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
+import vulc.luag.shell.Shell;
 
 public abstract class ShellCommand {
 
@@ -46,9 +47,9 @@ public abstract class ShellCommand {
 			for(int i = 0; i < command.names.length; i++) {
 				if(name.equals(command.names[i])) {
 					if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
-						Console.shell.write("Error:\n"
-						                    + "only developers can\n"
-						                    + "use this command\n\n");
+						Shell.write("Error:\n"
+						            + "only developers can\n"
+						            + "use this command\n\n");
 					} else {
 						command.run(args);
 					}

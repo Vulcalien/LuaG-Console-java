@@ -70,7 +70,6 @@ public class Console extends Canvas implements Runnable {
 	public static String rootDirectory;
 
 	public static final Screen SCREEN = new Screen(WIDTH, HEIGHT);
-	public static Shell shell;
 	public static Panel currentPanel;
 
 	public static String cartridge;
@@ -136,7 +135,7 @@ public class Console extends Canvas implements Runnable {
 		Panel nextPanel = null;
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
-			shell = new Shell();
+			Shell.init();
 			nextPanel = new ShellPanel();
 		} else if(mode == Mode.USER) {
 			nextPanel = new GamePanel();
@@ -185,7 +184,7 @@ public class Console extends Canvas implements Runnable {
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
 			switchToPanel(new ShellPanel());
-			shell.write(text + "\n\n");
+			Shell.write(text + "\n\n");
 		} else {
 			switchToPanel(new DeathPanel(text));
 		}

@@ -1,6 +1,5 @@
 package vulc.luag.shell.command;
 
-import vulc.luag.Console;
 import vulc.luag.shell.Shell;
 
 public class HelpCommand extends ShellCommand {
@@ -10,17 +9,15 @@ public class HelpCommand extends ShellCommand {
 	}
 
 	public void run(String[] args) {
-		Shell shell = Console.shell;
-
-		shell.write("run: runs game\n");
-		shell.write("edit: opens editor\n");
-		shell.write("pack: creates cartridge\n");
-		shell.write("cls: clears shell\n");
-		shell.write("ver: prints version\n");
-		shell.write("help: prints this list\n");
-		shell.write("mode: changes console mode\n");
-		shell.write("files: opens game folder\n");
-		shell.write("setup: creates game files\n\n");
+		Shell.write("run: runs game\n");
+		Shell.write("edit: opens editor\n");
+		Shell.write("pack: creates cartridge\n");
+		Shell.write("cls: clears shell\n");
+		Shell.write("ver: prints version\n");
+		Shell.write("help: prints this list\n");
+		Shell.write("mode: changes console mode\n");
+		Shell.write("files: opens game folder\n");
+		Shell.write("setup: creates game files\n\n");
 	}
 
 }

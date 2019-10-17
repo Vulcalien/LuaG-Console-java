@@ -10,9 +10,7 @@ public class VerCommand extends ShellCommand {
 	}
 
 	public void run(String[] args) {
-		Shell shell = Console.shell;
-
-		shell.write(Console.VERSION + " - By Vulcalien\n\n");
+		Shell.write(Console.VERSION + " - By Vulcalien\n\n");
 	}
 
 }
