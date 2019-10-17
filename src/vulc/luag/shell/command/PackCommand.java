@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.shell.Shell;
 
@@ -19,26 +20,28 @@ public class PackCommand extends ShellCommand {
 		isDevelopersOnly = true;
 	}
 
-	public void run(Shell shell, String[] args) {
+	public void run(String[] args) {
+		Shell shell = Console.shell;
+
 		if(args.length < 1) {
 			shell.write("Error: missing arguments\n"
-			          + "pack [cartridge-name]\n\n");
+			            + "pack [cartridge-name]\n\n");
 			return;
 		}
 
 		File consoleUserdata = new File(Game.USERDATA_DIR);
 		if(!consoleUserdata.isDirectory()) {
 			shell.write("Error:\n"
-			          + "'" + Game.USERDATA_DIR + "'\n"
-			          + "folder not found\n\n");
+			            + "'" + Game.USERDATA_DIR + "'\n"
+			            + "folder not found\n\n");
 			return;
 		}
 
 		File cartridge = new File(args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
 			shell.write("Error:\n"
-			          + "'" + cartridge + "'\n"
-			          + "file already exists\n\n");
+			            + "'" + cartridge + "'\n"
+			            + "file already exists\n\n");
 			return;
 		}
 

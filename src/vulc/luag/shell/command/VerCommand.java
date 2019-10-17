@@ -9,7 +9,9 @@ public class VerCommand extends ShellCommand {
 		super("ver", "version");
 	}
 
-	public void run(Shell shell, String[] args) {
+	public void run(String[] args) {
+		Shell shell = Console.shell;
+
 		shell.write(Console.VERSION + " - By Vulcalien\n\n");
 	}
 

@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
+import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.shell.Shell;
 
@@ -15,15 +16,17 @@ public class FilesCommand extends ShellCommand {
 		isDevelopersOnly = true;
 	}
 
-	public void run(Shell shell, String[] args) {
+	public void run(String[] args) {
+		Shell shell = Console.shell;
+
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();
 
 			File folder = new File(Game.USERDATA_DIR);
 			if(!folder.isDirectory()) {
 				shell.write("Error:\n"
-				          + "'" + Game.USERDATA_DIR_NAME + "'\n"
-				          + "folder not found\n\n");
+				            + "'" + Game.USERDATA_DIR_NAME + "'\n"
+				            + "folder not found\n\n");
 				return;
 			}
 

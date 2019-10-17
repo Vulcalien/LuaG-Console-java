@@ -6,7 +6,6 @@ import java.util.List;
 
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
-import vulc.luag.shell.Shell;
 
 public abstract class ShellCommand {
 
@@ -32,10 +31,10 @@ public abstract class ShellCommand {
 		COMMAND_LIST.add(this);
 	}
 
-	public abstract void run(Shell shell, String[] args);
+	public abstract void run(String[] args);
 
 	// returns true if could find a command, else false
-	public static boolean execute(Shell shell, String line) {
+	public static boolean execute(String line) {
 		Console.LOGGER.info("Shell execute: '" + line + "'");
 
 		String[] splittedLine = line.split(" ");
@@ -47,11 +46,11 @@ public abstract class ShellCommand {
 			for(int i = 0; i < command.names.length; i++) {
 				if(name.equals(command.names[i])) {
 					if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
-						shell.write("Error:\n"
-						            + "only developers can\n"
-						            + "use this command\n\n");
+						Console.shell.write("Error:\n"
+						                    + "only developers can\n"
+						                    + "use this command\n\n");
 					} else {
-						command.run(shell, args);
+						command.run(args);
 					}
 					return true;
 				}

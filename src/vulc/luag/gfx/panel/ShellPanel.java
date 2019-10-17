@@ -32,7 +32,7 @@ public class ShellPanel extends Panel {
 
 	public ShellPanel() {
 		this.shell = Console.shell;
-		shell.shellPanel = this;
+		shell.panel = this;
 	}
 
 	public void onShow() {

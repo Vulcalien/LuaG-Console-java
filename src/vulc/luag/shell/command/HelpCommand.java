@@ -1,5 +1,6 @@
 package vulc.luag.shell.command;
 
+import vulc.luag.Console;
 import vulc.luag.shell.Shell;
 
 public class HelpCommand extends ShellCommand {
@@ -8,7 +9,9 @@ public class HelpCommand extends ShellCommand {
 		super("help");
 	}
 
-	public void run(Shell shell, String[] args) {
+	public void run(String[] args) {
+		Shell shell = Console.shell;
+
 		shell.write("run: runs game\n");
 		shell.write("edit: opens editor\n");
 		shell.write("pack: creates cartridge\n");

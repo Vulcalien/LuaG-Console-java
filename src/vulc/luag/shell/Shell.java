@@ -24,7 +24,7 @@ public class Shell {
 	private int renderOffset = 0;
 	private int animationTicks = 0; // the _ that appears and disappears
 
-	public ShellPanel shellPanel;
+	public ShellPanel panel;
 
 	public Shell() {
 		write(Console.NAME + "\n");
@@ -97,7 +97,7 @@ public class Shell {
 
 			case '\b':
 				if(currentLine.length() > 0) {
-					if(shellPanel.ctrl.isKeyDown()) {
+					if(panel.ctrl.isKeyDown()) {
 						int lastSpace = currentLine.lastIndexOf(' ');
 						if(lastSpace == -1) {
 							currentLine = "";
@@ -132,7 +132,7 @@ public class Shell {
 
 	public void execute(String line) {
 		line = line.trim();
-		if(!ShellCommand.execute(this, line)) {
+		if(!ShellCommand.execute(line)) {
 			write("unknown command\n\n");
 		}
 	}

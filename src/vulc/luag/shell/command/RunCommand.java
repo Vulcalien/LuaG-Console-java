@@ -12,7 +12,9 @@ public class RunCommand extends ShellCommand {
 		super("run");
 	}
 
-	public void run(Shell shell, String[] args) {
+	public void run(String[] args) {
+		Shell shell = Console.shell;
+
 		if(args.length >= 1) {
 			Console.cartridge = args[0] + "." + Game.CARTRIDGE_EXTENSION;
 		} else {
@@ -20,7 +22,7 @@ public class RunCommand extends ShellCommand {
 
 			if(Console.mode == Mode.USER_SHELL) {
 				shell.write("Error:\n"
-				          + "insert cartridge's name\n\n");
+				            + "insert cartridge's name\n\n");
 				return;
 			}
 		}
