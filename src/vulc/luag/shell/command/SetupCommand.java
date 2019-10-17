@@ -1,4 +1,4 @@
-package vulc.luag.cmd.command;
+package vulc.luag.shell.command;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import vulc.luag.cmd.Cmd;
 import vulc.luag.game.Game;
+import vulc.luag.shell.Shell;
 
-public class SetupCommand extends CmdCommand {
+public class SetupCommand extends ShellCommand {
 
 	private static final String TEMPLATE_FILE = "/res/templates/template.zip";
 
@@ -19,10 +19,10 @@ public class SetupCommand extends CmdCommand {
 		isDevelopersOnly = true;
 	}
 
-	public void run(Cmd cmd, String[] args) {
+	public void run(Shell shell, String[] args) {
 		File folder = new File(Game.USERDATA_DIR);
 		if(folder.exists()) {
-			cmd.write("Error:\n"
+			shell.write("Error:\n"
 			          + "'" + Game.USERDATA_DIR_NAME + "'\n"
 			          + "already exists\n\n");
 			return;

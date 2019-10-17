@@ -41,16 +41,16 @@ public class EditorPanel extends Panel {
 		headerPanel.background = Colors.BACKGROUND_0;
 		mainPanel.add(headerPanel);
 
-		GUIButton cmdBtn = new GUIButton(1, 1, 8, 8);
-		cmdBtn.opaque = true;
-		cmdBtn.background = Colors.BACKGROUND_1;
-		cmdBtn.setImage(Icons.CMD, Colors.FOREGROUND_0);
-		cmdBtn.action = () -> {
-			Console.switchToPanel(new CmdPanel());
+		GUIButton shellBtn = new GUIButton(1, 1, 8, 8);
+		shellBtn.opaque = true;
+		shellBtn.background = Colors.BACKGROUND_1;
+		shellBtn.setImage(Icons.SHELL, Colors.FOREGROUND_0);
+		shellBtn.action = () -> {
+			Console.switchToPanel(new ShellPanel());
 		};
-		headerPanel.add(cmdBtn);
+		headerPanel.add(shellBtn);
 
-		GUIButton mapEditBtn = new GUIButton(cmdBtn.x + cmdBtn.w + btnDist, 1, 8, 8);
+		GUIButton mapEditBtn = new GUIButton(shellBtn.x + shellBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = Colors.BACKGROUND_1;
 		mapEditBtn.setImage(Icons.MAP_EDITOR, Colors.FOREGROUND_0);

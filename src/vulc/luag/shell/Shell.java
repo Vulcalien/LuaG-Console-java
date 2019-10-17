@@ -1,21 +1,21 @@
-package vulc.luag.cmd;
+package vulc.luag.shell;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import vulc.luag.Console;
-import vulc.luag.cmd.command.CmdCommand;
 import vulc.luag.gfx.Screen;
-import vulc.luag.gfx.panel.CmdPanel;
+import vulc.luag.gfx.panel.ShellPanel;
+import vulc.luag.shell.command.ShellCommand;
 
-public class Cmd {
+public class Shell {
 
 	private final int background = 0x000000;
 	private final int foreground = 0xffffff;
 
 	private final int renderedLines = Console.HEIGHT / (Screen.FONT.getHeight() + 1) + 1;
 
-	public final List<CmdChar> charBuffer = new ArrayList<CmdChar>();
+	public final List<ShellChar> charBuffer = new ArrayList<ShellChar>();
 	public int scrollBuffer = 0;
 
 	private final List<String> closedLines = new ArrayList<String>();
@@ -24,9 +24,9 @@ public class Cmd {
 	private int renderOffset = 0;
 	private int animationTicks = 0; // the _ that appears and disappears
 
-	public CmdPanel cmdPanel;
+	public ShellPanel shellPanel;
 
-	public Cmd() {
+	public Shell() {
 		write(Console.NAME + "\n");
 		write(Console.COPYRIGHT + "\n");
 		write("Version: " + Console.VERSION + "\n");
@@ -36,7 +36,7 @@ public class Cmd {
 	public void tick() {
 		boolean writing = false;
 		if(charBuffer.size() != 0) {
-			CmdChar character = charBuffer.remove(0);
+			ShellChar character = charBuffer.remove(0);
 			receiveInput(character.val, character.writtenByUser);
 			writing = true;
 		} else {
@@ -62,7 +62,7 @@ public class Cmd {
 		String textToRender = "";
 		for(int i = 0; i < renderedLines; i++) {
 			int line = i + renderOffset;
-			if(line > closedLines.size()) { // if line == closedLines.size() then the cmd will render currentLine
+			if(line > closedLines.size()) { // if line == closedLines.size() then the shell will render currentLine
 				break;
 			}
 
@@ -97,7 +97,7 @@ public class Cmd {
 
 			case '\b':
 				if(currentLine.length() > 0) {
-					if(cmdPanel.ctrl.isKeyDown()) {
+					if(shellPanel.ctrl.isKeyDown()) {
 						int lastSpace = currentLine.lastIndexOf(' ');
 						if(lastSpace == -1) {
 							currentLine = "";
@@ -120,7 +120,7 @@ public class Cmd {
 
 	public void write(String text) {
 		for(int i = 0; i < text.length(); i++) {
-			charBuffer.add(new CmdChar(text.charAt(i), false));
+			charBuffer.add(new ShellChar(text.charAt(i), false));
 		}
 	}
 
@@ -132,7 +132,7 @@ public class Cmd {
 
 	public void execute(String line) {
 		line = line.trim();
-		if(!CmdCommand.execute(this, line)) {
+		if(!ShellCommand.execute(this, line)) {
 			write("unknown command\n\n");
 		}
 	}

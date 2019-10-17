@@ -32,13 +32,13 @@ import java.util.logging.SimpleFormatter;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import vulc.luag.cmd.Cmd;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
-import vulc.luag.gfx.panel.CmdPanel;
 import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.Panel;
+import vulc.luag.gfx.panel.ShellPanel;
+import vulc.luag.shell.Shell;
 
 /**
  * Open Source since: 20.06.2019<br>
@@ -55,7 +55,7 @@ import vulc.luag.gfx.panel.Panel;
 public class Console extends Canvas implements Runnable {
 
 	public static enum Mode {
-		USER, USER_CMD, DEVELOPER
+		USER, USER_SHELL, DEVELOPER
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -70,7 +70,7 @@ public class Console extends Canvas implements Runnable {
 	public static String rootDirectory;
 
 	public static final Screen SCREEN = new Screen(WIDTH, HEIGHT);
-	public static Cmd cmd;
+	public static Shell shell;
 	public static Panel currentPanel;
 
 	public static String cartridge;
@@ -128,16 +128,16 @@ public class Console extends Canvas implements Runnable {
 				mode = Mode.USER;
 			}
 		} else {
-			mode = Mode.USER_CMD;
+			mode = Mode.USER_SHELL;
 		}
 
 		LOGGER.info("Startup mode: " + mode);
 
 		Panel nextPanel = null;
 
-		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
-			cmd = new Cmd();
-			nextPanel = new CmdPanel();
+		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
+			shell = new Shell();
+			nextPanel = new ShellPanel();
 		} else if(mode == Mode.USER) {
 			nextPanel = new GamePanel();
 		}
@@ -183,9 +183,9 @@ public class Console extends Canvas implements Runnable {
 	public static void die(String text) {
 		LOGGER.severe("Console die:\n" + text);
 
-		if(mode == Mode.DEVELOPER || mode == Mode.USER_CMD) {
-			switchToPanel(new CmdPanel());
-			cmd.write(text + "\n\n");
+		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
+			switchToPanel(new ShellPanel());
+			shell.write(text + "\n\n");
 		} else {
 			switchToPanel(new DeathPanel(text));
 		}

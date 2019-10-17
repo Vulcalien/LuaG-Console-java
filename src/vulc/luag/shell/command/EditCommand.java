@@ -1,10 +1,10 @@
-package vulc.luag.cmd.command;
+package vulc.luag.shell.command;
 
 import vulc.luag.Console;
-import vulc.luag.cmd.Cmd;
 import vulc.luag.gfx.panel.EditorPanel;
+import vulc.luag.shell.Shell;
 
-public class EditCommand extends CmdCommand {
+public class EditCommand extends ShellCommand {
 
 	public EditCommand() {
 		super("edit", "editor");
@@ -12,7 +12,7 @@ public class EditCommand extends CmdCommand {
 		isDevelopersOnly = true;
 	}
 
-	public void run(Cmd cmd, String[] args) {
+	public void run(Shell shell, String[] args) {
 		Console.switchToPanel(new EditorPanel());
 	}
 

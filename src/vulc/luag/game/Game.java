@@ -29,7 +29,7 @@ import vulc.luag.Console.Mode;
 import vulc.luag.editor.map.MapCompiler;
 import vulc.luag.game.map.Map;
 import vulc.luag.game.scripting.LuaScriptCore;
-import vulc.luag.gfx.panel.CmdPanel;
+import vulc.luag.gfx.panel.ShellPanel;
 import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
@@ -66,11 +66,11 @@ public class Game {
 
 	public final List<Key> keys = new ArrayList<Key>();
 
-	private Key debugGotoCMD = null;
+	private Key debugGotoShell = null;
 
 	public Game() {
 		if(Console.mode == Mode.DEVELOPER) {
-			debugGotoCMD = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F8);
+			debugGotoShell = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F8);
 		}
 	}
 
@@ -286,9 +286,9 @@ public class Game {
 
 		scriptCore.tick();
 		if(Console.mode == Mode.DEVELOPER) {
-			if(debugGotoCMD.isPressed()) {
+			if(debugGotoShell.isPressed()) {
 				Console.LOGGER.info("Closing Game");
-				Console.switchToPanel(new CmdPanel());
+				Console.switchToPanel(new ShellPanel());
 			}
 		}
 	}

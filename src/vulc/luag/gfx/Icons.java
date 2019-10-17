@@ -8,7 +8,7 @@ import vulc.bitmap.BoolBitmap;
 public abstract class Icons {
 
 	// GENERAL
-	public static final Bitmap<Boolean> CMD = loadIcon("/res/icons/cmd.png");
+	public static final Bitmap<Boolean> SHELL = loadIcon("/res/icons/shell.png");
 	public static final Bitmap<Boolean> SAVE = loadIcon("/res/icons/save.png");
 	public static final Bitmap<Boolean> UNDO = loadIcon("/res/icons/undo.png");
 	public static final Bitmap<Boolean> REDO = loadIcon("/res/icons/redo.png");

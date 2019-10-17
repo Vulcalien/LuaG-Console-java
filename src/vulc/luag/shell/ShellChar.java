@@ -1,11 +1,11 @@
-package vulc.luag.cmd;
+package vulc.luag.shell;
 
-public class CmdChar {
+public class ShellChar {
 
 	public final char val;
 	public final boolean writtenByUser;
 
-	public CmdChar(char val, boolean writtenByUser) {
+	public ShellChar(char val, boolean writtenByUser) {
 		this.val = val;
 		this.writtenByUser = writtenByUser;
 	}

@@ -1,4 +1,4 @@
-package vulc.luag.cmd.command;
+package vulc.luag.shell.command;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,10 +8,10 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import vulc.luag.cmd.Cmd;
 import vulc.luag.game.Game;
+import vulc.luag.shell.Shell;
 
-public class PackCommand extends CmdCommand {
+public class PackCommand extends ShellCommand {
 
 	public PackCommand() {
 		super("pack");
@@ -19,16 +19,16 @@ public class PackCommand extends CmdCommand {
 		isDevelopersOnly = true;
 	}
 
-	public void run(Cmd cmd, String[] args) {
+	public void run(Shell shell, String[] args) {
 		if(args.length < 1) {
-			cmd.write("Error: missing arguments\n"
+			shell.write("Error: missing arguments\n"
 			          + "pack [cartridge-name]\n\n");
 			return;
 		}
 
 		File consoleUserdata = new File(Game.USERDATA_DIR);
 		if(!consoleUserdata.isDirectory()) {
-			cmd.write("Error:\n"
+			shell.write("Error:\n"
 			          + "'" + Game.USERDATA_DIR + "'\n"
 			          + "folder not found\n\n");
 			return;
@@ -36,7 +36,7 @@ public class PackCommand extends CmdCommand {
 
 		File cartridge = new File(args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
-			cmd.write("Error:\n"
+			shell.write("Error:\n"
 			          + "'" + cartridge + "'\n"
 			          + "file already exists\n\n");
 			return;

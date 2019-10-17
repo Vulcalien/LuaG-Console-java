@@ -6,33 +6,33 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import vulc.luag.Console;
-import vulc.luag.cmd.Cmd;
-import vulc.luag.cmd.CmdChar;
 import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
+import vulc.luag.shell.ShellChar;
+import vulc.luag.shell.Shell;
 
-public class CmdPanel extends Panel {
+public class ShellPanel extends Panel {
 
-	private final Cmd cmd;
+	private final Shell shell;
 
 	private final InputHandler input = new InputHandler();
 	public final Key ctrl = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_CONTROL);
 
 	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
-			cmd.charBuffer.add(new CmdChar(e.getKeyChar(), true));
+			shell.charBuffer.add(new ShellChar(e.getKeyChar(), true));
 		}
 	};
 	private final MouseWheelListener mouseScrollListener = new MouseWheelListener() {
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			cmd.scrollBuffer += e.getWheelRotation();
+			shell.scrollBuffer += e.getWheelRotation();
 		}
 	};
 
-	public CmdPanel() {
-		this.cmd = Console.cmd;
-		cmd.cmdPanel = this;
+	public ShellPanel() {
+		this.shell = Console.shell;
+		shell.shellPanel = this;
 	}
 
 	public void onShow() {
@@ -45,7 +45,7 @@ public class CmdPanel extends Panel {
 
 	public void tick() {
 		input.tick();
-		cmd.tick();
+		shell.tick();
 	}
 
 	public void remove() {
