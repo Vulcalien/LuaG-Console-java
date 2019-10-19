@@ -6,6 +6,7 @@ import vulc.luag.gfx.gui.GUITextBox;
 public class MapSizeTextBox extends GUITextBox {
 
 	public static final boolean WIDTH = false, HEIGHT = true;
+	public static final int N_CHARS = 4;
 
 	private final MapEditor editor;
 	private final boolean side;
@@ -16,7 +17,7 @@ public class MapSizeTextBox extends GUITextBox {
 		this.side = side;
 
 		acceptedText = GUITextBox.DEC_ONLY;
-		nChars = 4;
+		nChars = N_CHARS;
 		opaque = true;
 		background = 0xffffff;
 		textColor = 0x000000;

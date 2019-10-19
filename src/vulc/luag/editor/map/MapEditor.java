@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import vulc.luag.editor.Editor;
 import vulc.luag.editor.map.gui.MapAtlasPreview;
 import vulc.luag.editor.map.gui.MapPreview;
+import vulc.luag.editor.map.gui.MapSizePanel;
 import vulc.luag.editor.map.gui.MapSizeTextBox;
 import vulc.luag.game.Game;
 import vulc.luag.game.map.Map;
@@ -47,6 +48,11 @@ public class MapEditor extends Editor {
 		                                                   wAtlas, hAtlas,
 		                                                   this, verticalTiles);
 		guiPanel.add(atlasPreview);
+
+		GUIPanel sizePanel = new MapSizePanel(atlasPreview.x, previewPanel.y + previewPanel.h + 3,
+		                                      atlasPreview.w, 12,
+		                                      this);
+		guiPanel.add(sizePanel);
 	}
 
 	public void tick() {
