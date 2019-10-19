@@ -32,7 +32,6 @@ public class SpriteEditor extends Editor {
 	public final int previewScale = 6;
 	public int spriteID = 0;
 	public int scope = 1; // TODO this can only be set to 1 at the moment
-	public int atlasOffset = 0;
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();
 
@@ -76,10 +75,11 @@ public class SpriteEditor extends Editor {
 		                                            this);
 		guiPanel.add(sprPreview);
 
-		int hAtlas = 8 * SpriteAtlasPreview.VERTICAL_TILES;
+		int verticalTiles = 8;
+		int hAtlas = 8 * verticalTiles;
 		GUIComponent atlasPreview = new SpriteAtlasPreview((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlas - 5,
 		                                                   atlas.width, hAtlas,
-		                                                   this);
+		                                                   this, verticalTiles);
 		guiPanel.add(atlasPreview);
 
 		int hToolbar = 9 * 5 + 1;

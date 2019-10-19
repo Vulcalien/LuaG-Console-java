@@ -12,6 +12,7 @@ public abstract class Icons {
 	public static final Bitmap<Boolean> SAVE = loadIcon("/res/icons/save.png");
 	public static final Bitmap<Boolean> UNDO = loadIcon("/res/icons/undo.png");
 	public static final Bitmap<Boolean> REDO = loadIcon("/res/icons/redo.png");
+	public static final Bitmap<Boolean> SELECTED = loadIcon("/res/icons/selected.png");
 
 	// EDITORS
 	public static final Bitmap<Boolean> SPRITE_EDITOR = loadIcon("/res/icons/editor/sprite_editor.png");

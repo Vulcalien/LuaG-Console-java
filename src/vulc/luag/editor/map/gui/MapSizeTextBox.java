@@ -1,7 +1,6 @@
 package vulc.luag.editor.map.gui;
 
 import vulc.luag.editor.map.MapEditor;
-import vulc.luag.game.map.Map;
 import vulc.luag.gfx.gui.GUITextBox;
 
 public class MapSizeTextBox extends GUITextBox {
@@ -21,23 +20,23 @@ public class MapSizeTextBox extends GUITextBox {
 		opaque = true;
 		background = 0xffffff;
 		textColor = 0x000000;
-
-		text = getSizeString();
 	}
 
 	public void onEnterPress() {
 		super.onEnterPress();
-		editor.resizeMap();
-	}
 
-	public void onLostFocus() {
-		text = getSizeString();
-	}
+		int value;
+		if(text.equals("")) {
+			value = 0;
+		} else {
+			value = Integer.parseInt(text);
+			if(value > 255) {
+				value = 255;
+			}
+		}
+		text = "" + value;
 
-	private String getSizeString() {
-		Map map = editor.editorPanel.game.map;
-		if(side == WIDTH) return map.width + "";
-		else return map.height + "";
+		editor.resizeMap(value, side);
 	}
 
 }

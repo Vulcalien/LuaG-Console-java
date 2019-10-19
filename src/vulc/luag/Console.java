@@ -61,7 +61,7 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "LuaG Console";
-	public static final String VERSION = "Post-0.6.0";
+	public static final String VERSION = "0.6.1 (WIP)";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
@@ -220,7 +220,7 @@ public class Console extends Canvas implements Runnable {
 		new Thread(instance).start();
 	}
 
-	public static void startupOperations() {
+	private static void startupOperations() {
 		if(Console.class.getResource("Console.class").toString().startsWith("jar")) {
 			File jarFile = new File(Console.class.getProtectionDomain()
 			                                     .getCodeSource()

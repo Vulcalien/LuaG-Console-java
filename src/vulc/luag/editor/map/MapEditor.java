@@ -3,11 +3,12 @@ package vulc.luag.editor.map;
 import java.awt.event.KeyEvent;
 
 import vulc.luag.editor.Editor;
+import vulc.luag.editor.map.gui.MapAtlasPreview;
 import vulc.luag.editor.map.gui.MapPreview;
-import vulc.luag.editor.map.gui.MapSidebar;
+import vulc.luag.editor.map.gui.MapSizeTextBox;
+import vulc.luag.game.Game;
 import vulc.luag.game.map.Map;
 import vulc.luag.gfx.gui.GUIPanel;
-import vulc.luag.gfx.gui.GUITextBox;
 import vulc.luag.gfx.panel.EditorPanel;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
@@ -18,8 +19,6 @@ public class MapEditor extends Editor {
 	private final Key moveLeft;
 	private final Key moveDown;
 	private final Key moveRight;
-
-	public GUITextBox wTextBox, hTextBox, selectTileTextBox;
 
 	public int xOffset = 0, yOffset = 0;
 	public int selectedTile = 0;
@@ -37,16 +36,17 @@ public class MapEditor extends Editor {
 		// INTERFACE
 		guiPanel.background = 0x000000;
 
-		// sidebar
-		int wSidebar = 36;
-		int hSidebar = guiPanel.h - 10;
-		GUIPanel sidebar = new MapSidebar(guiPanel.w - wSidebar - 5, 5, wSidebar, hSidebar,
-		                                  this);
-		guiPanel.add(sidebar);
-
-		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - sidebar.w - 15, guiPanel.h - 10,
+		GUIPanel previewPanel = new MapPreview(5, 5, guiPanel.w - 10, 10 * Game.SPR_SIZE,
 		                                       this);
 		guiPanel.add(previewPanel);
+
+		int verticalTiles = 4;
+		int wAtlas = editorPanel.game.atlas.width;
+		int hAtlas = verticalTiles * Game.SPR_SIZE;
+		MapAtlasPreview atlasPreview = new MapAtlasPreview((guiPanel.w - wAtlas) / 2, guiPanel.h - hAtlas - 5,
+		                                                   wAtlas, hAtlas,
+		                                                   this, verticalTiles);
+		guiPanel.add(atlasPreview);
 	}
 
 	public void tick() {
@@ -57,21 +57,11 @@ public class MapEditor extends Editor {
 		if(moveRight.isKeyDown()) xOffset += moveSpeed;
 	}
 
-	public void resizeMap() {
-		String wText = wTextBox.text;
-		String hText = hTextBox.text;
-
-		int w, h;
-		if(!wText.equals("")) w = Integer.parseInt(wText);
-		else w = 0;
-
-		if(!hText.equals("")) h = Integer.parseInt(hText);
-		else h = 0;
-
-		wTextBox.text = w + "";
-		hTextBox.text = h + "";
-
+	public void resizeMap(int newSide, boolean sideFlag) {
 		Map oldMap = editorPanel.game.map;
+
+		int w = (sideFlag == MapSizeTextBox.WIDTH ? newSide : oldMap.width);
+		int h = (sideFlag == MapSizeTextBox.HEIGHT ? newSide : oldMap.height);
 		Map newMap = new Map(w, h);
 
 		x_loop:
