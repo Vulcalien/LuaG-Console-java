@@ -23,10 +23,7 @@ public class SpriteColorbarPalette extends GUIPanel {
 					screen.fill(x, y, x + w - 1, y + h - 1, editor.lastColors.get(id));
 				}
 
-				// BUG If a new color is added, the colors will slide. (And it's normal)
-				//     But this causes the user to select the color that now occupies the
-				//     position of the previous color.
-				public void onMouseDown(int xMouse, int yMouse) {
+				public void onMousePress(int xMouse, int yMouse) {
 					editor.selectColor(editor.lastColors.get(id));
 				}
 			};
