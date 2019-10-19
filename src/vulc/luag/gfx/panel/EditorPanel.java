@@ -44,7 +44,7 @@ public class EditorPanel extends Panel {
 		GUIButton shellBtn = new GUIButton(1, 1, 8, 8);
 		shellBtn.opaque = true;
 		shellBtn.background = Colors.BACKGROUND_1;
-		shellBtn.setImage(Icons.SHELL, Colors.FOREGROUND_0);
+		shellBtn.setImage(Icons.SHELL, Colors.FOREGROUND_1);
 		shellBtn.action = () -> {
 			Console.switchToPanel(new ShellPanel());
 		};
@@ -53,7 +53,7 @@ public class EditorPanel extends Panel {
 		GUIButton mapEditBtn = new GUIButton(shellBtn.x + shellBtn.w + btnDist, 1, 8, 8);
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = Colors.BACKGROUND_1;
-		mapEditBtn.setImage(Icons.MAP_EDITOR, Colors.FOREGROUND_0);
+		mapEditBtn.setImage(Icons.MAP_EDITOR, Colors.FOREGROUND_1);
 		mapEditBtn.action = () -> {
 			switchToEditor(mapEditor);
 		};
@@ -62,7 +62,7 @@ public class EditorPanel extends Panel {
 		GUIButton sprEditBtn = new GUIButton(mapEditBtn.x + mapEditBtn.w + btnDist, 1, 8, 8);
 		sprEditBtn.opaque = true;
 		sprEditBtn.background = Colors.BACKGROUND_1;
-		sprEditBtn.setImage(Icons.SPRITE_EDITOR, Colors.FOREGROUND_0);
+		sprEditBtn.setImage(Icons.SPRITE_EDITOR, Colors.FOREGROUND_1);
 		sprEditBtn.action = () -> {
 			switchToEditor(spriteEditor);
 		};
@@ -71,7 +71,7 @@ public class EditorPanel extends Panel {
 		saveBtn = new GUIButton(headerPanel.w - 9, 1, 8, 8);
 		saveBtn.opaque = true;
 		saveBtn.background = Colors.BACKGROUND_1;
-		saveBtn.setImage(Icons.SAVE, Colors.FOREGROUND_0);
+		saveBtn.setImage(Icons.SAVE, Colors.FOREGROUND_1);
 		saveBtn.action = () -> { // BUG saving if holding the mouse. Should be only once per click
 			Console.LOGGER.info("saving");
 
@@ -89,7 +89,7 @@ public class EditorPanel extends Panel {
 		mainPanel.add(footerPanel);
 
 		footerLabel = new GUILabel(1, 1, Screen.FONT.widthOf("Game Editor"), 8);
-		footerLabel.textColor = Colors.FOREGROUND_0;
+		footerLabel.textColor = Colors.FOREGROUND_1;
 		footerPanel.add(footerLabel);
 	}
 
@@ -120,7 +120,7 @@ public class EditorPanel extends Panel {
 		   || spriteEditor.shouldSave()) {
 			saveBtn.colorAsBool = Colors.FOREGROUND_HIGHLIGHT;
 		} else {
-			saveBtn.colorAsBool = Colors.FOREGROUND_0;
+			saveBtn.colorAsBool = Colors.FOREGROUND_1;
 		}
 	}
 

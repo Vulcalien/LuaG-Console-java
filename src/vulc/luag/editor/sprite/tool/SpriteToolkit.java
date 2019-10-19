@@ -25,7 +25,7 @@ public class SpriteToolkit {
 			if(button.tool == tool) {
 				button.colorAsBool = Colors.FOREGROUND_HIGHLIGHT;
 			} else {
-				button.colorAsBool = Colors.FOREGROUND_0;
+				button.colorAsBool = Colors.FOREGROUND_1;
 			}
 		}
 	}
