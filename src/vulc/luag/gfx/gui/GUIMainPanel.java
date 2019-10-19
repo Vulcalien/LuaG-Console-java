@@ -75,6 +75,8 @@ public class GUIMainPanel extends GUIPanel {
 //			}
 //		}
 
+		this.onMouseInside(xMouse, yMouse);
+
 		if(wheelRotCount != 0) {
 			if(this.isMouseScrolled(xMouse, yMouse, wheelRotCount)) {
 				this.onMouseScroll(xMouse, yMouse, wheelRotCount);

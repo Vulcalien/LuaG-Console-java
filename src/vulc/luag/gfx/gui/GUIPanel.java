@@ -65,19 +65,17 @@ public class GUIPanel extends GUIComponent {
 		}
 	}
 
-	public void onKeyPress(char character) {
+	public void onMouseInside(int xMouse, int yMouse) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
-			comp.onKeyPress(character);
-		}
-	}
 
-	public void onLostFocus() {
-		for(int i = 0; i < comps.size(); i++) {
-			GUIComponent comp = comps.get(i);
-			boolean losingFocus = comp.focused;
-			comp.focused = false;
-			if(losingFocus) comp.onLostFocus();
+			// relative coordinates
+			int xr = xMouse - comp.x;
+			int yr = yMouse - comp.y;
+
+			if(comp.isPointInside(xr, yr)) {
+				comp.onMouseInside(xr, yr);
+			}
 		}
 	}
 
@@ -92,6 +90,22 @@ public class GUIPanel extends GUIComponent {
 			if(comp.isMouseScrolled(xr, yr, count)) {
 				comp.onMouseScroll(xr, yr, count);
 			}
+		}
+	}
+
+	public void onKeyPress(char character) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+			comp.onKeyPress(character);
+		}
+	}
+
+	public void onLostFocus() {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+			boolean losingFocus = comp.focused;
+			comp.focused = false;
+			if(losingFocus) comp.onLostFocus();
 		}
 	}
 

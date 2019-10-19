@@ -35,6 +35,9 @@ public class GUIComponent {
 	public void onMouseDown(int xMouse, int yMouse) {
 	}
 
+	public void onMouseInside(int xMouse, int yMouse) {
+	}
+
 	public void onGainFocus() {
 	}
 
