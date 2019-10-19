@@ -65,6 +65,34 @@ public class GUIPanel extends GUIComponent {
 		}
 	}
 
+	public void onMousePress(int xMouse, int yMouse) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+
+			// relative coordinates
+			int xr = xMouse - comp.x;
+			int yr = yMouse - comp.y;
+
+			if(comp.isPointInside(xr, yr)) {
+				comp.onMousePress(xr, yr);
+			}
+		}
+	}
+
+	public void onMouseRelease(int xMouse, int yMouse) {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+
+			// relative coordinates
+			int xr = xMouse - comp.x;
+			int yr = yMouse - comp.y;
+
+			if(comp.isPointInside(xr, yr)) {
+				comp.onMouseRelease(xr, yr);
+			}
+		}
+	}
+
 	public void onMouseInside(int xMouse, int yMouse) {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
