@@ -9,11 +9,6 @@ import vulc.luag.gfx.gui.GUIPanel;
 
 public class SpriteToolbar extends GUIPanel {
 
-	private boolean undoIsPressed = false;
-	private boolean redoIsPressed = false;
-	private boolean undoWasPressed = false;
-	private boolean redoWasPressed = false;
-
 	public SpriteToolbar(int x, int y, int w, int h, SpriteEditor editor) {
 		super(x, y, w, h);
 
@@ -43,9 +38,7 @@ public class SpriteToolbar extends GUIPanel {
 		undoButton.opaque = true;
 		undoButton.background = Colors.BACKGROUND_1;
 		undoButton.setImage(Icons.UNDO, Colors.FOREGROUND_1);
-		undoButton.onMouseDownAction = () -> {
-			undoIsPressed = true;
-			if(undoWasPressed) return;
+		undoButton.onMousePressAction = () -> {
 			editor.undo();
 		};
 		this.add(undoButton);
@@ -54,21 +47,10 @@ public class SpriteToolbar extends GUIPanel {
 		redoButton.opaque = true;
 		redoButton.background = Colors.BACKGROUND_1;
 		redoButton.setImage(Icons.REDO, Colors.FOREGROUND_1);
-		redoButton.onMouseDownAction = () -> {
-			redoIsPressed = true;
-			if(redoWasPressed) return;
+		redoButton.onMousePressAction = () -> {
 			editor.redo();
 		};
 		this.add(redoButton);
-	}
-
-	public void tick() {
-		super.tick();
-		undoWasPressed = undoIsPressed;
-		redoWasPressed = redoIsPressed;
-
-		undoIsPressed = false;
-		redoIsPressed = false;
 	}
 
 }
