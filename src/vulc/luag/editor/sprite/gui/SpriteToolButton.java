@@ -17,7 +17,7 @@ public class SpriteToolButton extends GUIButton {
 		SpriteToolkit toolkit = editor.toolkit;
 		toolkit.buttons.add(this);
 
-		this.action = () -> {
+		this.onMouseDownAction = () -> {
 			toolkit.setTool(tool);
 		};
 	}

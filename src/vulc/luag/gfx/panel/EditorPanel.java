@@ -45,7 +45,7 @@ public class EditorPanel extends Panel {
 		shellBtn.opaque = true;
 		shellBtn.background = Colors.BACKGROUND_1;
 		shellBtn.setImage(Icons.SHELL, Colors.FOREGROUND_1);
-		shellBtn.action = () -> {
+		shellBtn.onMousePressAction = () -> {
 			Console.switchToPanel(new ShellPanel());
 		};
 		headerPanel.add(shellBtn);
@@ -54,7 +54,7 @@ public class EditorPanel extends Panel {
 		mapEditBtn.opaque = true;
 		mapEditBtn.background = Colors.BACKGROUND_1;
 		mapEditBtn.setImage(Icons.MAP_EDITOR, Colors.FOREGROUND_1);
-		mapEditBtn.action = () -> {
+		mapEditBtn.onMousePressAction = () -> {
 			switchToEditor(mapEditor);
 		};
 		headerPanel.add(mapEditBtn);
@@ -63,7 +63,7 @@ public class EditorPanel extends Panel {
 		sprEditBtn.opaque = true;
 		sprEditBtn.background = Colors.BACKGROUND_1;
 		sprEditBtn.setImage(Icons.SPRITE_EDITOR, Colors.FOREGROUND_1);
-		sprEditBtn.action = () -> {
+		sprEditBtn.onMousePressAction = () -> {
 			switchToEditor(spriteEditor);
 		};
 		headerPanel.add(sprEditBtn);
@@ -72,7 +72,7 @@ public class EditorPanel extends Panel {
 		saveBtn.opaque = true;
 		saveBtn.background = Colors.BACKGROUND_1;
 		saveBtn.setImage(Icons.SAVE, Colors.FOREGROUND_1);
-		saveBtn.action = () -> { // BUG saving if holding the mouse. Should be only once per click
+		saveBtn.onMousePressAction = () -> {
 			Console.LOGGER.info("saving");
 
 			mapEditor.onSave();

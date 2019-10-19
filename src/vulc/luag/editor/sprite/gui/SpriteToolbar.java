@@ -43,7 +43,7 @@ public class SpriteToolbar extends GUIPanel {
 		undoButton.opaque = true;
 		undoButton.background = Colors.BACKGROUND_1;
 		undoButton.setImage(Icons.UNDO, Colors.FOREGROUND_1);
-		undoButton.action = () -> {
+		undoButton.onMouseDownAction = () -> {
 			undoIsPressed = true;
 			if(undoWasPressed) return;
 			editor.undo();
@@ -54,7 +54,7 @@ public class SpriteToolbar extends GUIPanel {
 		redoButton.opaque = true;
 		redoButton.background = Colors.BACKGROUND_1;
 		redoButton.setImage(Icons.REDO, Colors.FOREGROUND_1);
-		redoButton.action = () -> {
+		redoButton.onMouseDownAction = () -> {
 			redoIsPressed = true;
 			if(redoWasPressed) return;
 			editor.redo();
