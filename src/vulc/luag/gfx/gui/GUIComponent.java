@@ -60,7 +60,4 @@ public class GUIComponent {
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
 	}
 
-	public void onRemove(GUIMainPanel container) {
-	}
-
 }

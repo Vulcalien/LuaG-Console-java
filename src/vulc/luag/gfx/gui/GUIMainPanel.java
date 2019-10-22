@@ -17,17 +17,17 @@ public class GUIMainPanel extends GUIPanel {
 
 	public final InputHandler input = new InputHandler();
 
-	protected final List<Character> keyBuffer = new ArrayList<Character>();
-	protected final KeyAdapter keyListener = new KeyAdapter() {
+	private final List<Character> keyBuffer = new ArrayList<Character>();
+	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
 			keyBuffer.add(e.getKeyChar());
 		}
 	};
 
-	protected final Key mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
+	private final Key mouse1 = input.new Key(KeyType.MOUSE, MouseEvent.BUTTON1);
 
-	protected int wheelRotCount = 0;
-	protected final MouseWheelListener wheelListener = new MouseWheelListener() {
+	private int wheelRotCount = 0;
+	private final MouseWheelListener wheelListener = new MouseWheelListener() {
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			wheelRotCount += e.getWheelRotation();
 		}
@@ -83,11 +83,6 @@ public class GUIMainPanel extends GUIPanel {
 			}
 			wheelRotCount = 0;
 		}
-	}
-
-	public void onRemove(GUIMainPanel container) {
-		super.onRemove(container);
-		removeInputListeners();
 	}
 
 	public void removeInputListeners() {
