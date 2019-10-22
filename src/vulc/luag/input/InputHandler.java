@@ -33,6 +33,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public void init() {
 		Console console = Console.instance;
 
+		console.setFocusTraversalKeysEnabled(false);
+
 		console.addKeyListener(this);
 		console.addMouseListener(this);
 		console.addMouseMotionListener(this);
