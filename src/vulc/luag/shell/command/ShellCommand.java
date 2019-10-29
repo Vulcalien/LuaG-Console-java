@@ -10,20 +10,22 @@ import vulc.luag.shell.Shell;
 
 public abstract class ShellCommand {
 
-	public static final List<ShellCommand> COMMAND_LIST = new ArrayList<ShellCommand>();
+	private static final List<ShellCommand> COMMAND_LIST = new ArrayList<ShellCommand>();
 
-	public static final ShellCommand RUN = new RunCommand();
-	public static final ShellCommand EDIT = new EditCommand();
-	public static final ShellCommand PACK = new PackCommand();
-	public static final ShellCommand CLS = new ClsCommand();
-	public static final ShellCommand VER = new VerCommand();
-	public static final ShellCommand HELP = new HelpCommand();
-	public static final ShellCommand MODE = new ModeCommand();
-	public static final ShellCommand FILES = new FilesCommand();
-	public static final ShellCommand SETUP = new SetupCommand();
-	public static final ShellCommand EXIT = new ExitCommand();
+	static {
+		new RunCommand();
+		new EditCommand();
+		new PackCommand();
+		new ClsCommand();
+		new VerCommand();
+		new HelpCommand();
+		new ModeCommand();
+		new FilesCommand();
+		new SetupCommand();
+		new ExitCommand();
+	}
 
-	public final String[] names;
+	private final String[] names;
 	protected boolean isDevelopersOnly = false;
 
 	public ShellCommand(String... names) {
@@ -32,7 +34,12 @@ public abstract class ShellCommand {
 		COMMAND_LIST.add(this);
 	}
 
-	public abstract void run(String[] args);
+	protected abstract void run(String[] args);
+
+	protected String getHelpMessage() {
+		return "this command has no\n"
+		       + "'help' message";
+	}
 
 	// returns true if could find a command, else false
 	public static boolean execute(String line) {
@@ -43,21 +50,27 @@ public abstract class ShellCommand {
 		String name = splittedLine[0].toLowerCase();
 		String[] args = Arrays.copyOfRange(splittedLine, 1, splittedLine.length);
 
-		for(ShellCommand command : COMMAND_LIST) {
-			for(int i = 0; i < command.names.length; i++) {
-				if(name.equals(command.names[i])) {
-					if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
-						Shell.write("Error:\n"
-						            + "only developers can\n"
-						            + "use this command\n\n");
-					} else {
-						command.run(args);
-					}
-					return true;
-				}
+		ShellCommand command = findCommand(name);
+		if(command != null) {
+			if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
+				Shell.write("Error:\n"
+				            + "only developers can\n"
+				            + "use this command\n\n");
+			} else {
+				command.run(args);
 			}
+			return true;
 		}
 		return false;
+	}
+
+	protected static ShellCommand findCommand(String name) {
+		for(ShellCommand command : COMMAND_LIST) {
+			for(int i = 0; i < command.names.length; i++) {
+				if(name.equals(command.names[i])) return command;
+			}
+		}
+		return null;
 	}
 
 }
