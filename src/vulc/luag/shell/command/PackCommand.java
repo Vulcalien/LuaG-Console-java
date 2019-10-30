@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.shell.Shell;
 
@@ -45,12 +46,18 @@ public class PackCommand extends ShellCommand {
 		try {
 			cartridge.createNewFile();
 			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(cartridge));
+
+			// add files inside 'console-userdata'
 			File[] files = new File(Game.USERDATA_DIR).listFiles();
 			for(File f : files) {
 				addToZip(out, "", f);
 			}
 
-			// TODO add to zip .version file
+			// add .cartridge-info file
+			ZipEntry infoFile = new ZipEntry(".cartridge-info");
+			out.putNextEntry(infoFile);
+			out.write(("console version: " + Console.VERSION).getBytes());
+			out.closeEntry();
 
 			out.close();
 		} catch(IOException e) {

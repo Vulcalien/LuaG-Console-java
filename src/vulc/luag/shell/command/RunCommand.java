@@ -24,7 +24,6 @@ public class RunCommand extends ShellCommand {
 				return;
 			}
 		}
-
 		Console.switchToPanel(new GamePanel());
 	}
 
