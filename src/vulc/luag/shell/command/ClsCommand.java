@@ -12,4 +12,8 @@ public class ClsCommand extends ShellCommand {
 		Shell.clear();
 	}
 
+	protected String getHelpMessage() {
+		return "clears the shell";
+	}
+
 }

@@ -28,4 +28,15 @@ public class RunCommand extends ShellCommand {
 		Console.switchToPanel(new GamePanel());
 	}
 
+	protected String getHelpMessage() {
+		if(Console.mode == Mode.DEVELOPER) {
+			return "`run <nothing or\n"
+			       + "     cartridge's name>`\n"
+			       + "runs the game/cartridge";
+		} else {
+			return "`run <cartridge's name>`\n"
+			       + "runs the cartridge";
+		}
+	}
+
 }

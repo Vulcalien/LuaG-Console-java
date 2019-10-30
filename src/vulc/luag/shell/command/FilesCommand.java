@@ -35,4 +35,10 @@ public class FilesCommand extends ShellCommand {
 		}
 	}
 
+	protected String getHelpMessage() {
+		return "opens the folder\n"
+		       + "'" + Game.USERDATA_DIR_NAME + "'\n"
+		       + "in the file explorer";
+	}
+
 }

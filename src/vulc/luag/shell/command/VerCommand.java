@@ -13,4 +13,8 @@ public class VerCommand extends ShellCommand {
 		Shell.write(Console.VERSION + " - By Vulcalien\n\n");
 	}
 
+	protected String getHelpMessage() {
+		return "prints version and author";
+	}
+
 }

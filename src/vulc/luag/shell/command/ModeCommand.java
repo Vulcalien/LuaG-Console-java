@@ -38,4 +38,11 @@ public class ModeCommand extends ShellCommand {
 		}
 	}
 
+	protected String getHelpMessage() {
+		return "`mode <d or u>`\n"
+		       + "changes the console mode\n"
+		       + "'d' is developer\n"
+		       + "'u' is user";
+	}
+
 }

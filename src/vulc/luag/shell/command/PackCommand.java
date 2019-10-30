@@ -49,11 +49,13 @@ public class PackCommand extends ShellCommand {
 			for(File f : files) {
 				addToZip(out, "", f);
 			}
+
+			// TODO add to zip .version file
+
 			out.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void addToZip(ZipOutputStream zip, String folder, File file) throws IOException {
@@ -78,6 +80,11 @@ public class PackCommand extends ShellCommand {
 				addToZip(zip, folder + file.getName() + "/", f);
 			}
 		}
+	}
+
+	protected String getHelpMessage() {
+		return "`pack <cartridge name>`\n"
+		       + "creates a cartridge";
 	}
 
 }

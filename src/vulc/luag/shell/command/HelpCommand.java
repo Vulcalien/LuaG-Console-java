@@ -31,4 +31,12 @@ public class HelpCommand extends ShellCommand {
 		}
 	}
 
+	protected String getHelpMessage() {
+		return "`help`\n"
+		       + "prints a list of commands\n"
+		       + "`help <command name>`\n"
+		       + "prints an help message for\n"
+		       + "the given command";
+	}
+
 }

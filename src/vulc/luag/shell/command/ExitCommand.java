@@ -10,4 +10,8 @@ public class ExitCommand extends ShellCommand {
 		System.exit(0);
 	}
 
+	protected String getHelpMessage() {
+		return "shuts down the console";
+	}
+
 }

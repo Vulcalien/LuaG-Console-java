@@ -15,4 +15,8 @@ public class EditCommand extends ShellCommand {
 		Console.switchToPanel(new EditorPanel());
 	}
 
+	protected String getHelpMessage() {
+		return "opens the game editor";
+	}
+
 }

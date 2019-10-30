@@ -58,4 +58,8 @@ public class SetupCommand extends ShellCommand {
 		}
 	}
 
+	protected String getHelpMessage() {
+		return "creates blank game files";
+	}
+
 }
