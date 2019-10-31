@@ -54,11 +54,11 @@ public class Game {
 
 	public static final int SPR_SIZE = 8;
 
-	public final LuaScriptCore scriptCore = new LuaScriptCore();
+	private final LuaScriptCore scriptCore = new LuaScriptCore();
 	public final GameSounds sounds = new GameSounds();
 
 	public JsonObject jsonConfig;
-	public InputHandler input = new InputHandler();
+	private InputHandler input = new InputHandler();
 	public Bitmap<Integer> atlas;
 	public Map map;
 

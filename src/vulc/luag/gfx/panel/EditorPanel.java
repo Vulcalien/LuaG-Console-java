@@ -15,10 +15,10 @@ import vulc.luag.gfx.gui.GUIPanel;
 
 public class EditorPanel extends Panel {
 
-	public final int btnDist = 3;
+	private final int btnDist = 3;
 
-	public final GUIButton saveBtn;
-	public final GUILabel footerLabel;
+	private final GUIButton saveBtn;
+	private final GUILabel footerLabel;
 
 	public final Game game;
 	public final GUIMainPanel mainPanel;
