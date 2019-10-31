@@ -249,6 +249,8 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	private static void scaleFrame(int newScale) {
+		LOGGER.info("Console Scale: " + newScale);
+
 		scale = newScale;
 
 		instance.setPreferredSize(new Dimension(WIDTH * scale, HEIGHT * scale));

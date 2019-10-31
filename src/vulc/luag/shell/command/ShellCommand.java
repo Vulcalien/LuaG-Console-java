@@ -1,8 +1,6 @@
 package vulc.luag.shell.command;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
@@ -10,28 +8,24 @@ import vulc.luag.shell.Shell;
 
 public abstract class ShellCommand {
 
-	private static final List<ShellCommand> COMMAND_LIST = new ArrayList<ShellCommand>();
-
-	static {
-		new RunCommand();
-		new EditCommand();
-		new PackCommand();
-		new ClsCommand();
-		new VerCommand();
-		new HelpCommand();
-		new ModeCommand();
-		new FilesCommand();
-		new SetupCommand();
-		new ExitCommand();
-	}
+	private static final ShellCommand[] COMMAND_LIST = {
+	    new RunCommand(),
+	    new EditCommand(),
+	    new PackCommand(),
+	    new ClsCommand(),
+	    new VerCommand(),
+	    new HelpCommand(),
+	    new ModeCommand(),
+	    new FilesCommand(),
+	    new SetupCommand(),
+	    new ExitCommand()
+	};
 
 	private final String[] names;
 	protected boolean isDevelopersOnly = false;
 
 	public ShellCommand(String... names) {
 		this.names = names;
-
-		COMMAND_LIST.add(this);
 	}
 
 	protected abstract void run(String[] args);
