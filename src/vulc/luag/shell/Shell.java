@@ -13,7 +13,7 @@ public abstract class Shell {
 	private static final int BACKGROUND = 0x000000;
 	private static final int FOREGROUND = 0xffffff;
 
-	private static final int RENDERED_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1) + 1;
+	private static final int RENDERED_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
 
 	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
 	public static int scrollBuffer = 0;
@@ -49,8 +49,9 @@ public abstract class Shell {
 		if(scrollBuffer != 0) {
 			int newOffset = renderOffset + scrollBuffer;
 
-			if(newOffset > CLOSED_LINES.size() - RENDERED_LINES + 2) {
-				newOffset = CLOSED_LINES.size() - RENDERED_LINES + 2;
+			// if is under the bottom then move back to bottom
+			if(newOffset > CLOSED_LINES.size() - RENDERED_LINES + 1) {
+				newOffset = CLOSED_LINES.size() - RENDERED_LINES + 1;
 			}
 
 			// this may be caused by the previous if block
@@ -87,14 +88,13 @@ public abstract class Shell {
 		switch(character) {
 			case '\n':
 				if(shouldExecute) execute(currentLine);
+
 				CLOSED_LINES.add(currentLine);
 				currentLine = "";
 
-				// Theory is when you know everything but nothing works.
-				// Practice is when everything works but you don’t know why.
-				// THIS IS PRACTICE
-				if(renderOffset < CLOSED_LINES.size() - RENDERED_LINES + 2) {
-					renderOffset = CLOSED_LINES.size() - RENDERED_LINES + 2;
+				// if is not at bottom then move to bottom
+				if(renderOffset < CLOSED_LINES.size() - RENDERED_LINES + 1) {
+					renderOffset = CLOSED_LINES.size() - RENDERED_LINES + 1;
 				}
 				break;
 
@@ -102,11 +102,9 @@ public abstract class Shell {
 				if(currentLine.length() > 0) {
 					if(panel.ctrl.isKeyDown()) {
 						int lastSpace = currentLine.lastIndexOf(' ');
-						if(lastSpace == -1) {
-							currentLine = "";
-						} else {
-							currentLine = currentLine.substring(0, lastSpace);
-						}
+
+						if(lastSpace == -1) currentLine = "";
+						else currentLine = currentLine.substring(0, lastSpace);
 					} else {
 						currentLine = currentLine.substring(0, currentLine.length() - 1);
 					}
