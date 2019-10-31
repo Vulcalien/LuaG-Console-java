@@ -64,7 +64,8 @@ public class Console extends Canvas implements Runnable {
 	public static final String VERSION = "0.6.1 (WIP)";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
-	public static final int WIDTH = 160, HEIGHT = 160, SCALE = 3;
+	public static final int WIDTH = 160, HEIGHT = 160;
+	public static int scale;
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
@@ -76,6 +77,8 @@ public class Console extends Canvas implements Runnable {
 	public static Mode mode;
 
 	public static Console instance;
+
+	private static final JFrame FRAME = new JFrame();
 
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
@@ -165,7 +168,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(img, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		g.drawImage(img, 0, 0, WIDTH * scale, HEIGHT * scale, null);
 		g.dispose();
 		bs.show();
 	}
@@ -194,29 +197,25 @@ public class Console extends Canvas implements Runnable {
 		startupOperations();
 		LOGGER.info("Starting Console...");
 
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		FRAME.setTitle(NAME + " " + VERSION);
+		FRAME.setResizable(false);
 
 		instance = new Console();
-		instance.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		instance.setMaximumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		instance.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		FRAME.add(instance);
 
-		frame.add(instance);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
+		scaleFrame(3);
+		FRAME.setLocationRelativeTo(null);
 
 		try {
-			frame.setIconImage(ImageIO.read(Console.class.getResourceAsStream("/res/icon.png")));
+			FRAME.setIconImage(ImageIO.read(Console.class.getResourceAsStream("/res/icon.png")));
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 
 		instance.init(args);
 
-		frame.setTitle(NAME + " " + VERSION);
-		frame.setVisible(true);
+		FRAME.setVisible(true);
 		new Thread(instance).start();
 	}
 
@@ -247,6 +246,16 @@ public class Console extends Canvas implements Runnable {
 				LOGGER.info("Shutting down Console");
 			}
 		});
+	}
+
+	private static void scaleFrame(int newScale) {
+		scale = newScale;
+
+		instance.setPreferredSize(new Dimension(WIDTH * scale, HEIGHT * scale));
+		instance.setMaximumSize(new Dimension(WIDTH * scale, HEIGHT * scale));
+		instance.setMinimumSize(new Dimension(WIDTH * scale, HEIGHT * scale));
+
+		FRAME.pack();
 	}
 
 }
