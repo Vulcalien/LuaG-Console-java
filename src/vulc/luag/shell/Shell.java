@@ -13,12 +13,13 @@ public abstract class Shell {
 	private static final int BACKGROUND = 0x000000;
 	private static final int FOREGROUND = 0xffffff;
 
-	private static final int RENDERED_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
+	public static final int HORIZONTAL_CHARS = Console.WIDTH / (Screen.FONT.widthOf(' ') + 1);
+	private static final int VERTICAL_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
 
 	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
 	public static int scrollBuffer = 0;
 
-	private static final List<String> CLOSED_LINES = new ArrayList<String>();
+	private static final List<String> CLOSED_TEXT = new ArrayList<String>();
 	private static String currentLine = "";
 
 	private static int renderOffset = 0;
@@ -37,11 +38,11 @@ public abstract class Shell {
 	}
 
 	public static void tick() {
-		boolean writing = false;
+		boolean isWriting = false;
 		if(CHAR_BUFFER.size() != 0) {
 			ShellChar character = CHAR_BUFFER.remove(0);
 			receiveInput(character.val, character.writtenByUser);
-			writing = true;
+			isWriting = true;
 		} else {
 			animationTicks++;
 		}
@@ -50,8 +51,8 @@ public abstract class Shell {
 			int newOffset = renderOffset + scrollBuffer;
 
 			// if is under the bottom then move back to bottom
-			if(newOffset > CLOSED_LINES.size() - RENDERED_LINES + 1) {
-				newOffset = CLOSED_LINES.size() - RENDERED_LINES + 1;
+			if(newOffset > CLOSED_TEXT.size() - VERTICAL_LINES + 1) {
+				newOffset = CLOSED_TEXT.size() - VERTICAL_LINES + 1;
 			}
 
 			// this may be caused by the previous if block
@@ -61,25 +62,35 @@ public abstract class Shell {
 			scrollBuffer = 0;
 		}
 
+		render(isWriting);
+	}
+
+	private static void render(boolean isWriting) {
 		Console.SCREEN.clear(BACKGROUND);
 
 		String textToRender = "";
-		for(int i = 0; i < RENDERED_LINES; i++) {
+		for(int i = 0; i < VERTICAL_LINES; i++) {
 			int line = i + renderOffset;
-			if(line > CLOSED_LINES.size()) { // if line == closedLines.size() then the shell will render currentLine
-				break;
-			}
 
-			String text;
-			if(line < CLOSED_LINES.size()) {
-				text = CLOSED_LINES.get(line);
+			if(line < CLOSED_TEXT.size()) {
+				// closed lines always end with '\n'
+				textToRender += CLOSED_TEXT.get(line);
 			} else {
-				text = currentLine;
-				if(!writing && animationTicks / 25 % 2 == 1) {
+				String text = currentLine;
+				if(!isWriting && animationTicks / 25 % 2 == 1) {
 					text += "_";
 				}
+
+				String[] splitCurrent = splitCurrentLine(text);
+				for(int a = 0; a < splitCurrent.length; a++) {
+					textToRender += splitCurrent[a];
+
+					if(a != splitCurrent.length - 1) {
+						textToRender += '\n';
+					}
+				}
+				break;
 			}
-			textToRender += text + "\n";
 		}
 		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
 	}
@@ -89,12 +100,16 @@ public abstract class Shell {
 			case '\n':
 				if(shouldExecute) execute(currentLine);
 
-				CLOSED_LINES.add(currentLine);
+				String[] splitCurrent = splitCurrentLine(currentLine);
+				for(int i = 0; i < splitCurrent.length; i++) {
+					// here the text always ends with '\n'
+					CLOSED_TEXT.add(splitCurrent[i] + '\n');
+				}
 				currentLine = "";
 
 				// if is not at bottom then move to bottom
-				if(renderOffset < CLOSED_LINES.size() - RENDERED_LINES + 1) {
-					renderOffset = CLOSED_LINES.size() - RENDERED_LINES + 1;
+				if(renderOffset < CLOSED_TEXT.size() - VERTICAL_LINES + 1) {
+					renderOffset = CLOSED_TEXT.size() - VERTICAL_LINES + 1;
 				}
 				break;
 
@@ -126,7 +141,7 @@ public abstract class Shell {
 	}
 
 	public static void clear() {
-		CLOSED_LINES.clear();
+		CLOSED_TEXT.clear();
 		currentLine = "";
 		renderOffset = 0;
 	}
@@ -136,6 +151,30 @@ public abstract class Shell {
 		if(!ShellCommand.execute(line)) {
 			write("unknown command\n\n");
 		}
+	}
+
+	private static String[] splitCurrentLine(String line) {
+		int height = (line.length() - 1) / (Shell.HORIZONTAL_CHARS) + 1;
+
+		String[] splitLine = new String[height];
+		for(int i = 0; i < height; i++) {
+			int start = i * Shell.HORIZONTAL_CHARS;
+
+			int end = start;
+			if(i != height - 1) {
+				end += Shell.HORIZONTAL_CHARS;
+			} else {
+				// if length == HORIZONTAL_CHARS the % will be 0
+				if(line.length() != 0
+				   && line.length() % Shell.HORIZONTAL_CHARS == 0) {
+					end += Shell.HORIZONTAL_CHARS;
+				} else {
+					end += line.length() % (Shell.HORIZONTAL_CHARS);
+				}
+			}
+			splitLine[i] = line.substring(start, end);
+		}
+		return splitLine;
 	}
 
 }
