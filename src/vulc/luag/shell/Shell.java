@@ -18,9 +18,13 @@ public abstract class Shell {
 
 	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
 	public static int scrollBuffer = 0;
+	public static boolean pressedUP = false, pressedDOWN = false;
 
 	private static final List<String> CLOSED_TEXT = new ArrayList<String>();
 	private static String currentLine = "";
+
+	private static final List<String> COMMAND_HISTORY = new ArrayList<String>();
+	private static int historyPoint = 0;
 
 	private static int renderOffset = 0;
 	private static int animationTicks = 0; // the _ that appears and disappears
@@ -41,10 +45,35 @@ public abstract class Shell {
 		boolean isWriting = false;
 		if(CHAR_BUFFER.size() != 0) {
 			ShellChar character = CHAR_BUFFER.remove(0);
-			receiveInput(character.val, character.writtenByUser);
-			isWriting = true;
+			if(receiveInput(character.val, character.writtenByUser)) {
+				isWriting = true;
+			}
 		} else {
 			animationTicks++;
+		}
+
+		byte historyShift = 0;
+		if(pressedUP) {
+			pressedUP = false;
+			historyShift++;
+		}
+		if(pressedDOWN) {
+			pressedDOWN = false;
+			historyShift--;
+		}
+
+		history:
+		if(historyShift != 0) {
+			int newHistoryPoint = historyPoint + historyShift;
+
+			if(newHistoryPoint < 0
+			   || newHistoryPoint >= COMMAND_HISTORY.size()) {
+				break history;
+			}
+			historyPoint = newHistoryPoint;
+
+			// most recent command is 0
+			currentLine = COMMAND_HISTORY.get(historyPoint);
 		}
 
 		if(scrollBuffer != 0) {
@@ -86,7 +115,7 @@ public abstract class Shell {
 					textToRender += splitCurrent[a];
 
 					if(a != splitCurrent.length - 1) {
-						textToRender += '\n';
+						textToRender += "\n";
 					}
 				}
 				break;
@@ -95,7 +124,8 @@ public abstract class Shell {
 		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
 	}
 
-	public static void receiveInput(char character, boolean shouldExecute) {
+	// returns true if 'isWriting' should be set to true
+	public static boolean receiveInput(char character, boolean shouldExecute) {
 		switch(character) {
 			case '\n':
 				if(shouldExecute) execute(currentLine);
@@ -103,7 +133,7 @@ public abstract class Shell {
 				String[] splitCurrent = splitCurrentLine(currentLine);
 				for(int i = 0; i < splitCurrent.length; i++) {
 					// here the text always ends with '\n'
-					CLOSED_TEXT.add(splitCurrent[i] + '\n');
+					CLOSED_TEXT.add(splitCurrent[i] + "\n");
 				}
 				currentLine = "";
 
@@ -111,7 +141,7 @@ public abstract class Shell {
 				if(renderOffset < CLOSED_TEXT.size() - VERTICAL_LINES + 1) {
 					renderOffset = CLOSED_TEXT.size() - VERTICAL_LINES + 1;
 				}
-				break;
+				return true;
 
 			case '\b':
 				if(currentLine.length() > 0) {
@@ -124,14 +154,15 @@ public abstract class Shell {
 						currentLine = currentLine.substring(0, currentLine.length() - 1);
 					}
 				}
-				break;
+				return true;
 
 			default:
 				if(character >= 32 && character < 127) {
 					currentLine += character;
+					return true;
 				}
-				break;
 		}
+		return false;
 	}
 
 	public static void write(String text) {
@@ -147,6 +178,9 @@ public abstract class Shell {
 	}
 
 	public static void execute(String line) {
+		COMMAND_HISTORY.add(0, line);
+		historyPoint = -1;
+
 		line = line.trim();
 		if(!ShellCommand.execute(line)) {
 			write("unknown command\n\n");

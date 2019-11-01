@@ -20,6 +20,12 @@ public class ShellPanel extends Panel {
 	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
 			Shell.CHAR_BUFFER.add(new ShellChar(e.getKeyChar(), true));
+
+			int code = e.getKeyCode();
+			if(code == KeyEvent.VK_UP)
+			    Shell.pressedUP = true;
+			if(code == KeyEvent.VK_DOWN)
+			    Shell.pressedDOWN = true;
 		}
 	};
 	private final MouseWheelListener mouseScrollListener = new MouseWheelListener() {
