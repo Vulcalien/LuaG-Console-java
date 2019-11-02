@@ -156,8 +156,8 @@ public class SpriteEditor extends Editor {
 	public void onSave() {
 		try {
 			int[] pixels = new int[atlas.width * atlas.height];
-			for(int i = 0; i < atlas.pixels.length; i++) {
-				pixels[i] = atlas.pixels[i];
+			for(int i = 0; i < atlas.size(); i++) {
+				pixels[i] = atlas.raster.getPixel(i);
 			}
 
 			BufferedImage img = new BufferedImage(atlas.width, atlas.height, BufferedImage.TYPE_INT_RGB);

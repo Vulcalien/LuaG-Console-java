@@ -164,7 +164,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		for(int i = 0; i < pixels.length; i++) {
-			pixels[i] = SCREEN.pixels[i];
+			pixels[i] = SCREEN.raster.getPixel(i);
 		}
 
 		Graphics g = bs.getDrawGraphics();
