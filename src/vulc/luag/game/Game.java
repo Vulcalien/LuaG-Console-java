@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -146,7 +147,7 @@ public class Game {
 
 			try {
 				cartridgeFile = new ZipFile(cartridge);
-			} catch(FileNotFoundException e) {
+			} catch(FileNotFoundException | NoSuchFileException e) {
 				Console.die("Error:\n"
 				            + "'" + cartridge + "'\n"
 				            + "cartridge not found");

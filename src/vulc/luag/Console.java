@@ -126,7 +126,8 @@ public class Console extends Canvas implements Runnable {
 			if(args[0].equals("-dev")) {
 				mode = Mode.DEVELOPER;
 			} else {
-				cartridge = rootDirectory + args[0];
+				// this is not relative to root: it should be an argument passed automatically
+				cartridge = args[0];
 				mode = Mode.USER_GAME;
 			}
 		} else {
