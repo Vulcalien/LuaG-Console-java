@@ -30,7 +30,7 @@ public class PackCommand extends ShellCommand {
 		File consoleUserdata = new File(Game.USERDATA_DIR);
 		if(!consoleUserdata.isDirectory()) {
 			Shell.write("Error:\n"
-			            + "'" + Game.USERDATA_DIR + "'\n"
+			            + "'" + Game.USERDATA_DIR_NAME + "'\n"
 			            + "folder not found\n\n");
 			return;
 		}
