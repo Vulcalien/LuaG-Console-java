@@ -54,8 +54,8 @@ public class MapPreview extends GUIPanel {
 	}
 
 	public void onMouseInside(int xMouse, int yMouse) {
-		this.xPointed = (xMouse + editor.xOffset) / Game.SPR_SIZE;
-		this.yPointed = (yMouse + editor.yOffset) / Game.SPR_SIZE;
+		this.xPointed = Math.floorDiv(xMouse + editor.xOffset, Game.SPR_SIZE);
+		this.yPointed = Math.floorDiv(yMouse + editor.yOffset, Game.SPR_SIZE);
 	}
 
 }

@@ -130,7 +130,7 @@ public class Game {
 			map = Map.load(new FileInputStream(mapFile));
 			if(map == null) return false;
 		} catch(FileNotFoundException e) {
-			Console.LOGGER.info("Missing map file: generating new");
+			Console.LOGGER.info("Missing map file: generating new file");
 
 			map = new Map(10, 10);
 			MapCompiler.compile(map);
@@ -287,7 +287,7 @@ public class Game {
 		scriptCore.tick();
 		if(Console.mode == Mode.DEVELOPER) {
 			if(debugGotoShell.isPressed()) {
-				Console.LOGGER.info("Closing Game");
+				Console.LOGGER.info("Stopping Game");
 				Console.switchToPanel(new ShellPanel());
 			}
 		}
