@@ -55,7 +55,7 @@ import vulc.luag.shell.Shell;
 public class Console extends Canvas implements Runnable {
 
 	public static enum Mode {
-		USER, USER_SHELL, DEVELOPER
+		USER_GAME, USER_SHELL, DEVELOPER
 	}
 
 	private static final long serialVersionUID = 1L;
@@ -126,8 +126,8 @@ public class Console extends Canvas implements Runnable {
 			if(args[0].equals("-dev")) {
 				mode = Mode.DEVELOPER;
 			} else {
-				cartridge = args[0];
-				mode = Mode.USER;
+				cartridge = rootDirectory + args[0];
+				mode = Mode.USER_GAME;
 			}
 		} else {
 			mode = Mode.USER_SHELL;
@@ -140,7 +140,7 @@ public class Console extends Canvas implements Runnable {
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
 			Shell.init();
 			nextPanel = new ShellPanel();
-		} else if(mode == Mode.USER) {
+		} else if(mode == Mode.USER_GAME) {
 			nextPanel = new GamePanel();
 		}
 
