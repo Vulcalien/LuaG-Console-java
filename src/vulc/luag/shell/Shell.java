@@ -76,6 +76,7 @@ public abstract class Shell {
 			currentLine = COMMAND_HISTORY.get(historyPoint);
 		}
 
+		// BUG: active line is on bottom and many chars are written
 		if(scrollBuffer != 0) {
 			int newOffset = renderOffset + scrollBuffer;
 
