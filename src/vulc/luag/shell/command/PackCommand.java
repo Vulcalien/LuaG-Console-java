@@ -35,7 +35,7 @@ public class PackCommand extends ShellCommand {
 			return;
 		}
 
-		File cartridge = new File(args[0] + "." + Game.CARTRIDGE_EXTENSION);
+		File cartridge = new File(Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
 			Shell.write("Error:\n"
 			            + "'" + cartridge + "'\n"
