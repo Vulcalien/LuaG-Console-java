@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -61,7 +62,7 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "LuaG Console";
-	public static final String VERSION = "post-0.6.1";
+	public static final String VERSION = "0.6.2-WIP";
 	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;
@@ -222,11 +223,15 @@ public class Console extends Canvas implements Runnable {
 
 	private static void startupOperations() {
 		if(Console.class.getResource("Console.class").toString().startsWith("jar")) {
-			File jarFile = new File(Console.class.getProtectionDomain()
-			                                     .getCodeSource()
-			                                     .getLocation()
-			                                     .getPath());
-			rootDirectory = jarFile.getParent() + "/";
+			try {
+				File jarFile = new File(Console.class.getProtectionDomain()
+				                                     .getCodeSource()
+				                                     .getLocation()
+				                                     .toURI());
+				rootDirectory = jarFile.getParent() + "/";
+			} catch(URISyntaxException e) {
+				e.printStackTrace();
+			}
 		} else {
 			rootDirectory = "./";
 		}
