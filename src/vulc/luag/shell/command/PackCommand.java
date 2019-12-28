@@ -35,6 +35,7 @@ public class PackCommand extends ShellCommand {
 			return;
 		}
 
+		// TODO illegal characters
 		File cartridge = new File(Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
 			Shell.write("Error:\n"
