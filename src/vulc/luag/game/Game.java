@@ -44,6 +44,7 @@ public class Game {
 	public static final String CONFIG_FILE_NAME = "config.json";
 	public static final String ATLAS_FILE_NAME = "atlas.png";
 	public static final String MAP_FILE_NAME = "map";
+	public static final String CARTRIDGE_INFO_NAME = ".cartridge-info";
 
 	public static final String USERDATA_DIR = Console.rootDirectory + USERDATA_DIR_NAME;
 	public static final String SCRIPT_DIR = USERDATA_DIR + "/" + SCRIPT_DIR_NAME;
@@ -59,7 +60,7 @@ public class Game {
 	private final LuaScriptCore scriptCore = new LuaScriptCore();
 	public final GameSounds sounds = new GameSounds();
 
-	public JsonObject jsonConfig;
+	public JsonObject jsonConfig, cartridgeInfo;
 	private InputHandler input = new InputHandler();
 	public Bitmap<Integer> atlas;
 	public Map map;
@@ -182,7 +183,7 @@ public class Game {
 					throw new Exception();
 				}
 			} else {
-				Console.die("Cartridge Error:"
+				Console.die("Cartridge Error:\n"
 				            + "'" + CONFIG_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
@@ -211,6 +212,20 @@ public class Game {
 			} else {
 				Console.die("Cartirdge Error:\n"
 				            + "'" + MAP_FILE_NAME + "'\n"
+				            + "file not found");
+				return false;
+			}
+
+			// .cartridge-info
+			Console.LOGGER.info("Load '" + CARTRIDGE_INFO_NAME + "'");
+			ZipEntry cartridgeInfoEntry = cartridgeFile.getEntry(CARTRIDGE_INFO_NAME);
+			if(cartridgeInfoEntry != null) {
+				if(!loadCartridgeInfo(cartridgeFile.getInputStream(cartridgeInfoEntry))) {
+					throw new Exception();
+				}
+			} else {
+				Console.die("Cartridge Error:\n"
+				            + "'" + CARTRIDGE_INFO_NAME + "'\n"
 				            + "file not found");
 				return false;
 			}
@@ -244,7 +259,6 @@ public class Game {
 		if(scriptCore.init(this)) {
 			Console.LOGGER.info("Game Started");
 		}
-
 		return true;
 	}
 
@@ -255,6 +269,19 @@ public class Game {
 		} else {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
+			            + "must be a json object");
+			return false;
+		}
+		return true;
+	}
+
+	private boolean loadCartridgeInfo(InputStream in) {
+		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
+		if(element.isJsonObject()) {
+			cartridgeInfo = element.getAsJsonObject();
+		} else {
+			Console.die("Error:\n"
+			            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
