@@ -18,15 +18,14 @@ import vulc.luag.game.Game;
 
 public class LuaScriptCore {
 
-	private final LuaInterface luaInterface = new LuaInterface();
-
 	private LuaFunction luaTick;
 
 	// return true if init was successfully, else false
 	public boolean init(Game game) {
 		Globals globals = JsePlatform.standardGlobals();
 
-		luaInterface.init(game, globals);
+		LuaInterface luaInterface = new LuaInterface(game, globals);
+		luaInterface.init();
 
 		// READ main.lua
 		boolean error = false;

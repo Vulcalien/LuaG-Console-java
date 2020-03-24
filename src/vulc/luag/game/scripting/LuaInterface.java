@@ -21,13 +21,15 @@ import vulc.luag.sfx.Sound;
 
 public class LuaInterface {
 
-	private Game game;
-	private Globals env;
+	private final Game game;
+	private final Globals env;
 
-	public void init(Game game, Globals env) {
+	public LuaInterface(Game game, Globals env) {
 		this.game = game;
 		this.env = env;
+	}
 
+	public void init() {
 		// SCREEN
 		env.set("scr_w", Console.SCREEN.width);
 		env.set("scr_h", Console.SCREEN.height);
