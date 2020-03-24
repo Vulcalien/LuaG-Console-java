@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2019 Vulcalien
+ * Copyright 2019-2020 Vulcalien
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License.  You may obtain a copy
@@ -63,7 +63,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static final String NAME = "LuaG Console";
 	public static final String VERSION = "0.6.2-WIP";
-	public static final String COPYRIGHT = "Copyright 2019 Vulcalien";
+	public static final String COPYRIGHT = "Copyright 2020 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;
 	public static int scale;
