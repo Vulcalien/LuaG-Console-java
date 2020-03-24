@@ -1,4 +1,4 @@
-package vulc.luag.game.scripting;
+package vulc.luag.game.interfaces;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,14 +19,13 @@ import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.sfx.Sound;
 
-public class LuaInterface {
+/**
+ * 0.1
+ */
+public class Interface001 extends LuaInterface {
 
-	private final Game game;
-	private final Globals env;
-
-	public LuaInterface(Game game, Globals env) {
-		this.game = game;
-		this.env = env;
+	public Interface001(Game game, Globals env) {
+		super(game, env);
 	}
 
 	public void init() {

@@ -13,6 +13,7 @@ import com.google.gson.stream.JsonWriter;
 
 import vulc.luag.Console;
 import vulc.luag.game.Game;
+import vulc.luag.game.interfaces.LuaInterface;
 import vulc.luag.shell.Shell;
 
 public class PackCommand extends ShellCommand {
@@ -65,7 +66,9 @@ public class PackCommand extends ShellCommand {
 				JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
 				writer.beginObject();
 				writer.name("console-version").value(Console.VERSION);
-				writer.name("interface-version").value("0.1");
+				writer.name("interface-version").value(LuaInterface.getLastestXVersion()
+				                                       + "."
+				                                       + LuaInterface.yVersion(LuaInterface.getLastestXVersion()));
 				writer.endObject();
 
 				writer.flush();

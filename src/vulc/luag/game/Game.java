@@ -29,7 +29,6 @@ import vulc.luag.Console;
 import vulc.luag.Console.Mode;
 import vulc.luag.editor.map.MapCompiler;
 import vulc.luag.game.map.Map;
-import vulc.luag.game.scripting.LuaScriptCore;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.ShellPanel;
 import vulc.luag.input.InputHandler;

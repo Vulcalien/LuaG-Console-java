@@ -26,7 +26,6 @@ public class GameSounds {
 		for(String key : keys) {
 			list.get(key).onRemove();
 		}
-
 		list.clear();
 	}
 
@@ -38,9 +37,7 @@ public class GameSounds {
 			            + "folder not found");
 			return false;
 		}
-
 		readSoundsInFolder(sfxDir, "");
-
 		return true;
 	}
 

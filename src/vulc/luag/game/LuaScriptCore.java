@@ -1,4 +1,4 @@
-package vulc.luag.game.scripting;
+package vulc.luag.game;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 import vulc.luag.Console;
-import vulc.luag.game.Game;
+import vulc.luag.game.interfaces.LuaInterface;
 
 public class LuaScriptCore {
 
@@ -24,7 +24,27 @@ public class LuaScriptCore {
 	public boolean init(Game game) {
 		Globals globals = JsePlatform.standardGlobals();
 
-		LuaInterface luaInterface = new LuaInterface(game, globals);
+		LuaInterface luaInterface;
+		if(Console.cartridge != null) {
+			String[] requestedVersion = game.cartridgeInfo.get("interface-version").getAsString().split("\\.");
+			int xVerReq = Integer.parseInt(requestedVersion[0]);
+			int yVerReq = Integer.parseInt(requestedVersion[1]);
+
+			luaInterface = LuaInterface.getInterface(xVerReq, game, globals);
+			if(luaInterface == null) {
+				Console.die("Error:\n"
+				            + "interface x, TODO"); // TODO error message
+				return false;
+			}
+			int yVer = LuaInterface.yVersion(xVerReq);
+			if(yVer < yVerReq) {
+				Console.die("Error:\n"
+				            + "interface y, TODO"); // TODO error message
+				return false;
+			}
+		} else {
+			luaInterface = LuaInterface.getInterface(LuaInterface.getLastestXVersion(), game, globals);
+		}
 		luaInterface.init();
 
 		// READ main.lua
