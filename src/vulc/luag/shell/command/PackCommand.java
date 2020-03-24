@@ -5,8 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import com.google.gson.stream.JsonWriter;
 
 import vulc.luag.Console;
 import vulc.luag.game.Game;
@@ -57,7 +60,15 @@ public class PackCommand extends ShellCommand {
 			// add .cartridge-info file
 			ZipEntry infoFile = new ZipEntry(".cartridge-info");
 			out.putNextEntry(infoFile);
-			out.write(("console version: " + Console.VERSION).getBytes());
+			{
+				@SuppressWarnings("resource")
+				JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
+				writer.beginObject();
+				writer.name("console-version").value(Console.VERSION);
+				writer.endObject();
+
+				writer.flush();
+			}
 			out.closeEntry();
 
 			out.close();
