@@ -76,13 +76,13 @@ public abstract class Shell {
 			currentLine = COMMAND_HISTORY.get(historyPoint);
 		}
 
-		// BUG: active line is on bottom and many chars are written
 		if(scrollBuffer != 0) {
 			int newOffset = renderOffset + scrollBuffer;
 
 			// if is under the bottom then move back to bottom
-			if(newOffset > CLOSED_TEXT.size() - VERTICAL_LINES + 1) {
-				newOffset = CLOSED_TEXT.size() - VERTICAL_LINES + 1;
+			int lowestOffset = lowestOffset();
+			if(newOffset > lowestOffset) {
+				newOffset = lowestOffset;
 			}
 
 			// this may be caused by the previous if block
@@ -127,6 +127,7 @@ public abstract class Shell {
 
 	// returns true if 'isWriting' should be set to true
 	public static boolean receiveInput(char character, boolean shouldExecute) {
+		int lowestOffset;
 		switch(character) {
 			case '\n':
 				if(shouldExecute) execute(currentLine);
@@ -139,8 +140,9 @@ public abstract class Shell {
 				currentLine = "";
 
 				// if is not at bottom then move to bottom
-				if(renderOffset < CLOSED_TEXT.size() - VERTICAL_LINES + 1) {
-					renderOffset = CLOSED_TEXT.size() - VERTICAL_LINES + 1;
+				lowestOffset = lowestOffset();
+				if(renderOffset < lowestOffset) {
+					renderOffset = lowestOffset;
 				}
 				return true;
 
@@ -160,6 +162,12 @@ public abstract class Shell {
 			default:
 				if(character >= 32 && character < 127) {
 					currentLine += character;
+
+					// if is not at bottom then move to bottom
+					lowestOffset = lowestOffset();
+					if(renderOffset < lowestOffset) {
+						renderOffset = lowestOffset;
+					}
 					return true;
 				}
 		}
@@ -210,6 +218,11 @@ public abstract class Shell {
 			splitLine[i] = line.substring(start, end);
 		}
 		return splitLine;
+	}
+
+	private static int lowestOffset() {
+		int currentLineHeight = currentLine.length() / HORIZONTAL_CHARS + 1;
+		return CLOSED_TEXT.size() - VERTICAL_LINES + currentLineHeight;
 	}
 
 }
