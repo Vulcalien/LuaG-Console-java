@@ -97,10 +97,8 @@ public class Game {
 
 		// config.json
 		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
-		try {
-			InputStream in = new FileInputStream(CONFIG_FILE);
+		try(InputStream in = new FileInputStream(CONFIG_FILE)) {
 			boolean error = !loadJsonConfig(in);
-			in.close();
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
@@ -113,10 +111,8 @@ public class Game {
 
 		// atlas.png
 		Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
-		try {
-			InputStream in = new FileInputStream(ATLAS_FILE);
+		try(InputStream in = new FileInputStream(ATLAS_FILE)) {
 			boolean error = !loadAtlas(in);
-			in.close();
 			if(error) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"

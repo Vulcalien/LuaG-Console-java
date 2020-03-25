@@ -2,6 +2,7 @@ package vulc.luag.shell.command;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,6 @@ public class PackCommand extends ShellCommand {
 			return;
 		}
 
-		// TODO illegal characters
 		File cartridge = new File(Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
 			Shell.write("Error:\n"
@@ -49,8 +49,22 @@ public class PackCommand extends ShellCommand {
 		}
 
 		try {
-			cartridge.createNewFile();
-			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(cartridge));
+			ZipOutputStream out = null;
+			boolean error = false;
+			try {
+				out = new ZipOutputStream(new FileOutputStream(cartridge));
+				cartridge.createNewFile();
+
+				if(!cartridge.exists()) error = true;
+			} catch(FileNotFoundException e) {
+				error = true;
+			}
+			if(error) {
+				Shell.write("Error:\n"
+				            + "could not\n"
+				            + "create cartridge\n\n");
+				return;
+			}
 
 			// add files inside 'console-userdata'
 			File[] files = new File(Game.USERDATA_DIR).listFiles();
