@@ -20,6 +20,8 @@ public abstract class LuaInterface {
 	        new HashMap<Integer, Class<? extends LuaInterface>>();
 	public static final Map<Integer, Integer> Y_VERSIONS = new HashMap<Integer, Integer>();
 
+	public static final int DEFAULT_X_VERSION = 1;
+
 	static {
 		INTERFACES.put(1, Interface001.class);
 		Y_VERSIONS.put(1, 0);
@@ -49,10 +51,6 @@ public abstract class LuaInterface {
 
 	public static int yVersion(int xVersion) {
 		return Y_VERSIONS.get(xVersion);
-	}
-
-	public static int getLastestXVersion() {
-		return 1;
 	}
 
 }

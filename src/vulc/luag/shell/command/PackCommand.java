@@ -66,9 +66,9 @@ public class PackCommand extends ShellCommand {
 				JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
 				writer.beginObject();
 				writer.name("console-version").value(Console.VERSION);
-				writer.name("interface-version").value(LuaInterface.getLastestXVersion()
+				writer.name("interface-version").value(LuaInterface.DEFAULT_X_VERSION
 				                                       + "."
-				                                       + LuaInterface.yVersion(LuaInterface.getLastestXVersion()));
+				                                       + LuaInterface.yVersion(LuaInterface.DEFAULT_X_VERSION));
 				writer.endObject();
 
 				writer.flush();

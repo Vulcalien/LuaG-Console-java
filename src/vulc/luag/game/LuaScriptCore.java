@@ -33,17 +33,20 @@ public class LuaScriptCore {
 			luaInterface = LuaInterface.getInterface(xVerReq, game, globals);
 			if(luaInterface == null) {
 				Console.die("Error:\n"
-				            + "interface x, TODO"); // TODO error message
+				            + "interface version " + xVerReq + "\n"
+				            + "not supported");
 				return false;
 			}
 			int yVer = LuaInterface.yVersion(xVerReq);
 			if(yVer < yVerReq) {
 				Console.die("Error:\n"
-				            + "interface y, TODO"); // TODO error message
+				            + "interface " + xVerReq + "." + yVerReq + "\n"
+				            + "not supported\n"
+				            + "Lastest: " + xVerReq + "." + LuaInterface.yVersion(xVerReq));
 				return false;
 			}
 		} else {
-			luaInterface = LuaInterface.getInterface(LuaInterface.getLastestXVersion(), game, globals);
+			luaInterface = LuaInterface.getInterface(LuaInterface.DEFAULT_X_VERSION, game, globals);
 		}
 		luaInterface.init();
 
