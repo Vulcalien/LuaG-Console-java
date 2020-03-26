@@ -76,7 +76,6 @@ public class PackCommand extends ShellCommand {
 			ZipEntry infoFile = new ZipEntry(Game.CARTRIDGE_INFO_NAME);
 			out.putNextEntry(infoFile);
 			{
-				@SuppressWarnings("resource")
 				JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
 				writer.beginObject();
 				writer.name("console-version").value(Console.VERSION);

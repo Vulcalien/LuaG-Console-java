@@ -14,7 +14,7 @@ public class RunCommand extends ShellCommand {
 
 	public void run(String[] args) {
 		if(args.length >= 1) {
-			Console.cartridge = args[0] + "." + Game.CARTRIDGE_EXTENSION;
+			Console.cartridge = Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION;
 		} else {
 			Console.cartridge = null;
 
