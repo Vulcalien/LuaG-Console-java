@@ -20,7 +20,7 @@ public class RunCommand extends ShellCommand {
 
 			if(Console.mode == Mode.USER_SHELL) {
 				Shell.write("Error:\n"
-				            + "insert cartridge's name\n\n");
+				            + "insert cartridge name\n\n");
 				return;
 			}
 		}
@@ -30,10 +30,10 @@ public class RunCommand extends ShellCommand {
 	protected String getHelpMessage() {
 		if(Console.mode == Mode.DEVELOPER) {
 			return "`run <nothing or\n"
-			       + "     cartridge's name>`\n"
+			       + "     cartridge name>`\n"
 			       + "runs the game/cartridge";
 		} else {
-			return "`run <cartridge's name>`\n"
+			return "`run <cartridge name>`\n"
 			       + "runs the cartridge";
 		}
 	}
