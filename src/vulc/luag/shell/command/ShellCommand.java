@@ -41,7 +41,7 @@ public abstract class ShellCommand {
 
 		String[] splittedLine = line.split(" ");
 
-		String name = splittedLine[0].toLowerCase();
+		String name = splittedLine[0];
 		String[] args = Arrays.copyOfRange(splittedLine, 1, splittedLine.length);
 
 		ShellCommand command = findCommand(name);
@@ -59,6 +59,8 @@ public abstract class ShellCommand {
 	}
 
 	protected static ShellCommand findCommand(String name) {
+		name = name.toLowerCase();
+
 		for(ShellCommand command : COMMAND_LIST) {
 			for(int i = 0; i < command.names.length; i++) {
 				if(name.equals(command.names[i])) return command;
