@@ -12,12 +12,12 @@ public abstract class ShellCommand {
 	    new RunCommand(),
 	    new EditCommand(),
 	    new PackCommand(),
+	    new SetupCommand(),
 	    new ClsCommand(),
 	    new VerCommand(),
 	    new HelpCommand(),
 	    new ModeCommand(),
 	    new FilesCommand(),
-	    new SetupCommand(),
 	    new ExitCommand()
 	};
 
