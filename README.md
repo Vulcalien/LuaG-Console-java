@@ -2,7 +2,7 @@
 # LuaG Console
 LuaG is a virtual console that allows you to build a game very quickly using the lua language.  
 The console offers tools for developers, like the integrated editors for the map and the sprites!  
-LuaG is always getting updates! Current Version: 0.6.0
+LuaG is always getting updates!
 
 ## Getting Started
 First of all, [download the console](https://github.com/Vulcalien/LuaG-Console/wiki/Download).  
