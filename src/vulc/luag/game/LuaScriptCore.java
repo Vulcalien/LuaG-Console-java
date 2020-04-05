@@ -8,10 +8,17 @@ import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LoadState;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.compiler.LuaC;
+import org.luaj.vm2.lib.Bit32Lib;
+import org.luaj.vm2.lib.PackageLib;
+import org.luaj.vm2.lib.StringLib;
+import org.luaj.vm2.lib.TableLib;
+import org.luaj.vm2.lib.jse.JseBaseLib;
+import org.luaj.vm2.lib.jse.JseMathLib;
 
 import vulc.luag.Console;
 import vulc.luag.game.interfaces.LuaInterface;
@@ -22,8 +29,35 @@ public class LuaScriptCore {
 
 	// return true if init was successfully, else false
 	public boolean init(Game game) {
-		Globals globals = JsePlatform.standardGlobals();
+		Globals globals = new Globals();
 
+		// must load
+		globals.load(new JseBaseLib());
+		globals.load(new PackageLib());
+
+		// math
+		globals.load(new Bit32Lib());
+		globals.load(new JseMathLib());
+
+		// utils
+		globals.load(new TableLib());
+		globals.load(new StringLib());
+
+		// disable require
+		globals.set("require", LuaValue.NIL);
+
+		/* libraries that are not loaded
+		 *
+		 * CoroutineLib
+		 * JseIoLib
+		 * JseOsLib
+		 * LuajavaLib
+		 */
+
+		LoadState.install(globals);
+		LuaC.install(globals);
+
+		// load luag interface
 		LuaInterface luaInterface;
 		if(Console.cartridge != null) {
 			String[] requestedVersion = game.cartridgeInfo.get("interface-version").getAsString().split("\\.");
