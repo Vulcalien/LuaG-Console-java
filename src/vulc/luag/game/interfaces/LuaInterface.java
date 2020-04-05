@@ -7,10 +7,10 @@ import org.luaj.vm2.Globals;
 
 import vulc.luag.game.Game;
 
-/** versioning: x.y
- * x -> retrocompatibility with other x versions
- * y -> updates of an x versions (that do not break retrocompatibility)
- * an y greater than the interface's version means it is not up to date
+/** versioning: major.minor
+ * major -> backward compatibility with other major versions is broken
+ * minor -> backward compatibility with the same major version is not broken
+ *
  * eg. 6.4 can run using an interface 6.7,
  * but 6.7 cannot run using an interface 6.4
  */
@@ -18,13 +18,13 @@ public abstract class LuaInterface {
 
 	public static final Map<Integer, Class<? extends LuaInterface>> INTERFACES =
 	        new HashMap<Integer, Class<? extends LuaInterface>>();
-	public static final Map<Integer, Integer> Y_VERSIONS = new HashMap<Integer, Integer>();
+	public static final Map<Integer, Integer> MINOR_VERSIONS = new HashMap<Integer, Integer>();
 
-	public static final int DEFAULT_X_VERSION = 1;
+	public static final int DEFAULT_MAJOR_VERSION = 1;
 
 	static {
 		INTERFACES.put(1, Interface001.class);
-		Y_VERSIONS.put(1, 0);
+		MINOR_VERSIONS.put(1, 0);
 	}
 
 	protected final Game game;
@@ -37,9 +37,9 @@ public abstract class LuaInterface {
 
 	public abstract void init();
 
-	public static LuaInterface getInterface(int xVersion, Game game, Globals env) {
+	public static LuaInterface getInterface(int majorVersion, Game game, Globals env) {
 		try {
-			Class<? extends LuaInterface> interfaceClass = INTERFACES.get(xVersion);
+			Class<? extends LuaInterface> interfaceClass = INTERFACES.get(majorVersion);
 			if(interfaceClass != null) {
 				return interfaceClass.getConstructor(Game.class, Globals.class).newInstance(game, env);
 			}
@@ -49,8 +49,8 @@ public abstract class LuaInterface {
 		return null;
 	}
 
-	public static int yVersion(int xVersion) {
-		return Y_VERSIONS.get(xVersion);
+	public static int minorVersion(int majorVersion) {
+		return MINOR_VERSIONS.get(majorVersion);
 	}
 
 }

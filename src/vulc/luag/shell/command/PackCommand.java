@@ -81,7 +81,7 @@ public class PackCommand extends ShellCommand {
 				writer.name("console-version").value(Console.VERSION);
 				writer.name("interface-version").value(LuaInterface.DEFAULT_X_VERSION
 				                                       + "."
-				                                       + LuaInterface.yVersion(LuaInterface.DEFAULT_X_VERSION));
+				                                       + LuaInterface.minorVersion(LuaInterface.DEFAULT_X_VERSION));
 				writer.endObject();
 
 				writer.flush();

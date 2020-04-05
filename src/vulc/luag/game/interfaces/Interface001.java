@@ -19,9 +19,6 @@ import vulc.luag.game.Game;
 import vulc.luag.gfx.Screen;
 import vulc.luag.sfx.Sound;
 
-/**
- * 0.1
- */
 public class Interface001 extends LuaInterface {
 
 	public Interface001(Game game, Globals env) {
