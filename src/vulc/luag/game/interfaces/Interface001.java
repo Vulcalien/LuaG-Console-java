@@ -93,7 +93,6 @@ public class Interface001 extends LuaInterface {
 					e.printStackTrace();
 				}
 			}
-
 			return NIL;
 		}
 	}
@@ -208,7 +207,15 @@ public class Interface001 extends LuaInterface {
 			int sw = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 			int sh = args.arg(6).isnil() ? 1 : args.arg(6).checkint();
 
-			Console.SCREEN.draw(game.getSprite(id, sw, sh).getScaled(scale), x, y);
+			int xSprite = id % 16;
+			int ySprite = id / 16;
+
+			if(id < 0 || id >= 256) throw new LuaError("bad argument: id");
+			if(sw <= 0 || xSprite + sw > 16) throw new LuaError("bad argument: sw");
+			if(sh <= 0 || ySprite + sh > 16) throw new LuaError("bad argument: sh");
+
+			Console.SCREEN.draw(game.getSprite(xSprite, ySprite, sw, sh).getScaled(scale), x, y);
+
 			return NIL;
 		}
 	}
@@ -221,6 +228,7 @@ public class Interface001 extends LuaInterface {
 		}
 	}
 
+	// note for next interface version: change to set_tile(id, x, y)
 	private class set_tile extends ThreeArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y, LuaValue id) {
 			game.map.setTile(x.checkint(), y.checkint(), id.checkint());

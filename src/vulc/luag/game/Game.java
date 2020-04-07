@@ -347,8 +347,8 @@ public class Game {
 		return getSprite(id % 16, id / 16, sw, sh);
 	}
 
-	public Bitmap<Integer> getSprite(int x, int y, int w, int h) {
-		return atlas.getSubimage(x * SPR_SIZE, y * SPR_SIZE, w * SPR_SIZE, h * SPR_SIZE);
+	public Bitmap<Integer> getSprite(int x, int y, int sw, int sh) {
+		return atlas.getSubimage(x * SPR_SIZE, y * SPR_SIZE, sw * SPR_SIZE, sh * SPR_SIZE);
 	}
 
 }
