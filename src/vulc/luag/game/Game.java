@@ -240,8 +240,15 @@ public class Game {
 
 			for(int i = 0; i < keyArray.size(); i++) {
 				String key = keyArray.get(i).getAsString().toUpperCase();
-				keys.add(input.new Key(KeyType.KEYBOARD,
-				                       KeyStroke.getKeyStroke(key).getKeyCode()));
+
+				KeyStroke keyStroke = KeyStroke.getKeyStroke(key);
+				if(keyStroke == null) {
+					Console.die("Error:\n"
+					            + "'" + CONFIG_FILE_NAME + "'\n"
+					            + "contains invalid keys");
+					return false;
+				}
+				keys.add(input.new Key(KeyType.KEYBOARD, keyStroke.getKeyCode()));
 			}
 		} else {
 			Console.die("Error:\n"

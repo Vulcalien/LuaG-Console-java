@@ -4,6 +4,8 @@
  ******************************************************************************/
 package vulc.luag.input;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -14,7 +16,7 @@ import java.util.List;
 
 import vulc.luag.Console;
 
-public class InputHandler implements KeyListener, MouseListener, MouseMotionListener {
+public class InputHandler implements KeyListener, MouseListener, MouseMotionListener, FocusListener {
 
 	public static enum KeyType {
 		KEYBOARD, MOUSE
@@ -38,6 +40,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		console.addKeyListener(this);
 		console.addMouseListener(this);
 		console.addMouseMotionListener(this);
+		console.addFocusListener(this);
 	}
 
 	public void remove() {
@@ -48,6 +51,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		console.removeKeyListener(this);
 		console.removeMouseListener(this);
 		console.removeMouseMotionListener(this);
+		console.removeFocusListener(this);
 	}
 
 	public void tick() {
@@ -56,10 +60,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		}
 	}
 
-	public void releaseAll() {
-		for(int i = 0; i < keys.size(); i++) {
-			Key key = keys.get(i);
-
+	private void releaseAll() {
+		for(Key key : keys) {
 			key.isKeyDown = false;
 			key.wasKeyDown = false;
 			key.isReleased = false;
@@ -68,10 +70,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
 	private void receiveInput(KeyAction action, KeyType type, int code) {
 		List<Key> keys = getList(type);
-		for(int i = 0; i < keys.size(); i++) {
-			Key key = keys.get(i);
+		for(Key key : keys) {
 			if(key.code == code) {
-
 				if(action == KeyAction.PRESS) {
 					key.shouldStayDown = true;
 				} else if(action == KeyAction.RELEASE) {
@@ -130,6 +130,15 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public void mouseMoved(MouseEvent e) {
 		xMouse = e.getX();
 		yMouse = e.getY();
+	}
+
+	public void focusGained(FocusEvent e) {
+	}
+
+	public void focusLost(FocusEvent e) {
+		for(Key key : keys) {
+			key.shouldRelease = true;
+		}
 	}
 
 	public class Key {
