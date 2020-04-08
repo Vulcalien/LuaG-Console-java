@@ -101,19 +101,28 @@ public class Interface001 extends LuaInterface {
 
 	private class key extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(game.keys.get(id.checkint()).isKeyDown());
+			int key = id.checkint();
+			if(key < 0 || key >= game.keys.size()) throw new LuaError("bad argument: key '" + key + "' does not exist");
+
+			return valueOf(game.keys.get(key).isKeyDown());
 		}
 	}
 
 	private class key_pressed extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(game.keys.get(id.checkint()).isPressed());
+			int key = id.checkint();
+			if(key < 0 || key >= game.keys.size()) throw new LuaError("bad argument: key '" + key + "' does not exist");
+
+			return valueOf(game.keys.get(key).isPressed());
 		}
 	}
 
 	private class key_released extends OneArgFunction {
 		public LuaValue call(LuaValue id) {
-			return valueOf(game.keys.get(id.checkint()).isReleased());
+			int key = id.checkint();
+			if(key < 0 || key >= game.keys.size()) throw new LuaError("bad argument: key '" + key + "' does not exist");
+
+			return valueOf(game.keys.get(key).isReleased());
 		}
 	}
 
@@ -122,11 +131,9 @@ public class Interface001 extends LuaInterface {
 	private class sfx extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
 			Sound sound = game.sounds.get(name.checkjstring());
-			if(sound == null) {
-				System.err.println("Error: sound '" + name + "' does not exist");
-			} else {
-				sound.play();
-			}
+			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
+			sound.play();
+
 			return NIL;
 		}
 	}
@@ -134,11 +141,9 @@ public class Interface001 extends LuaInterface {
 	private class sfx_loop extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
 			Sound sound = game.sounds.get(name.checkjstring());
-			if(sound == null) {
-				System.err.println("Error: sound '" + name + "' does not exist");
-			} else {
-				sound.loop();
-			}
+			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
+			sound.loop();
+
 			return NIL;
 		}
 	}
@@ -146,11 +151,9 @@ public class Interface001 extends LuaInterface {
 	private class sfx_stop extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
 			Sound sound = game.sounds.get(name.checkjstring());
-			if(sound == null) {
-				System.err.println("Error: sound '" + name + "' does not exist");
-			} else {
-				sound.stop();
-			}
+			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
+			sound.stop();
+
 			return NIL;
 		}
 	}
