@@ -1,8 +1,10 @@
 package vulc.luag.game.interfaces;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.luaj.vm2.Globals;
@@ -76,22 +78,27 @@ public class Interface001 extends LuaInterface {
 			InputStream input = null;
 			try {
 				if(Console.cartridge == null) {
-					input = new FileInputStream(Game.SCRIPT_DIR + "/" + script);
+					File file = new File(Game.SCRIPT_DIR + "/" + script);
+					if(!file.exists()) throw new LuaError("bad argument: file '" + script + "' not found");
+
+					input = new FileInputStream(file);
 				} else {
 					ZipFile cartridgeFile = game.cartridgeFile;
-					input = cartridgeFile.getInputStream(cartridgeFile.getEntry(Game.SCRIPT_DIR_NAME
-					                                                            + "/" + script));
-				}
+					ZipEntry entry = cartridgeFile.getEntry(Game.SCRIPT_DIR_NAME
+					                                        + "/" + script);
+					if(entry == null) throw new LuaError("bad argument: file '" + script + "' not found");
 
+					input = cartridgeFile.getInputStream(entry);
+				}
 				env.load(input, "@" + script, "t", env).call();
 			} catch(IOException e) {
-				throw new LuaError(e);
-			} finally {
-				try {
-					input.close();
-				} catch(IOException e) {
-					e.printStackTrace();
-				}
+				e.printStackTrace();
+			}
+
+			try {
+				input.close();
+			} catch(IOException e) {
+				e.printStackTrace();
 			}
 			return NIL;
 		}
