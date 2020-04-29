@@ -98,8 +98,7 @@ public class Game {
 		// config.json
 		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
 		try(InputStream in = new FileInputStream(CONFIG_FILE)) {
-			boolean error = !loadJsonConfig(in);
-			if(error) return false;
+			if(!loadJsonConfig(in)) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
@@ -112,8 +111,7 @@ public class Game {
 		// atlas.png
 		Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
 		try(InputStream in = new FileInputStream(ATLAS_FILE)) {
-			boolean error = !loadAtlas(in);
-			if(error) return false;
+			if(!loadAtlas(in)) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
 			            + "'" + Game.ATLAS_FILE_NAME + "'\n"
@@ -135,7 +133,6 @@ public class Game {
 			map = new Map(10, 10);
 			MapCompiler.compile(map);
 		}
-
 		return true;
 	}
 
@@ -173,56 +170,56 @@ public class Game {
 			// config.json
 			Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
 			ZipEntry configEntry = cartridgeFile.getEntry(CONFIG_FILE_NAME);
-			if(configEntry != null) {
-				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
-					throw new Exception();
-				}
-			} else {
+			if(configEntry == null) {
 				Console.die("Cartridge Error:\n"
 				            + "'" + CONFIG_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
+			} else {
+				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
+					throw new Exception();
+				}
 			}
 
 			// atlas.png
 			Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
 			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_FILE_NAME);
-			if(atlasEntry != null) {
-				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
-					throw new Exception();
-				}
-			} else {
+			if(atlasEntry == null) {
 				Console.die("Cartirdge Error:\n"
 				            + "'" + ATLAS_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
+			} else {
+				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
+					throw new Exception();
+				}
 			}
 
 			// map
 			Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_FILE_NAME);
-			if(mapEntry != null) {
-				this.map = Map.load(cartridgeFile.getInputStream(mapEntry));
-				if(map == null) return false;
-			} else {
+			if(mapEntry == null) {
 				Console.die("Cartirdge Error:\n"
 				            + "'" + MAP_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
+			} else {
+				this.map = Map.load(cartridgeFile.getInputStream(mapEntry));
+				if(map == null) return false;
 			}
 
 			// .cartridge-info
 			Console.LOGGER.info("Load '" + CARTRIDGE_INFO_NAME + "'");
 			ZipEntry cartridgeInfoEntry = cartridgeFile.getEntry(CARTRIDGE_INFO_NAME);
-			if(cartridgeInfoEntry != null) {
-				if(!loadCartridgeInfo(cartridgeFile.getInputStream(cartridgeInfoEntry))) {
-					throw new Exception();
-				}
-			} else {
+			if(cartridgeInfoEntry == null) {
 				Console.die("Cartridge Error:\n"
 				            + "'" + CARTRIDGE_INFO_NAME + "'\n"
 				            + "file not found");
 				return false;
+			} else {
+				if(!loadCartridgeInfo(cartridgeFile.getInputStream(cartridgeInfoEntry))) {
+					throw new Exception();
+				}
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -235,28 +232,28 @@ public class Game {
 		Console.LOGGER.info("Loading scripts");
 
 		JsonElement keysElement = jsonConfig.get("keys");
-		if(keysElement != null && keysElement.isJsonArray()) {
-			JsonArray keyArray = keysElement.getAsJsonArray();
-
-			for(int i = 0; i < keyArray.size(); i++) {
-				String key = keyArray.get(i).getAsString().toUpperCase();
-
-				KeyStroke keyStroke = KeyStroke.getKeyStroke(key);
-				if(keyStroke == null) {
-					Console.die("Error:\n"
-					            + "'" + CONFIG_FILE_NAME + "'\n"
-					            + "contains invalid keys");
-					return false;
-				}
-				keys.add(input.new Key(KeyType.KEYBOARD, keyStroke.getKeyCode()));
-			}
-		} else {
+		if(keysElement == null || !keysElement.isJsonArray()) {
 			Console.die("Error:\n"
 			            + "'" + CONFIG_FILE_NAME + "'\n"
 			            + "must contain\n"
 			            + "a string array 'keys'");
 			return false;
 		}
+
+		JsonArray keyArray = keysElement.getAsJsonArray();
+		for(int i = 0; i < keyArray.size(); i++) {
+			String key = keyArray.get(i).getAsString().toUpperCase();
+
+			KeyStroke keyStroke = KeyStroke.getKeyStroke(key);
+			if(keyStroke == null) {
+				Console.die("Error:\n"
+				            + "'" + CONFIG_FILE_NAME + "'\n"
+				            + "contains invalid keys");
+				return false;
+			}
+			keys.add(input.new Key(KeyType.KEYBOARD, keyStroke.getKeyCode()));
+		}
+
 		input.init();
 		if(scriptCore.init(this)) {
 			Console.LOGGER.info("Game Started");
@@ -266,46 +263,43 @@ public class Game {
 
 	private boolean loadJsonConfig(InputStream in) {
 		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
-		if(element.isJsonObject()) {
-			jsonConfig = element.getAsJsonObject();
-		} else {
+		if(!element.isJsonObject()) {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
+		jsonConfig = element.getAsJsonObject();
 		return true;
 	}
 
 	private boolean loadCartridgeInfo(InputStream in) {
 		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
-		if(element.isJsonObject()) {
-			cartridgeInfo = element.getAsJsonObject();
-		} else {
+		if(!element.isJsonObject()) {
 			Console.die("Error:\n"
 			            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
+		cartridgeInfo = element.getAsJsonObject();
 		return true;
 	}
 
 	private boolean loadAtlas(InputStream in) {
 		try {
 			BufferedImage img = ImageIO.read(in);
-			if(img != null) {
-				atlas = new IntBitmap(img);
-				if(atlas.width != 128 || atlas.height != 128) {
-					Console.die("Error:\n"
-					            + "atlas must be\n"
-					            + "128x128 pixels\n"
-					            + "(256 sprites)");
-					return false;
-				}
-			} else {
+			if(img == null) {
 				Console.die("Error:\n"
 				            + "'" + Game.ATLAS_FILE_NAME + "'\n"
 				            + "is not an image");
+				return false;
+			}
+			atlas = new IntBitmap(img);
+			if(atlas.width != 128 || atlas.height != 128) {
+				Console.die("Error:\n"
+				            + "atlas must be\n"
+				            + "128x128 pixels\n"
+				            + "(256 sprites)");
 				return false;
 			}
 		} catch(IOException e) {
