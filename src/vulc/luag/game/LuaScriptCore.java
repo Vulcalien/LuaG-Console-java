@@ -60,23 +60,32 @@ public class LuaScriptCore {
 		// load luag interface
 		LuaInterface luaInterface;
 		if(Console.cartridge != null) {
-			String[] requestedVersion = game.cartridgeInfo.get("interface-version").getAsString().split("\\.");
-			int xVerReq = Integer.parseInt(requestedVersion[0]);
-			int yVerReq = Integer.parseInt(requestedVersion[1]);
+			String[] requestedVersion;
+			try {
+				requestedVersion = game.cartridgeInfo.get("interface-version").getAsString().split("\\.");
+			} catch(Exception e) {
+				Console.die("Error:\n"
+				            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
+				            + "is invalid");
+				return false;
+			}
 
-			luaInterface = LuaInterface.getInterface(xVerReq, game, globals);
+			int majorVerReq = Integer.parseInt(requestedVersion[0]);
+			int minorVerReq = Integer.parseInt(requestedVersion[1]);
+
+			luaInterface = LuaInterface.getInterface(majorVerReq, game, globals);
 			if(luaInterface == null) {
 				Console.die("Error:\n"
-				            + "interface version " + xVerReq + "\n"
+				            + "interface version " + majorVerReq + "\n"
 				            + "not supported");
 				return false;
 			}
-			int yVer = LuaInterface.minorVersion(xVerReq);
-			if(yVer < yVerReq) {
+			int yVer = LuaInterface.minorVersion(majorVerReq);
+			if(yVer < minorVerReq) {
 				Console.die("Error:\n"
-				            + "interface " + xVerReq + "." + yVerReq + "\n"
+				            + "interface " + majorVerReq + "." + minorVerReq + "\n"
 				            + "not supported\n"
-				            + "Lastest: " + xVerReq + "." + LuaInterface.minorVersion(xVerReq));
+				            + "Lastest: " + majorVerReq + "." + LuaInterface.minorVersion(majorVerReq));
 				return false;
 			}
 		} else {

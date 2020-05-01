@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import vulc.bitmap.Bitmap;
@@ -177,7 +178,7 @@ public class Game {
 				return false;
 			} else {
 				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
-					throw new Exception();
+					return false;
 				}
 			}
 
@@ -191,7 +192,7 @@ public class Game {
 				return false;
 			} else {
 				if(!loadAtlas(cartridgeFile.getInputStream(atlasEntry))) {
-					throw new Exception();
+					return false;
 				}
 			}
 
@@ -218,7 +219,7 @@ public class Game {
 				return false;
 			} else {
 				if(!loadCartridgeInfo(cartridgeFile.getInputStream(cartridgeInfoEntry))) {
-					throw new Exception();
+					return false;
 				}
 			}
 		} catch(Exception e) {
@@ -242,16 +243,16 @@ public class Game {
 
 		JsonArray keyArray = keysElement.getAsJsonArray();
 		for(int i = 0; i < keyArray.size(); i++) {
-			String key = keyArray.get(i).getAsString().toUpperCase();
-
-			KeyStroke keyStroke = KeyStroke.getKeyStroke(key);
-			if(keyStroke == null) {
+			try {
+				String key = keyArray.get(i).getAsString().toUpperCase();
+				keys.add(input.new Key(KeyType.KEYBOARD,
+				                       KeyStroke.getKeyStroke(key).getKeyCode()));
+			} catch(Exception e) {
 				Console.die("Error:\n"
 				            + "'" + CONFIG_FILE_NAME + "'\n"
 				            + "contains invalid keys");
 				return false;
 			}
-			keys.add(input.new Key(KeyType.KEYBOARD, keyStroke.getKeyCode()));
 		}
 
 		input.init();
@@ -262,8 +263,14 @@ public class Game {
 	}
 
 	private boolean loadJsonConfig(InputStream in) {
-		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
-		if(!element.isJsonObject()) {
+		JsonElement element = null;
+		boolean error = false;
+		try {
+			element = new JsonParser().parse(new InputStreamReader(in));
+		} catch(JsonParseException e) {
+			error = true;
+		}
+		if(error || !element.isJsonObject()) {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "must be a json object");
@@ -274,11 +281,17 @@ public class Game {
 	}
 
 	private boolean loadCartridgeInfo(InputStream in) {
-		JsonElement element = new JsonParser().parse(new InputStreamReader(in));
-		if(!element.isJsonObject()) {
+		JsonElement element = null;
+		boolean error = false;
+		try {
+			element = new JsonParser().parse(new InputStreamReader(in));
+		} catch(JsonParseException e) {
+			error = true;
+		}
+		if(error || !element.isJsonObject()) {
 			Console.die("Error:\n"
 			            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
-			            + "must be a json object");
+			            + "is invalid");
 			return false;
 		}
 		cartridgeInfo = element.getAsJsonObject();
