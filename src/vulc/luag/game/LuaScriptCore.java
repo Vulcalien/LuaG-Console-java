@@ -70,6 +70,7 @@ public class LuaScriptCore {
 				return false;
 			}
 
+			// BUG crash if these are not numbers
 			int majorVerReq = Integer.parseInt(requestedVersion[0]);
 			int minorVerReq = Integer.parseInt(requestedVersion[1]);
 

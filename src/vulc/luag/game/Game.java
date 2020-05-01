@@ -99,7 +99,7 @@ public class Game {
 		// config.json
 		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
 		try(InputStream in = new FileInputStream(CONFIG_FILE)) {
-			if(!loadJsonConfig(in)) return false;
+			if(!loadConfig(in)) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
@@ -177,7 +177,7 @@ public class Game {
 				            + "file not found");
 				return false;
 			} else {
-				if(!loadJsonConfig(cartridgeFile.getInputStream(configEntry))) {
+				if(!loadConfig(cartridgeFile.getInputStream(configEntry))) {
 					return false;
 				}
 			}
@@ -262,39 +262,25 @@ public class Game {
 		return true;
 	}
 
-	private boolean loadJsonConfig(InputStream in) {
-		JsonElement element = null;
-		boolean error = false;
-		try {
-			element = new JsonParser().parse(new InputStreamReader(in));
-		} catch(JsonParseException e) {
-			error = true;
-		}
-		if(error || !element.isJsonObject()) {
+	private boolean loadConfig(InputStream in) {
+		jsonConfig = loadJson(in);
+		if(jsonConfig == null) {
 			Console.die("Error:\n"
 			            + "'" + Game.CONFIG_FILE_NAME + "'\n"
 			            + "must be a json object");
 			return false;
 		}
-		jsonConfig = element.getAsJsonObject();
 		return true;
 	}
 
 	private boolean loadCartridgeInfo(InputStream in) {
-		JsonElement element = null;
-		boolean error = false;
-		try {
-			element = new JsonParser().parse(new InputStreamReader(in));
-		} catch(JsonParseException e) {
-			error = true;
-		}
-		if(error || !element.isJsonObject()) {
+		cartridgeInfo = loadJson(in);
+		if(cartridgeInfo == null) {
 			Console.die("Error:\n"
 			            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
 			            + "is invalid");
 			return false;
 		}
-		cartridgeInfo = element.getAsJsonObject();
 		return true;
 	}
 
@@ -319,6 +305,16 @@ public class Game {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	private JsonObject loadJson(InputStream in) {
+		try {
+			JsonElement element = new JsonParser().parse(new InputStreamReader(in));
+			if(!element.isJsonObject()) return null;
+			return element.getAsJsonObject();
+		} catch(JsonParseException e) {
+			return null;
+		}
 	}
 
 	public void tick() {
