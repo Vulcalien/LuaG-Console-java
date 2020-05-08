@@ -24,11 +24,8 @@ import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Locale;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -70,6 +67,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
+	public static String logFile;
 
 	public static final Screen SCREEN = new Screen(WIDTH, HEIGHT);
 	public static Panel currentPanel;
@@ -236,22 +234,7 @@ public class Console extends Canvas implements Runnable {
 			rootDirectory = "./";
 		}
 
-		// setup LOGGER
-		LOGGER.setLevel(Level.ALL);
-		Locale.setDefault(Locale.ENGLISH);
-		try {
-			FileHandler fh = new FileHandler(rootDirectory + "luag.log");
-			fh.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(fh);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				LOGGER.info("Shutting down Console");
-			}
-		});
+		LoggerSetup.setup(LOGGER, rootDirectory);
 	}
 
 	private static void scaleFrame(int newScale) {

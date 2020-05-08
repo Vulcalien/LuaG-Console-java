@@ -11,7 +11,6 @@ public class FilesCommand extends ShellCommand {
 
 	public FilesCommand() {
 		super("files");
-
 		isDevelopersOnly = true;
 	}
 

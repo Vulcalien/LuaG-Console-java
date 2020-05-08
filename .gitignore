@@ -3,5 +3,5 @@
 /.project
 /.classpath
 
-/luag.log*
+/luag*.log*
 /console-userdata/

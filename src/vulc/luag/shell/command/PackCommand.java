@@ -21,7 +21,6 @@ public class PackCommand extends ShellCommand {
 
 	public PackCommand() {
 		super("pack");
-
 		isDevelopersOnly = true;
 	}
 

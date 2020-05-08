@@ -18,6 +18,7 @@ public abstract class ShellCommand {
 	    new HelpCommand(),
 	    new ModeCommand(),
 	    new FilesCommand(),
+	    new LogCommand(),
 	    new ExitCommand()
 	};
 

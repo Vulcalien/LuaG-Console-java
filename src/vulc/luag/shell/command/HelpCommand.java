@@ -27,7 +27,9 @@ public class HelpCommand extends ShellCommand {
 			Shell.write("ver: prints version\n");
 			Shell.write("help: prints this list\n");
 			Shell.write("mode: changes console mode\n");
-			Shell.write("files: opens game folder\n\n");
+			Shell.write("files: opens game folder\n");
+			Shell.write("log: opens log file\n");
+			Shell.write("\n");
 		}
 	}
 

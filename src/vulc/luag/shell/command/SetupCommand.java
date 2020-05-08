@@ -15,7 +15,6 @@ public class SetupCommand extends ShellCommand {
 
 	public SetupCommand() {
 		super("setup");
-
 		isDevelopersOnly = true;
 	}
 

@@ -7,7 +7,6 @@ public class EditCommand extends ShellCommand {
 
 	public EditCommand() {
 		super("edit", "editor");
-
 		isDevelopersOnly = true;
 	}
 
