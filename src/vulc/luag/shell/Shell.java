@@ -3,6 +3,7 @@ package vulc.luag.shell;
 import java.util.ArrayList;
 import java.util.List;
 
+import vulc.bitmap.font.Font;
 import vulc.luag.Console;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.ShellPanel;
@@ -93,13 +94,24 @@ public abstract class Shell {
 
 		if(pressedLEFT) {
 			pressedLEFT = false;
-			if(currentChar > 0) currentChar--;
+			if(currentChar > 0) {
+				if(panel.ctrl.isKeyDown()) {
+					currentChar = leftWordPosition();
+				} else {
+					currentChar--;
+				}
+			}
 		}
 		if(pressedRIGHT) {
 			pressedRIGHT = false;
-			if(currentChar < currentLine.length()) currentChar++;
+			if(currentChar < currentLine.length()) {
+				if(panel.ctrl.isKeyDown()) {
+					currentChar = rightWordPosition();
+				} else {
+					currentChar++;
+				}
+			}
 		}
-
 		render();
 	}
 
@@ -129,13 +141,14 @@ public abstract class Shell {
 		}
 		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
 
-		// draw the _ cursor
+		// draw the cursor
 		if(animationTicks / 25 % 2 == 1) {
+			Font font = Screen.FONT;
 			Console.SCREEN.write("_", FOREGROUND,
-			                     1 + (Screen.FONT.widthOf(' ') + Screen.FONT.getLetterSpacing())
-			                         * ((currentChar) % HORIZONTAL_CHARS),
-			                     1 + (Screen.FONT.getHeight() + Screen.FONT.getLineSpacing())
-			                         * (CLOSED_TEXT.size() - renderOffset + (currentChar) / HORIZONTAL_CHARS));
+			                     1 + (font.widthOf(' ') + font.getLetterSpacing())
+			                         * (currentChar % HORIZONTAL_CHARS),
+			                     1 + (font.getHeight() + font.getLineSpacing())
+			                         * (currentChar / HORIZONTAL_CHARS + CLOSED_TEXT.size() - renderOffset));
 		}
 	}
 
@@ -164,21 +177,8 @@ public abstract class Shell {
 			case '\b':
 				if(currentLine.length() > 0 && currentChar > 0) {
 					if(panel.ctrl.isKeyDown()) {
-						int lastSpace = -1;
-						boolean foundNonSpace = false;
-						for(int i = currentChar - 1; i >= 0; i--) {
-							if(currentLine.charAt(i) == ' ') {
-								if(foundNonSpace) {
-									lastSpace = i;
-									break;
-								}
-							} else {
-								foundNonSpace = true;
-							}
-						}
-
 						int oldLength = currentLine.length();
-						currentLine = currentLine.substring(0, lastSpace + 1)
+						currentLine = currentLine.substring(0, leftWordPosition())
 						              + currentLine.substring(currentChar, currentLine.length());
 
 						currentChar -= oldLength - currentLine.length();
@@ -193,7 +193,8 @@ public abstract class Shell {
 			case 127:
 				if(currentLine.length() > 0 && currentChar != currentLine.length()) {
 					if(panel.ctrl.isKeyDown()) {
-						// TODO ctrl+del
+						currentLine = currentLine.substring(0, currentChar)
+						              + currentLine.substring(rightWordPosition(), currentLine.length());
 					} else {
 						currentLine = currentLine.substring(0, currentChar)
 						              + currentLine.substring(currentChar + 1, currentLine.length());
@@ -268,6 +269,40 @@ public abstract class Shell {
 	private static int lowestOffset() {
 		int currentLineHeight = currentLine.length() / HORIZONTAL_CHARS + 1;
 		return CLOSED_TEXT.size() - VERTICAL_LINES + currentLineHeight;
+	}
+
+	// find left word's position, used for ctrl+left and ctrl+'\b'
+	private static int leftWordPosition() {
+		int spacePosition = -1;
+		boolean foundNonSpace = false;
+		for(int i = currentChar - 1; i >= 0; i--) {
+			if(currentLine.charAt(i) == ' ') {
+				if(foundNonSpace) {
+					spacePosition = i;
+					break;
+				}
+			} else {
+				foundNonSpace = true;
+			}
+		}
+		return spacePosition + 1;
+	}
+
+	// find right word's position, used for ctrl+right and ctrl+del
+	private static int rightWordPosition() {
+		int spacePosition = currentLine.length() - 1;
+		boolean foundNonSpace = false;
+		for(int i = currentChar; i < currentLine.length(); i++) {
+			if(currentLine.charAt(i) == ' ') {
+				if(foundNonSpace) {
+					spacePosition = i;
+					break;
+				}
+			} else {
+				foundNonSpace = true;
+			}
+		}
+		return spacePosition + 1;
 	}
 
 }
