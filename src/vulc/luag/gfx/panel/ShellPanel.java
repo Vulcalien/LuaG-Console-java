@@ -24,8 +24,12 @@ public class ShellPanel extends Panel {
 			int code = e.getKeyCode();
 			if(code == KeyEvent.VK_UP)
 			    Shell.pressedUP = true;
-			if(code == KeyEvent.VK_DOWN)
+			else if(code == KeyEvent.VK_LEFT)
+			    Shell.pressedLEFT = true;
+			else if(code == KeyEvent.VK_DOWN)
 			    Shell.pressedDOWN = true;
+			else if(code == KeyEvent.VK_RIGHT)
+			    Shell.pressedRIGHT = true;
 		}
 	};
 	private final MouseWheelListener mouseScrollListener = new MouseWheelListener() {

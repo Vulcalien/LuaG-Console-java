@@ -18,16 +18,17 @@ public abstract class Shell {
 
 	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
 	public static int scrollBuffer = 0;
-	public static boolean pressedUP = false, pressedDOWN = false;
+	public static boolean pressedUP = false, pressedLEFT = false, pressedDOWN = false, pressedRIGHT = false;
 
 	private static final List<String> CLOSED_TEXT = new ArrayList<String>();
 	private static String currentLine = "";
+	private static int currentChar = 0;
 
 	private static final List<String> COMMAND_HISTORY = new ArrayList<String>();
 	private static int historyPoint = 0;
 
 	private static int renderOffset = 0;
-	private static int animationTicks = 0; // the _ that appears and disappears
+	private static int animationTicks = 0; // cursor animation
 
 	public static ShellPanel panel;
 
@@ -42,16 +43,16 @@ public abstract class Shell {
 	}
 
 	public static void tick() {
-		boolean isWriting = false;
 		if(CHAR_BUFFER.size() != 0) {
 			ShellChar character = CHAR_BUFFER.remove(0);
 			if(receiveInput(character.val, character.writtenByUser)) {
-				isWriting = true;
+				animationTicks = 0;
 			}
 		} else {
 			animationTicks++;
 		}
 
+		// history
 		byte historyShift = 0;
 		if(pressedUP) {
 			pressedUP = false;
@@ -62,18 +63,16 @@ public abstract class Shell {
 			historyShift--;
 		}
 
-		history:
 		if(historyShift != 0) {
 			int newHistoryPoint = historyPoint + historyShift;
 
-			if(newHistoryPoint < 0
-			   || newHistoryPoint >= COMMAND_HISTORY.size()) {
-				break history;
-			}
-			historyPoint = newHistoryPoint;
+			if(newHistoryPoint >= 0 && newHistoryPoint < COMMAND_HISTORY.size()) {
+				historyPoint = newHistoryPoint;
 
-			// most recent command is 0
-			currentLine = COMMAND_HISTORY.get(historyPoint);
+				// most recent command is 0
+				currentLine = COMMAND_HISTORY.get(historyPoint);
+				currentChar = currentLine.length();
+			}
 		}
 
 		if(scrollBuffer != 0) {
@@ -92,10 +91,19 @@ public abstract class Shell {
 			scrollBuffer = 0;
 		}
 
-		render(isWriting);
+		if(pressedLEFT) {
+			pressedLEFT = false;
+			if(currentChar > 0) currentChar--;
+		}
+		if(pressedRIGHT) {
+			pressedRIGHT = false;
+			if(currentChar < currentLine.length()) currentChar++;
+		}
+
+		render();
 	}
 
-	private static void render(boolean isWriting) {
+	private static void render() {
 		Console.SCREEN.clear(BACKGROUND);
 
 		String textToRender = "";
@@ -107,9 +115,6 @@ public abstract class Shell {
 				textToRender += CLOSED_TEXT.get(line);
 			} else {
 				String text = currentLine;
-				if(!isWriting && animationTicks / 25 % 2 == 1) {
-					text += "_";
-				}
 
 				String[] splitCurrent = splitCurrentLine(text);
 				for(int a = 0; a < splitCurrent.length; a++) {
@@ -123,6 +128,15 @@ public abstract class Shell {
 			}
 		}
 		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
+
+		// draw the _ cursor
+		if(animationTicks / 25 % 2 == 1) {
+			Console.SCREEN.write("_", FOREGROUND,
+			                     1 + (Screen.FONT.widthOf(' ') + Screen.FONT.getLetterSpacing())
+			                         * ((currentChar) % HORIZONTAL_CHARS),
+			                     1 + (Screen.FONT.getHeight() + Screen.FONT.getLineSpacing())
+			                         * (CLOSED_TEXT.size() - renderOffset + (currentChar) / HORIZONTAL_CHARS));
+		}
 	}
 
 	// returns true if 'isWriting' should be set to true
@@ -138,6 +152,7 @@ public abstract class Shell {
 					CLOSED_TEXT.add(splitCurrent[i] + "\n");
 				}
 				currentLine = "";
+				currentChar = 0;
 
 				// if is not at bottom then move to bottom
 				lowestOffset = lowestOffset();
@@ -147,21 +162,51 @@ public abstract class Shell {
 				return true;
 
 			case '\b':
-				if(currentLine.length() > 0) {
+				if(currentLine.length() > 0 && currentChar > 0) {
 					if(panel.ctrl.isKeyDown()) {
-						int lastSpace = currentLine.lastIndexOf(' ');
+						int lastSpace = -1;
+						boolean foundNonSpace = false;
+						for(int i = currentChar - 1; i >= 0; i--) {
+							if(currentLine.charAt(i) == ' ') {
+								if(foundNonSpace) {
+									lastSpace = i;
+									break;
+								}
+							} else {
+								foundNonSpace = true;
+							}
+						}
 
-						if(lastSpace == -1) currentLine = "";
-						else currentLine = currentLine.substring(0, lastSpace);
+						int oldLength = currentLine.length();
+						currentLine = currentLine.substring(0, lastSpace + 1)
+						              + currentLine.substring(currentChar, currentLine.length());
+
+						currentChar -= oldLength - currentLine.length();
 					} else {
-						currentLine = currentLine.substring(0, currentLine.length() - 1);
+						currentLine = currentLine.substring(0, currentChar - 1)
+						              + currentLine.substring(currentChar, currentLine.length());
+						currentChar--;
+					}
+				}
+				return true;
+
+			case 127:
+				if(currentLine.length() > 0 && currentChar != currentLine.length()) {
+					if(panel.ctrl.isKeyDown()) {
+						// TODO ctrl+del
+					} else {
+						currentLine = currentLine.substring(0, currentChar)
+						              + currentLine.substring(currentChar + 1, currentLine.length());
 					}
 				}
 				return true;
 
 			default:
 				if(character >= 32 && character < 127) {
-					currentLine += character;
+					currentLine = currentLine.substring(0, currentChar)
+					              + character
+					              + currentLine.substring(currentChar, currentLine.length());
+					currentChar++;
 
 					// if is not at bottom then move to bottom
 					lowestOffset = lowestOffset();
