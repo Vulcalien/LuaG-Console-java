@@ -17,10 +17,14 @@ public class SpriteAtlasPreview extends AtlasPreview {
 		super.onMouseDown(xMouse, yMouse);
 		editor.spriteID = selectedTile;
 
-		Game game = editor.editorPanel.game;
-		editor.preview = game.getSprite(selectedTile, editor.scope, editor.scope);
+		resetPreview();
 
 		editor.resetHistory();
+	}
+
+	public void resetPreview() {
+		Game game = editor.editorPanel.game;
+		editor.preview = game.getSprite(selectedTile, editor.scope, editor.scope);
 	}
 
 }

@@ -21,13 +21,15 @@ public class SpritePreview extends GUIComponent {
 
 	public void render(Screen screen) {
 		super.render(screen);
-		screen.draw(editor.preview.getScaled(editor.previewScale),
+		screen.draw(editor.preview.getScaled(SpriteEditor.DEFAULT_SCALE / editor.scope),
 		            x + BORDER, y + BORDER);
 	}
 
 	public void onMouseDown(int xMouse, int yMouse) {
-		int xPix = (xMouse - BORDER) / editor.previewScale;
-		int yPix = (yMouse - BORDER) / editor.previewScale;
+		int scale = SpriteEditor.DEFAULT_SCALE / editor.scope;
+
+		int xPix = (xMouse - BORDER) / scale;
+		int yPix = (yMouse - BORDER) / scale;
 
 		if(xPix < 0 || xPix >= editor.preview.width
 		   || yPix < 0 || yPix >= editor.preview.height) return;

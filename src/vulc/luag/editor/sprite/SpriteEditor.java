@@ -13,6 +13,7 @@ import vulc.luag.editor.Editor;
 import vulc.luag.editor.sprite.gui.SpriteAtlasPreview;
 import vulc.luag.editor.sprite.gui.SpriteColorbar;
 import vulc.luag.editor.sprite.gui.SpritePreview;
+import vulc.luag.editor.sprite.gui.SpriteScopeSelector;
 import vulc.luag.editor.sprite.gui.SpriteToolbar;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.game.Game;
@@ -26,17 +27,19 @@ public class SpriteEditor extends Editor {
 	public static final int PALETTE_SIZE = 8;
 	public static final int HISTORY_SIZE = 100;
 
+	public static final int DEFAULT_SCALE = 6;
+
 	// preview and atlas
+	public final SpriteAtlasPreview atlasPreview;
 	public final Bitmap<Integer> atlas;
 	public Bitmap<Integer> preview;
-	public final int previewScale = 6;
 	public int spriteID = 0;
-	public int scope = 1; // TODO this can only be set to 1 at the moment
+	public int scope = 1;
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();
 
 	// select color and last colors
-	public int selectedColor = 0x000000; // this value will change in constructor
+	public int selectedColor;
 	public final List<Integer> lastColors = new ArrayList<Integer>();
 
 	// editing history
@@ -68,18 +71,25 @@ public class SpriteEditor extends Editor {
 		// INTERFACE
 		guiPanel.background = 0x000000;
 
-		int previewSize = Game.SPR_SIZE * previewScale;
+		int previewSize = Game.SPR_SIZE * DEFAULT_SCALE;
 		GUIComponent sprPreview = new SpritePreview((guiPanel.w - previewSize) / 2 - SpritePreview.BORDER, 5,
 		                                            previewSize + SpritePreview.BORDER * 2,
 		                                            previewSize + SpritePreview.BORDER * 2,
 		                                            this);
 		guiPanel.add(sprPreview);
 
+		int scopes[] = {1, 2};
+		SpriteScopeSelector scopeSelector = new SpriteScopeSelector(sprPreview.x - 9 - 5,
+		                                                            (sprPreview.y + sprPreview.h) / 2 - 5,
+		                                                            9, 1 + scopes.length * 8,
+		                                                            this, scopes);
+		guiPanel.add(scopeSelector);
+
 		int verticalTiles = 8;
 		int hAtlas = 8 * verticalTiles;
-		GUIComponent atlasPreview = new SpriteAtlasPreview((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlas - 5,
-		                                                   atlas.width, hAtlas,
-		                                                   this, verticalTiles);
+		atlasPreview = new SpriteAtlasPreview((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlas - 5,
+		                                      atlas.width, hAtlas,
+		                                      this, verticalTiles);
 		guiPanel.add(atlasPreview);
 
 		int hToolbar = 9 * 5 + 1;

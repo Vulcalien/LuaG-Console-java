@@ -13,6 +13,7 @@ public class AtlasPreview extends GUIComponent {
 	private int animationTicks = 0;
 	protected int atlasOffset = 0;
 	protected int selectedTile = 0;
+	public int scope = 1;
 
 	public AtlasPreview(int x, int y, int w, int h, Game game, int verticalTiles) {
 		super(x, y, w, h);
@@ -34,7 +35,7 @@ public class AtlasPreview extends GUIComponent {
 		int transparency = animationTicks / 50 % 2 == 0 ? 0xaa : 0xdd;
 
 		if(ySpr >= 0 && ySpr < verticalTiles) {
-			screen.drawBool(Icons.SELECTED, 0xffffff, transparency,
+			screen.drawBool(Icons.SELECTED.getScaled(scope), 0xffffff, transparency,
 			                x + xSpr * Game.SPR_SIZE,
 			                y + ySpr * Game.SPR_SIZE);
 		}
@@ -44,8 +45,7 @@ public class AtlasPreview extends GUIComponent {
 		int xs = xMouse / Game.SPR_SIZE;
 		int ys = yMouse / Game.SPR_SIZE + atlasOffset;
 
-		int id = xs + ys * 16; // 16 = atlas.width (in sprites)
-		selectedTile = id;
+		setSelected(xs, ys);
 	}
 
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
@@ -53,6 +53,13 @@ public class AtlasPreview extends GUIComponent {
 		if(newOffset >= 0 && newOffset + h / Game.SPR_SIZE <= 16) {
 			atlasOffset = newOffset;
 		}
+	}
+
+	public void setSelected(int xs, int ys) {
+		if(xs + scope > 16) xs = 16 - scope;
+		if(ys + scope > 16) ys = 16 - scope;
+
+		selectedTile = xs + ys * 16; // 16 = atlas.width (in sprites)
 	}
 
 }
