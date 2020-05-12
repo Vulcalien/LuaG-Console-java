@@ -236,7 +236,7 @@ public abstract class Shell {
 		COMMAND_HISTORY.add(0, line);
 		historyPoint = -1;
 
-		line = line.trim();
+		line = line.trim().replaceAll(" +", " ");
 		if(!ShellCommand.execute(line)) {
 			write("unknown command\n\n");
 		}
