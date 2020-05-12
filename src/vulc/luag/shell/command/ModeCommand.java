@@ -28,9 +28,9 @@ public class ModeCommand extends ShellCommand {
 			Shell.write("switching to\n"
 			            + "developer mode\n\n");
 		} else if(mode.equals("u") || mode.equals("user")) {
+			Console.mode = Mode.USER_SHELL;
 			Shell.write("switching to\n"
 			            + "user mode\n\n");
-			Console.mode = Mode.USER_SHELL;
 		} else {
 			Shell.write("Error:\n"
 			            + "unrecognized mode\n"
@@ -39,7 +39,7 @@ public class ModeCommand extends ShellCommand {
 	}
 
 	protected String getHelpMessage() {
-		return "`mode <d or u>`\n"
+		return "'mode <mode>'\n"
 		       + "changes the console mode\n"
 		       + "'d' is developer\n"
 		       + "'u' is user";

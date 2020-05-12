@@ -118,7 +118,7 @@ public class PackCommand extends ShellCommand {
 	}
 
 	protected String getHelpMessage() {
-		return "`pack <cartridge name>`\n"
+		return "'pack <cartridge name>'\n"
 		       + "creates a cartridge";
 	}
 

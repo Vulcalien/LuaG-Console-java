@@ -29,11 +29,12 @@ public class RunCommand extends ShellCommand {
 
 	protected String getHelpMessage() {
 		if(Console.mode == Mode.DEVELOPER) {
-			return "`run <nothing or\n"
-			       + "     cartridge name>`\n"
-			       + "runs the game/cartridge";
+			return "'run'\n"
+			       + "runs the developed game\n"
+			       + "'run <cartridge name>'\n"
+			       + "runs the cartridge";
 		} else {
-			return "`run <cartridge name>`\n"
+			return "'run <cartridge name>'\n"
 			       + "runs the cartridge";
 		}
 	}
