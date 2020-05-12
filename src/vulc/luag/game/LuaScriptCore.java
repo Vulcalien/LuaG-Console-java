@@ -61,18 +61,20 @@ public class LuaScriptCore {
 		LuaInterface luaInterface;
 		if(Console.cartridge != null) {
 			String[] requestedVersion;
+			int majorVerReq, minorVerReq;
 			try {
-				requestedVersion = game.cartridgeInfo.get("interface-version").getAsString().split("\\.");
+				requestedVersion = game.cartridgeInfo.get("interface-version")
+				                                     .getAsString()
+				                                     .split("\\.");
+
+				majorVerReq = Integer.parseInt(requestedVersion[0]);
+				minorVerReq = Integer.parseInt(requestedVersion[1]);
 			} catch(Exception e) {
 				Console.die("Error:\n"
 				            + "'" + Game.CARTRIDGE_INFO_NAME + "'\n"
 				            + "is invalid");
 				return false;
 			}
-
-			// BUG crash if these are not numbers
-			int majorVerReq = Integer.parseInt(requestedVersion[0]);
-			int minorVerReq = Integer.parseInt(requestedVersion[1]);
 
 			luaInterface = LuaInterface.getInterface(majorVerReq, game, globals);
 			if(luaInterface == null) {
