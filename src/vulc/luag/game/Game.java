@@ -186,7 +186,7 @@ public class Game {
 			Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
 			ZipEntry atlasEntry = cartridgeFile.getEntry(ATLAS_FILE_NAME);
 			if(atlasEntry == null) {
-				Console.die("Cartirdge Error:\n"
+				Console.die("Cartridge Error:\n"
 				            + "'" + ATLAS_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;
@@ -200,7 +200,7 @@ public class Game {
 			Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 			ZipEntry mapEntry = cartridgeFile.getEntry(MAP_FILE_NAME);
 			if(mapEntry == null) {
-				Console.die("Cartirdge Error:\n"
+				Console.die("Cartridge Error:\n"
 				            + "'" + MAP_FILE_NAME + "'\n"
 				            + "file not found");
 				return false;

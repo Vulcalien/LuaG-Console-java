@@ -12,12 +12,20 @@ public class GamePanel extends Panel {
 	}
 
 	public void init() {
-		if(Console.cartridge != null) {
-			if(!game.initCartridgeResources()) return;
-		} else {
-			if(!game.initDevResources()) return;
+		try {
+			if(Console.cartridge != null) {
+				if(!game.initCartridgeResources()) return;
+			} else {
+				if(!game.initDevResources()) return;
+			}
+			game.initScript();
+		} catch(Exception e) {
+			// no error should be uncaught
+			// this prevents the console to crash
+			Console.die("Error:\n"
+			            + "uncaught error");
+			e.printStackTrace();
 		}
-		game.initScript();
 	}
 
 	public void remove() {
