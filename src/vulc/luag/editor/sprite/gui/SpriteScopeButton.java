@@ -15,9 +15,7 @@ public class SpriteScopeButton extends GUIButton {
 		text = scope + "";
 
 		this.onMouseDownAction = () -> {
-			editor.scope = scope;
-			editor.atlasPreview.scope = scope;
-			editor.atlasPreview.resetPreview();
+			editor.setScope(scope);
 		};
 	}
 

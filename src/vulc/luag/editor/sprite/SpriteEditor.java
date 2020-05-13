@@ -200,4 +200,11 @@ public class SpriteEditor extends Editor {
 		updateAtlas();
 	}
 
+	public void setScope(int scope) {
+		this.scope = scope;
+
+		atlasPreview.setScope(scope);
+		preview = atlasPreview.getPreview();
+	}
+
 }

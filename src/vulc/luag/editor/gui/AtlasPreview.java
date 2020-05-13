@@ -12,7 +12,7 @@ public class AtlasPreview extends GUIComponent {
 
 	private int animationTicks = 0;
 	protected int atlasOffset = 0;
-	protected int selectedTile = 0;
+	protected int selected = 0;
 	public int scope = 1;
 
 	public AtlasPreview(int x, int y, int w, int h, Game game, int verticalTiles) {
@@ -28,7 +28,6 @@ public class AtlasPreview extends GUIComponent {
 	public void render(Screen screen) {
 		screen.draw(game.atlas.getSubimage(0, atlasOffset * Game.SPR_SIZE, w, h), x, y);
 
-		int selected = selectedTile;
 		int xSpr = selected % 16;
 		int ySpr = ((selected / 16) - atlasOffset);
 
@@ -59,7 +58,17 @@ public class AtlasPreview extends GUIComponent {
 		if(xs + scope > 16) xs = 16 - scope;
 		if(ys + scope > 16) ys = 16 - scope;
 
-		selectedTile = xs + ys * 16; // 16 = atlas.width (in sprites)
+		selected = xs + ys * 16; // 16 = atlas.width (in sprites)
+	}
+
+	public void setScope(int scope) {
+		this.scope = scope;
+
+		// check if the selected area is out of bounds
+		int xs = selected % 16;
+		int ys = selected / 16;
+
+		setSelected(xs, ys);
 	}
 
 }

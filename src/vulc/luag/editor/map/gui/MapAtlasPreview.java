@@ -14,7 +14,7 @@ public class MapAtlasPreview extends AtlasPreview {
 
 	public void onMouseDown(int xMouse, int yMouse) {
 		super.onMouseDown(xMouse, yMouse);
-		editor.selectedTile = selectedTile;
+		editor.selectedTile = selected;
 	}
 
 }
