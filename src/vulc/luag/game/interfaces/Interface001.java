@@ -234,23 +234,39 @@ public class Interface001 extends LuaInterface {
 
 	private class get_tile extends TwoArgFunction {
 		public LuaValue call(LuaValue x, LuaValue y) {
-			return valueOf(game.map.getTile(x.checkint(), y.checkint()));
+			int xt = x.checkint();
+			int yt = y.checkint();
+
+			if(xt < 0 || xt >= game.map.width) throw new LuaError("bad argument: x");
+			if(yt < 0 || yt >= game.map.height) throw new LuaError("bad argument: y");
+
+			return valueOf(game.map.getTile(xt, yt));
 		}
 	}
 
 	// note for next interface version: change to set_tile(id, x, y)
 	private class set_tile extends ThreeArgFunction {
-		public LuaValue call(LuaValue x, LuaValue y, LuaValue id) {
-			game.map.setTile(x.checkint(), y.checkint(), id.checkint());
+		public LuaValue call(LuaValue x, LuaValue y, LuaValue idArg) {
+			int xt = x.checkint();
+			int yt = y.checkint();
+			int id = idArg.checkint();
+
+			if(xt < 0 || xt >= game.map.width) throw new LuaError("bad argument: x");
+			if(yt < 0 || yt >= game.map.height) throw new LuaError("bad argument: y");
+			if(id < 0 || id >= 256) throw new LuaError("bad argument: id");
+
+			game.map.setTile(xt, yt, id);
 			return NIL;
 		}
 	}
 
 	private class maprender extends ThreeArgFunction {
-		public LuaValue call(LuaValue arg1, LuaValue arg2, LuaValue arg3) {
-			int scale = arg1.isnil() ? 1 : arg1.checkint();
-			int xoff = arg2.isnil() ? 0 : arg2.checkint();
-			int yoff = arg3.isnil() ? 0 : arg3.checkint();
+		public LuaValue call(LuaValue scaleArg, LuaValue xOffArg, LuaValue yOffArg) {
+			int scale = scaleArg.isnil() ? 1 : scaleArg.checkint();
+			int xoff = xOffArg.isnil() ? 0 : xOffArg.checkint();
+			int yoff = yOffArg.isnil() ? 0 : yOffArg.checkint();
+
+			if(scale <= 0) throw new LuaError("bad argument: scale");
 
 			game.map.render(Console.SCREEN, game, xoff, yoff, scale);
 			return NIL;
