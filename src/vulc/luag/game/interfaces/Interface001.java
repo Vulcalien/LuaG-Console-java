@@ -221,6 +221,7 @@ public class Interface001 extends LuaInterface {
 			int ySprite = id / 16;
 
 			if(id < 0 || id >= 256) throw new LuaError("bad argument: id");
+			if(scale <= 0) throw new LuaError("bad argument: scale");
 			if(sw <= 0 || xSprite + sw > 16) throw new LuaError("bad argument: sw");
 			if(sh <= 0 || ySprite + sh > 16) throw new LuaError("bad argument: sh");
 
