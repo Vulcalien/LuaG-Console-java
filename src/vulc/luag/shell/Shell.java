@@ -15,7 +15,9 @@ public abstract class Shell {
 	private static final int FOREGROUND = 0xffffff;
 
 	public static final int HORIZONTAL_CHARS = Console.WIDTH / (Screen.FONT.widthOf(' ') + 1);
-	private static final int VERTICAL_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
+	public static final int VERTICAL_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
+
+	private static final int ANIMATION_DELAY = 25;
 
 	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
 	public static int scrollBuffer = 0;
@@ -46,9 +48,10 @@ public abstract class Shell {
 	public static void tick() {
 		if(CHAR_BUFFER.size() != 0) {
 			ShellChar character = CHAR_BUFFER.remove(0);
-			if(receiveInput(character.val, character.writtenByUser)) {
-				animationTicks = 0;
-			}
+			receiveInput(character.val, character.writtenByUser);
+
+			if(character.writtenByUser) animationTicks = 0;
+			else animationTicks = ANIMATION_DELAY;
 		} else {
 			animationTicks++;
 		}
@@ -142,7 +145,7 @@ public abstract class Shell {
 		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
 
 		// draw the cursor
-		if(animationTicks / 25 % 2 == 1) {
+		if(animationTicks / ANIMATION_DELAY % 2 == 0) {
 			Font font = Screen.FONT;
 			Console.SCREEN.write("_", FOREGROUND,
 			                     1 + (font.widthOf(' ') + font.getLetterSpacing())
@@ -152,8 +155,7 @@ public abstract class Shell {
 		}
 	}
 
-	// returns true if 'isWriting' should be set to true
-	public static boolean receiveInput(char character, boolean shouldExecute) {
+	public static void receiveInput(char character, boolean shouldExecute) {
 		int lowestOffset;
 		switch(character) {
 			case '\n':
@@ -172,7 +174,7 @@ public abstract class Shell {
 				if(renderOffset < lowestOffset) {
 					renderOffset = lowestOffset;
 				}
-				return true;
+				break;
 
 			case '\b':
 				if(currentLine.length() > 0 && currentChar > 0) {
@@ -188,7 +190,7 @@ public abstract class Shell {
 						currentChar--;
 					}
 				}
-				return true;
+				break;
 
 			case 127:
 				if(currentLine.length() > 0 && currentChar != currentLine.length()) {
@@ -200,7 +202,7 @@ public abstract class Shell {
 						              + currentLine.substring(currentChar + 1, currentLine.length());
 					}
 				}
-				return true;
+				break;
 
 			default:
 				if(character >= 32 && character < 127) {
@@ -214,10 +216,9 @@ public abstract class Shell {
 					if(renderOffset < lowestOffset) {
 						renderOffset = lowestOffset;
 					}
-					return true;
 				}
+				break;
 		}
-		return false;
 	}
 
 	public static void write(String text) {
@@ -290,19 +291,19 @@ public abstract class Shell {
 
 	// find right word's position, used for ctrl+right and ctrl+del
 	private static int rightWordPosition() {
-		int spacePosition = currentLine.length() - 1;
-		boolean foundNonSpace = false;
+		int nonSpacePosition = currentLine.length();
+		boolean foundSpace = false;
 		for(int i = currentChar; i < currentLine.length(); i++) {
-			if(currentLine.charAt(i) == ' ') {
-				if(foundNonSpace) {
-					spacePosition = i;
+			if(currentLine.charAt(i) != ' ') {
+				if(foundSpace) {
+					nonSpacePosition = i;
 					break;
 				}
 			} else {
-				foundNonSpace = true;
+				foundSpace = true;
 			}
 		}
-		return spacePosition + 1;
+		return nonSpacePosition;
 	}
 
 }
