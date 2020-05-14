@@ -31,8 +31,8 @@ public class MapSizeTextBox extends GUITextBox {
 			value = 0;
 		} else {
 			value = Integer.parseInt(text);
-			if(value > 255) {
-				value = 255;
+			if(value > 256) {
+				value = 256;
 			}
 		}
 		text = "" + value;
