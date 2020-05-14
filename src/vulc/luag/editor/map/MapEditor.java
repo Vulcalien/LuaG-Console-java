@@ -41,12 +41,11 @@ public class MapEditor extends Editor {
 		                                       this);
 		guiPanel.add(previewPanel);
 
-		int verticalTiles = 4;
 		int wAtlas = editorPanel.game.atlas.width;
-		int hAtlas = verticalTiles * Game.SPR_SIZE;
+		int hAtlas = 4 * Game.SPR_SIZE;
 		MapAtlasPreview atlasPreview = new MapAtlasPreview((guiPanel.w - wAtlas) / 2, guiPanel.h - hAtlas - 5,
 		                                                   wAtlas, hAtlas,
-		                                                   this, verticalTiles);
+		                                                   this);
 		guiPanel.add(atlasPreview);
 
 		GUIPanel sizePanel = new MapSizePanel(atlasPreview.x, previewPanel.y + previewPanel.h + 3,

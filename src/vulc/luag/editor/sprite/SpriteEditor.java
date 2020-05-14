@@ -85,11 +85,10 @@ public class SpriteEditor extends Editor {
 		                                                            this, scopes);
 		guiPanel.add(scopeSelector);
 
-		int verticalTiles = 8;
-		int hAtlas = 8 * verticalTiles;
+		int hAtlas = 8 * Game.SPR_SIZE;
 		atlasPreview = new SpriteAtlasPreview((guiPanel.w - atlas.width) / 2, guiPanel.h - hAtlas - 5,
 		                                      atlas.width, hAtlas,
-		                                      this, verticalTiles);
+		                                      this);
 		guiPanel.add(atlasPreview);
 
 		int hToolbar = 9 * 5 + 1;

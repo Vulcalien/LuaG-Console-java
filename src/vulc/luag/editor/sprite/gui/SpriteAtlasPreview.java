@@ -9,8 +9,8 @@ public class SpriteAtlasPreview extends AtlasPreview {
 
 	private final SpriteEditor editor;
 
-	public SpriteAtlasPreview(int x, int y, int w, int h, SpriteEditor editor, int verticalTiles) {
-		super(x, y, w, h, editor.editorPanel.game, verticalTiles);
+	public SpriteAtlasPreview(int x, int y, int w, int h, SpriteEditor editor) {
+		super(x, y, w, h, editor.editorPanel.game);
 		this.editor = editor;
 	}
 

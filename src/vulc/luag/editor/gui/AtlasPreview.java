@@ -2,42 +2,37 @@ package vulc.luag.editor.gui;
 
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Icons;
-import vulc.luag.gfx.Screen;
-import vulc.luag.gfx.gui.GUIComponent;
+import vulc.luag.gfx.gui.GUIPanel;
 
-public class AtlasPreview extends GUIComponent {
+public class AtlasPreview extends GUIPanel {
 
 	private final Game game;
-	private final int verticalTiles;
 
 	private int animationTicks = 0;
 	protected int atlasOffset = 0;
 	protected int selected = 0;
 	public int scope = 1;
 
-	public AtlasPreview(int x, int y, int w, int h, Game game, int verticalTiles) {
+	public AtlasPreview(int x, int y, int w, int h, Game game) {
 		super(x, y, w, h);
 		this.game = game;
-		this.verticalTiles = verticalTiles;
 	}
 
 	public void tick() {
 		animationTicks++;
 	}
 
-	public void render(Screen screen) {
-		screen.draw(game.atlas.getSubimage(0, atlasOffset * Game.SPR_SIZE, w, h), x, y);
+	public void drawComponents() {
+		screen.draw(game.atlas.getSubimage(0, atlasOffset * Game.SPR_SIZE, w, h), 0, 0);
 
 		int xSpr = selected % 16;
 		int ySpr = ((selected / 16) - atlasOffset);
 
 		int transparency = animationTicks / 50 % 2 == 0 ? 0xaa : 0xdd;
 
-		if(ySpr >= 0 && ySpr < verticalTiles) {
-			screen.drawBool(Icons.SELECTED.getScaled(scope), 0xffffff, transparency,
-			                x + xSpr * Game.SPR_SIZE,
-			                y + ySpr * Game.SPR_SIZE);
-		}
+		screen.drawBool(Icons.SELECTED.getScaled(scope), 0xffffff, transparency,
+		                xSpr * Game.SPR_SIZE,
+		                ySpr * Game.SPR_SIZE);
 	}
 
 	public void onMouseDown(int xMouse, int yMouse) {

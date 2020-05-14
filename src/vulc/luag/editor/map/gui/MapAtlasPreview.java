@@ -7,8 +7,8 @@ public class MapAtlasPreview extends AtlasPreview {
 
 	private final MapEditor editor;
 
-	public MapAtlasPreview(int x, int y, int w, int h, MapEditor editor, int verticalTiles) {
-		super(x, y, w, h, editor.editorPanel.game, verticalTiles);
+	public MapAtlasPreview(int x, int y, int w, int h, MapEditor editor) {
+		super(x, y, w, h, editor.editorPanel.game);
 		this.editor = editor;
 	}
 
