@@ -15,6 +15,7 @@ import vulc.luag.editor.sprite.gui.SpriteColorbar;
 import vulc.luag.editor.sprite.gui.SpritePreview;
 import vulc.luag.editor.sprite.gui.SpriteScopeSelector;
 import vulc.luag.editor.sprite.gui.SpriteToolbar;
+import vulc.luag.editor.sprite.history.History;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.gui.GUIComponent;
@@ -25,7 +26,6 @@ import vulc.luag.gfx.panel.EditorPanel;
 public class SpriteEditor extends Editor {
 
 	public static final int PALETTE_SIZE = 8;
-	public static final int HISTORY_SIZE = 100;
 
 	public static final int DEFAULT_SCALE = 6;
 
@@ -43,8 +43,7 @@ public class SpriteEditor extends Editor {
 	public final List<Integer> lastColors = new ArrayList<Integer>();
 
 	// editing history
-	public List<Bitmap<Integer>> history = new ArrayList<Bitmap<Integer>>();
-	public int nextHistoryIndex = 0;
+	public final History history = new History(this, 100);
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
 
@@ -66,7 +65,7 @@ public class SpriteEditor extends Editor {
 		lastColors.add(0xff_00_ff);
 		lastColors.add(0x00_ff_ff);
 
-		historySave();
+		history.save();
 
 		// INTERFACE
 		guiPanel.background = 0x000000;
@@ -113,29 +112,13 @@ public class SpriteEditor extends Editor {
 		isEditing = false;
 
 		if(shouldSaveHistory) {
-			historySave();
 			updateAtlas();
+			history.save();
 		}
 	}
 
-	public void historySave() {
-		// if UNDOs where done, clear the "future" history
-		history = history.subList(0, nextHistoryIndex);
-
-		history.add(preview.getCopy());
-		if(history.size() > HISTORY_SIZE) {
-			history.remove(0);
-		}
-		nextHistoryIndex = history.size();
-
-		System.out.println(history.size());
-	}
-
-	public void resetHistory() {
-		history.clear();
-		nextHistoryIndex = 0;
-
-		historySave(); // save the first sprite
+	public void updatePreview() {
+		preview = atlasPreview.getPreview();
 	}
 
 	private void updateAtlas() {
@@ -182,23 +165,17 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void undo() {
-		if(nextHistoryIndex == 1) return;
-
-		preview = history.get(nextHistoryIndex - 2).getCopy();
-		nextHistoryIndex--;
-
-		shouldSaveContent = true;
-		updateAtlas();
+		if(history.undo()) {
+			updatePreview();
+			shouldSaveContent = true;
+		}
 	}
 
 	public void redo() {
-		if(nextHistoryIndex == history.size()) return;
-
-		preview = history.get(nextHistoryIndex).getCopy();
-		nextHistoryIndex++;
-
-		shouldSaveContent = true;
-		updateAtlas();
+		if(history.redo()) {
+			updatePreview();
+			shouldSaveContent = true;
+		}
 	}
 
 	public void setScope(int scope) {
@@ -206,8 +183,7 @@ public class SpriteEditor extends Editor {
 
 		atlasPreview.setScope(scope);
 
-		preview = atlasPreview.getPreview();
-		resetHistory();
+		updatePreview();
 	}
 
 }

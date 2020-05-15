@@ -17,8 +17,7 @@ public class SpriteAtlasPreview extends AtlasPreview {
 	public void onMouseDown(int xMouse, int yMouse) {
 		super.onMouseDown(xMouse, yMouse);
 
-		editor.preview = getPreview();
-		editor.resetHistory();
+		editor.updatePreview();
 	}
 
 	public Bitmap<Integer> getPreview() {
