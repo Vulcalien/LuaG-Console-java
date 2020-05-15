@@ -81,7 +81,7 @@ public class SpriteEditor extends Editor {
 		int scopes[] = {1, 2};
 		SpriteScopeSelector scopeSelector = new SpriteScopeSelector(sprPreview.x - 9 - 5,
 		                                                            (sprPreview.y + sprPreview.h) / 2 - 5,
-		                                                            9, 1 + scopes.length * 8,
+		                                                            10, 1 + scopes.length * 9,
 		                                                            this, scopes);
 		guiPanel.add(scopeSelector);
 
@@ -127,6 +127,8 @@ public class SpriteEditor extends Editor {
 			history.remove(0);
 		}
 		nextHistoryIndex = history.size();
+
+		System.out.println(history.size());
 	}
 
 	public void resetHistory() {
@@ -203,7 +205,9 @@ public class SpriteEditor extends Editor {
 		this.scope = scope;
 
 		atlasPreview.setScope(scope);
+
 		preview = atlasPreview.getPreview();
+		resetHistory();
 	}
 
 }

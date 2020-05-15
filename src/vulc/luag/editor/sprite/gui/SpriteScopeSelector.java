@@ -11,7 +11,7 @@ public class SpriteScopeSelector extends GUIPanel {
 		background = Colors.BACKGROUND_0;
 
 		for(int i = 0; i < scopes.length; i++) {
-			add(new SpriteScopeButton(1, 1 + i * 8, 7, 7, editor, scopes[i]));
+			add(new SpriteScopeButton(1, 1 + i * 9, 8, 8, editor, scopes[i]));
 		}
 	}
 

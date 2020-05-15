@@ -23,6 +23,10 @@ public abstract class Icons {
 	public static final Bitmap<Boolean> BUCKET_TOOL = loadIcon("/res/icons/editor/tool/bucket.png");
 	public static final Bitmap<Boolean> PICKUP_TOOL = loadIcon("/res/icons/editor/tool/pickup.png");
 
+	// SPRITE EDITOR
+	public static final Bitmap<Boolean> SPRITE_SCOPE_1 = loadIcon("/res/icons/editor/sprite/scope_1.png");
+	public static final Bitmap<Boolean> SPRITE_SCOPE_2 = loadIcon("/res/icons/editor/sprite/scope_2.png");
+
 	private static Bitmap<Boolean> loadIcon(String icon) {
 		try {
 			return new BoolBitmap(ImageIO.read(Icons.class.getResourceAsStream(icon)), 0x000000);
