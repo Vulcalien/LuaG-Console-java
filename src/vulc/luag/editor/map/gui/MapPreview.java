@@ -42,8 +42,8 @@ public class MapPreview extends GUIPanel {
 	public void onMouseDown(int xMouse, int yMouse) {
 		super.onMouseDown(xMouse, yMouse);
 
-		int xt = (xMouse + editor.xOffset) / Game.SPR_SIZE;
-		int yt = (yMouse + editor.yOffset) / Game.SPR_SIZE;
+		int xt = Math.floorDiv(xMouse + editor.xOffset, Game.SPR_SIZE);
+		int yt = Math.floorDiv(yMouse + editor.yOffset, Game.SPR_SIZE);
 
 		if(xt < 0 || yt < 0 || xt >= game.map.width || yt >= game.map.height) return;
 

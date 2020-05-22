@@ -28,8 +28,8 @@ public class SpritePreview extends GUIComponent {
 	public void onMouseDown(int xMouse, int yMouse) {
 		int scale = SpriteEditor.DEFAULT_SCALE / editor.scope;
 
-		int xPix = (xMouse - BORDER) / scale;
-		int yPix = (yMouse - BORDER) / scale;
+		int xPix = Math.floorDiv(xMouse - BORDER, scale);
+		int yPix = Math.floorDiv(yMouse - BORDER, scale);
 
 		if(xPix < 0 || xPix >= editor.preview.width
 		   || yPix < 0 || yPix >= editor.preview.height) return;
