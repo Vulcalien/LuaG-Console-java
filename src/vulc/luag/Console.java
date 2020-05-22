@@ -16,20 +16,19 @@
 package vulc.luag;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.File;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-
+import vulc.luag.gfx.ConsoleFrame;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
 import vulc.luag.gfx.panel.DeathPanel;
@@ -63,7 +62,7 @@ public class Console extends Canvas implements Runnable {
 	public static final String COPYRIGHT = "Copyright 2020 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;
-	public static int scale;
+	public static int realWidth, realHeight;
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
@@ -77,7 +76,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static Console instance;
 
-	private static final JFrame FRAME = new JFrame();
+	private static final ConsoleFrame FRAME = new ConsoleFrame();
 
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
@@ -168,7 +167,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(img, 0, 0, WIDTH * scale, HEIGHT * scale, null);
+		g.drawImage(img, 0, 0, realWidth, realHeight, null);
 		g.dispose();
 		bs.show();
 	}
@@ -197,21 +196,15 @@ public class Console extends Canvas implements Runnable {
 		startupOperations();
 		LOGGER.info("Starting Console...");
 
-		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		FRAME.setTitle(NAME + " " + VERSION);
-		FRAME.setResizable(false);
+		FRAME.init();
 
 		instance = new Console();
 		FRAME.add(instance);
 
-		scaleFrame(3);
-		FRAME.setLocationRelativeTo(null);
+		instance.setBackground(Color.GRAY); // DEBUG
 
-		try {
-			FRAME.setIconImage(ImageIO.read(Console.class.getResourceAsStream("/res/icon.png")));
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		initialScale();
+		FRAME.setLocationRelativeTo(null);
 
 		instance.init(args);
 
@@ -237,16 +230,27 @@ public class Console extends Canvas implements Runnable {
 		LoggerSetup.setup(LOGGER, rootDirectory);
 	}
 
-	private static void scaleFrame(int newScale) {
-		LOGGER.info("Console Scale: " + newScale);
+	private static void initialScale() {
+		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-		scale = newScale;
+		// by default, the console's height is 50% of the screen
+		double newScale = (double) screenHeight / HEIGHT / 2;
 
-		instance.setPreferredSize(new Dimension(WIDTH * scale, HEIGHT * scale));
-		instance.setMaximumSize(new Dimension(WIDTH * scale, HEIGHT * scale));
-		instance.setMinimumSize(new Dimension(WIDTH * scale, HEIGHT * scale));
+		instance.setSize(new Dimension((int) (WIDTH * newScale), (int) (HEIGHT * newScale)));
+		updateRealSize();
 
 		FRAME.pack();
+
+		LOGGER.info("Initial console scale: " + newScale);
+	}
+
+	public static void updateRealSize() {
+		// FIX what if the console was not squared?
+		int minReal = Math.min(instance.getWidth(), instance.getHeight());
+		int minScr = Math.min(WIDTH, HEIGHT);
+
+		realWidth = minReal * WIDTH / minScr;
+		realHeight = minReal * HEIGHT / minScr;
 	}
 
 }

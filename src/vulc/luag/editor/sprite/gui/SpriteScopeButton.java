@@ -19,7 +19,7 @@ public class SpriteScopeButton extends GUIButton {
 			boolImage = Icons.SPRITE_SCOPE_2;
 		}
 
-		this.onMouseDownAction = () -> {
+		this.onMousePressAction = () -> {
 			if(editor.scope != scope) {
 				editor.setScope(scope);
 			}
