@@ -17,7 +17,6 @@ package vulc.luag;
 
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
@@ -62,7 +61,7 @@ public class Console extends Canvas implements Runnable {
 	public static final String COPYRIGHT = "Copyright 2020 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;
-	public static int realWidth, realHeight;
+	public static int scaledWidth, scaledHeight;
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
@@ -152,6 +151,7 @@ public class Console extends Canvas implements Runnable {
 	private void tick() {
 		currentPanel.tick();
 
+		FRAME.checkSize();
 		render();
 	}
 
@@ -167,7 +167,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(img, 0, 0, realWidth, realHeight, null);
+		g.drawImage(img, 0, 0, scaledWidth, scaledHeight, null);
 		g.dispose();
 		bs.show();
 	}
@@ -199,11 +199,10 @@ public class Console extends Canvas implements Runnable {
 		FRAME.init();
 
 		instance = new Console();
+		instance.setBackground(Color.DARK_GRAY);
 		FRAME.add(instance);
 
-		instance.setBackground(Color.GRAY); // DEBUG
-
-		initialScale();
+		setInitialScale();
 		FRAME.setLocationRelativeTo(null);
 
 		instance.init(args);
@@ -230,27 +229,22 @@ public class Console extends Canvas implements Runnable {
 		LoggerSetup.setup(LOGGER, rootDirectory);
 	}
 
-	private static void initialScale() {
+	private static void setInitialScale() {
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
-		// by default, the console's height is 50% of the screen
+		// by default, the console's height is half of the screen
 		double newScale = (double) screenHeight / HEIGHT / 2;
 
-		instance.setSize(new Dimension((int) (WIDTH * newScale), (int) (HEIGHT * newScale)));
-		updateRealSize();
-
+		updateScaledSize((int) (WIDTH * newScale), (int) (HEIGHT * newScale));
+		instance.setSize(scaledWidth, scaledHeight);
 		FRAME.pack();
 
 		LOGGER.info("Initial console scale: " + newScale);
 	}
 
-	public static void updateRealSize() {
-		// FIX what if the console was not squared?
-		int minReal = Math.min(instance.getWidth(), instance.getHeight());
-		int minScr = Math.min(WIDTH, HEIGHT);
-
-		realWidth = minReal * WIDTH / minScr;
-		realHeight = minReal * HEIGHT / minScr;
+	public static void updateScaledSize(int width, int height) {
+		scaledWidth = width;
+		scaledHeight = height;
 	}
 
 }
