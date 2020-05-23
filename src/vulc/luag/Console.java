@@ -62,6 +62,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static final int WIDTH = 160, HEIGHT = 160;
 	public static int scaledWidth, scaledHeight;
+	public static int xOffset, yOffset;
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
@@ -167,7 +168,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
-		g.drawImage(img, 0, 0, scaledWidth, scaledHeight, null);
+		g.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight, null);
 		g.dispose();
 		bs.show();
 	}
@@ -243,8 +244,21 @@ public class Console extends Canvas implements Runnable {
 	}
 
 	public static void updateScaledSize(int width, int height) {
-		scaledWidth = width;
-		scaledHeight = height;
+		// find lowest scale and use it on both sides
+		int minScaled, minScreen;
+		if(width * Console.HEIGHT < height * Console.WIDTH) {
+			minScaled = width;
+			minScreen = Console.WIDTH;
+		} else {
+			minScaled = height;
+			minScreen = Console.HEIGHT;
+		}
+
+		scaledWidth = Console.WIDTH * minScaled / minScreen;
+		scaledHeight = Console.HEIGHT * minScaled / minScreen;
+
+		xOffset = (width - scaledWidth) / 2;
+		yOffset = (height - scaledHeight) / 2;
 	}
 
 }

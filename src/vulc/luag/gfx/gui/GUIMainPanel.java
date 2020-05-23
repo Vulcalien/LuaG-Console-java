@@ -50,8 +50,8 @@ public class GUIMainPanel extends GUIPanel {
 
 		input.tick();
 
-		int xMouse = input.xMouse * Console.WIDTH / Console.scaledWidth - this.x;
-		int yMouse = input.yMouse * Console.HEIGHT / Console.scaledHeight - this.y;
+		int xMouse = (input.xMouse - Console.xOffset) * Console.WIDTH / Console.scaledWidth - this.x;
+		int yMouse = (input.yMouse - Console.yOffset) * Console.HEIGHT / Console.scaledHeight - this.y;
 
 		while(keyBuffer.size() != 0) {
 			char c = keyBuffer.remove(0);

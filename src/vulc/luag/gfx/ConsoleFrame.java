@@ -3,8 +3,6 @@ package vulc.luag.gfx;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -28,28 +26,20 @@ public class ConsoleFrame extends JFrame {
 			e.printStackTrace();
 		}
 
-		addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent e) {
-				pack();
-			}
-		});
-
 		Toolkit.getDefaultToolkit().setDynamicLayout(false);
 	}
 
 	public void checkSize() {
 		Dimension d = getSize();
 		Insets insets = getInsets();
-		int w = d.width - insets.left - insets.right;
-		int h = d.height - insets.top - insets.bottom;
+		int wFrame = d.width - insets.left - insets.right;
+		int hFrame = d.height - insets.top - insets.bottom;
 
-		if(w != wOld || h != hOld) {
-			int min = Math.min(w, h);
+		if(wFrame != wOld || hFrame != hOld) {
+			Console.updateScaledSize(wFrame, hFrame);
 
-			Console.updateScaledSize(min, min);
-
-			wOld = w;
-			hOld = h;
+			wOld = wFrame;
+			hOld = hFrame;
 		}
 	}
 
