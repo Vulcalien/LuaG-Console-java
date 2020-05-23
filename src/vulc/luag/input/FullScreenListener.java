@@ -12,6 +12,8 @@ public class FullScreenListener implements KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_F11) {
+			Console.stop();
+
 			Console.frame.setVisible(false);
 
 			if(Console.isFullScreen) {
@@ -23,6 +25,8 @@ public class FullScreenListener implements KeyListener {
 			}
 			Console.frame.setVisible(true);
 			Console.instance.requestFocus();
+
+			Console.start();
 		}
 	}
 

@@ -80,6 +80,9 @@ public class Console extends Canvas implements Runnable {
 
 	public static Console instance;
 
+	private static boolean running = false;
+	private static Thread thread;
+
 	public static ConsoleFrame frame;
 
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
@@ -92,7 +95,7 @@ public class Console extends Canvas implements Runnable {
 		long unprocessedNanos = 0;
 		long lastTime = System.nanoTime();
 
-		while(true) {
+		while(running) {
 			long now = System.nanoTime();
 			long passedTime = now - lastTime;
 			lastTime = now;
@@ -118,6 +121,23 @@ public class Console extends Canvas implements Runnable {
 			} catch(InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public static void start() {
+		if(running) return;
+		running = true;
+		thread = new Thread(instance);
+		thread.start();
+	}
+
+	public static void stop() {
+		if(!running) return;
+		running = false;
+		try {
+			thread.join();
+		} catch(InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -213,7 +233,7 @@ public class Console extends Canvas implements Runnable {
 		instance.init(args);
 
 		frame.setVisible(true);
-		new Thread(instance).start();
+		start();
 
 		instance.addKeyListener(new FullScreenListener());
 	}
