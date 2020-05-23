@@ -50,6 +50,7 @@ public class GUIMainPanel extends GUIPanel {
 
 		input.tick();
 
+		// BUG what if the scaledHeight is 0 (division for 0)
 		int xMouse = (input.xMouse - Console.xOffset) * Console.WIDTH / Console.scaledWidth - this.x;
 		int yMouse = (input.yMouse - Console.yOffset) * Console.HEIGHT / Console.scaledHeight - this.y;
 

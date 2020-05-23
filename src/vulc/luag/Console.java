@@ -27,6 +27,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JFrame;
+
 import vulc.luag.gfx.ConsoleFrame;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
@@ -34,6 +36,7 @@ import vulc.luag.gfx.panel.DeathPanel;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.Panel;
 import vulc.luag.gfx.panel.ShellPanel;
+import vulc.luag.input.FullScreenListener;
 import vulc.luag.shell.Shell;
 
 /**
@@ -63,6 +66,7 @@ public class Console extends Canvas implements Runnable {
 	public static final int WIDTH = 160, HEIGHT = 160;
 	public static int scaledWidth, scaledHeight;
 	public static int xOffset, yOffset;
+	public static boolean isFullScreen;
 
 	public static final Logger LOGGER = Logger.getLogger(Console.class.getName());
 	public static String rootDirectory;
@@ -76,7 +80,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static Console instance;
 
-	private static final ConsoleFrame FRAME = new ConsoleFrame();
+	public static ConsoleFrame frame;
 
 	private final BufferedImage img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private final int[] pixels = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
@@ -152,7 +156,7 @@ public class Console extends Canvas implements Runnable {
 	private void tick() {
 		currentPanel.tick();
 
-		FRAME.checkSize();
+		frame.checkSize();
 		render();
 	}
 
@@ -197,19 +201,21 @@ public class Console extends Canvas implements Runnable {
 		startupOperations();
 		LOGGER.info("Starting Console...");
 
-		FRAME.init();
+		Toolkit.getDefaultToolkit().setDynamicLayout(false);
 
 		instance = new Console();
 		instance.setBackground(Color.DARK_GRAY);
-		FRAME.add(instance);
+		initFrame(false);
 
 		setInitialScale();
-		FRAME.setLocationRelativeTo(null);
+		frame.setLocationRelativeTo(null);
 
 		instance.init(args);
 
-		FRAME.setVisible(true);
+		frame.setVisible(true);
 		new Thread(instance).start();
+
+		instance.addKeyListener(new FullScreenListener());
 	}
 
 	private static void startupOperations() {
@@ -230,7 +236,7 @@ public class Console extends Canvas implements Runnable {
 		LoggerSetup.setup(LOGGER, rootDirectory);
 	}
 
-	private static void setInitialScale() {
+	public static void setInitialScale() {
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		// by default, the console's height is half of the screen
@@ -238,9 +244,7 @@ public class Console extends Canvas implements Runnable {
 
 		updateScaledSize((int) (WIDTH * newScale), (int) (HEIGHT * newScale));
 		instance.setSize(scaledWidth, scaledHeight);
-		FRAME.pack();
-
-		LOGGER.info("Initial console scale: " + newScale);
+		frame.pack();
 	}
 
 	public static void updateScaledSize(int width, int height) {
@@ -259,6 +263,19 @@ public class Console extends Canvas implements Runnable {
 
 		xOffset = (width - scaledWidth) / 2;
 		yOffset = (height - scaledHeight) / 2;
+	}
+
+	public static void initFrame(boolean fullScreen) {
+		frame = new ConsoleFrame();
+		frame.init();
+		frame.add(instance);
+
+		isFullScreen = fullScreen;
+
+		if(fullScreen) {
+			frame.setUndecorated(true);
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		}
 	}
 
 }

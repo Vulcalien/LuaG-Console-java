@@ -2,7 +2,6 @@ package vulc.luag.gfx;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -25,8 +24,6 @@ public class ConsoleFrame extends JFrame {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-
-		Toolkit.getDefaultToolkit().setDynamicLayout(false);
 	}
 
 	public void checkSize() {
