@@ -17,7 +17,9 @@ package vulc.luag;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -225,9 +227,10 @@ public class Console extends Canvas implements Runnable {
 
 		instance = new Console();
 		instance.setBackground(Color.DARK_GRAY);
-		initFrame(false);
 
+		initFrame(false);
 		setInitialScale();
+
 		frame.setLocationRelativeTo(null);
 
 		instance.init(args);
@@ -296,6 +299,32 @@ public class Console extends Canvas implements Runnable {
 			frame.setUndecorated(true);
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
+
+		// minimum size: Console's size not scaled
+		frame.pack(); // this sets the insets of the frame
+
+		Insets insets = frame.getInsets();
+		frame.setMinimumSize(new Dimension(WIDTH + insets.left + insets.right,
+		                                   HEIGHT + insets.top + insets.bottom));
+	}
+
+	public static void switchFullScreen() {
+		stop();
+
+		frame.setVisible(false);
+
+		// this changes the value of isFullScreen
+		initFrame(!isFullScreen);
+
+		if(!isFullScreen) {
+			setInitialScale();
+			frame.setLocationRelativeTo(null);
+		}
+
+		frame.setVisible(true);
+		instance.requestFocus();
+
+		start();
 	}
 
 }
