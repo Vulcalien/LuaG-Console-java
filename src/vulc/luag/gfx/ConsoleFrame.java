@@ -2,6 +2,8 @@ package vulc.luag.gfx;
 
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -24,6 +26,16 @@ public class ConsoleFrame extends JFrame {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+
+		addWindowListener(new WindowAdapter() {
+			public void windowIconified(WindowEvent e) {
+				Console.stop();
+			}
+
+			public void windowDeiconified(WindowEvent e) {
+				Console.start();
+			}
+		});
 	}
 
 	public void checkSize() {

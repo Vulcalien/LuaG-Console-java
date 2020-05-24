@@ -129,6 +129,9 @@ public class Console extends Canvas implements Runnable {
 	public static void start() {
 		if(running) return;
 		running = true;
+
+		LOGGER.info("Console: start");
+
 		thread = new Thread(instance);
 		thread.start();
 	}
@@ -136,6 +139,9 @@ public class Console extends Canvas implements Runnable {
 	public static void stop() {
 		if(!running) return;
 		running = false;
+
+		LOGGER.info("Console: stop");
+
 		try {
 			thread.join();
 		} catch(InterruptedException e) {
