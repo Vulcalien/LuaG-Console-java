@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.JFrame;
+
 import vulc.luag.gfx.ConsoleFrame;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.panel.BootPanel;
@@ -301,7 +303,7 @@ public class Console extends Canvas implements Runnable {
 
 		if(fullScreen) {
 			frame.setUndecorated(true);
-			frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		} else {
 			// minimum size: Console's size not scaled
 			frame.pack(); // this sets the insets of the frame
