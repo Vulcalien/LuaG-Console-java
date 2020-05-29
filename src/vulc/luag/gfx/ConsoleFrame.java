@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import vulc.luag.Console;
 
+// BUG try to do WIN+down when in full screen
 public class ConsoleFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;

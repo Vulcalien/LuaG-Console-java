@@ -206,6 +206,7 @@ public class Interface001 extends LuaInterface {
 		}
 	}
 
+	// note for next interface version: change arguments order
 	private class spr extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
 			int id = args.arg(1).checkint();
@@ -217,6 +218,11 @@ public class Interface001 extends LuaInterface {
 			int sw = args.arg(5).isnil() ? 1 : args.arg(5).checkint();
 			int sh = args.arg(6).isnil() ? 1 : args.arg(6).checkint();
 
+			int rot = args.arg(7).isnil() ? 0 : args.arg(7).checkint();
+
+			boolean hflip = args.arg(8).isnil() ? false : args.arg(8).checkboolean();
+			boolean vflip = args.arg(9).isnil() ? false : args.arg(9).checkboolean();
+
 			int xSprite = id % 16;
 			int ySprite = id / 16;
 
@@ -225,7 +231,12 @@ public class Interface001 extends LuaInterface {
 			if(sw <= 0 || xSprite + sw > 16) throw new LuaError("bad argument: sw");
 			if(sh <= 0 || ySprite + sh > 16) throw new LuaError("bad argument: sh");
 
-			Console.SCREEN.draw(game.getSprite(xSprite, ySprite, sw, sh).getScaled(scale), x, y);
+			// flip is applied before rotation
+			Console.SCREEN.draw(game.getSprite(xSprite, ySprite, sw, sh)
+			                        .getFlipped(hflip, vflip)
+			                        .getRotated(rot)
+			                        .getScaled(scale),
+			                    x, y);
 
 			return NIL;
 		}
