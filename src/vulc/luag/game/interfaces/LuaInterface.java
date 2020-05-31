@@ -24,7 +24,7 @@ public abstract class LuaInterface {
 
 	static {
 		INTERFACES.put(1, Interface001.class);
-		MINOR_VERSIONS.put(1, 1);
+		MINOR_VERSIONS.put(1, 2);
 	}
 
 	protected final Game game;

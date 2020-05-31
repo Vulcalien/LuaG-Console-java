@@ -43,6 +43,7 @@ public class Interface001 extends LuaInterface {
 		// FUNCTIONS
 		// general
 		env.set("loadscript", new loadscript());
+		env.set("log", new log());
 
 		// keys
 		env.set("key", new key());
@@ -100,6 +101,13 @@ public class Interface001 extends LuaInterface {
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
+			return NIL;
+		}
+	}
+
+	private class log extends OneArgFunction {
+		public LuaValue call(LuaValue x) {
+			Console.LOGGER.info(x.toString());
 			return NIL;
 		}
 	}
@@ -272,6 +280,7 @@ public class Interface001 extends LuaInterface {
 		}
 	}
 
+	// consider changing the arguments from offset to position (eg. draw on (x, y), not offset)
 	private class maprender extends ThreeArgFunction {
 		public LuaValue call(LuaValue scaleArg, LuaValue xOffArg, LuaValue yOffArg) {
 			int scale = scaleArg.isnil() ? 1 : scaleArg.checkint();
