@@ -145,7 +145,7 @@ public class Interface001 extends LuaInterface {
 
 	private class sfx extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
-			Sound sound = game.sounds.get(name.checkjstring());
+			Sound sound = game.sounds.get(name.toString());
 			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
 			sound.play();
 
@@ -155,7 +155,7 @@ public class Interface001 extends LuaInterface {
 
 	private class sfx_loop extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
-			Sound sound = game.sounds.get(name.checkjstring());
+			Sound sound = game.sounds.get(name.toString());
 			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
 			sound.loop();
 
@@ -165,7 +165,7 @@ public class Interface001 extends LuaInterface {
 
 	private class sfx_stop extends OneArgFunction {
 		public LuaValue call(LuaValue name) {
-			Sound sound = game.sounds.get(name.checkjstring());
+			Sound sound = game.sounds.get(name.toString());
 			if(sound == null) throw new LuaError("bad argument: sound '" + name + "' does not exist");
 			sound.stop();
 
@@ -204,7 +204,7 @@ public class Interface001 extends LuaInterface {
 
 	private class write extends VarArgFunction {
 		public Varargs invoke(Varargs args) {
-			String text = args.arg(1).checkjstring();
+			String text = args.arg(1).toString();
 			int color = args.arg(2).checkint();
 			int x = args.arg(3).checkint();
 			int y = args.arg(4).checkint();
