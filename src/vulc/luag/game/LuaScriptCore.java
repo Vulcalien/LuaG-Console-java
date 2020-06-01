@@ -139,8 +139,8 @@ public class LuaScriptCore {
 		}
 		if(error) return false;
 
-		// LOAD TICK FUNCTION
 		try {
+			// load tick
 			LuaValue tick = globals.get("tick");
 			if(tick == LuaValue.NIL || !tick.isfunction()) {
 				Console.die("Error:\n"
@@ -151,6 +151,7 @@ public class LuaScriptCore {
 				luaTick = tick.checkfunction();
 			}
 
+			// call init
 			Console.LOGGER.info("Calling 'init' function");
 			LuaValue init = globals.get("init");
 			if(init == LuaValue.NIL || !init.isfunction()) {

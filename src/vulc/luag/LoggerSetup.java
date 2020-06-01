@@ -13,9 +13,12 @@ public abstract class LoggerSetup {
 		logger.setLevel(Level.ALL);
 		Locale.setDefault(Locale.ENGLISH);
 		try {
-			String fileName = "luag.log";
+			// fallback value, in case a good filename is not found
+			String fileName = folder + "luag.log";
+
 			for(int i = 0; i < 100; i++) {
-				fileName = "luag" + (i == 0 ? "" : "-" + i) + ".log";
+				// first, try with "luag.log" then try adding numbers
+				fileName = folder + "luag" + (i == 0 ? "" : "-" + i) + ".log";
 				File file = new File(fileName);
 
 				// if does not exist or is a file and is not locked
@@ -24,8 +27,8 @@ public abstract class LoggerSetup {
 				}
 			}
 
-			Console.logFile = folder + fileName;
-			FileHandler fh = new FileHandler(folder + fileName);
+			Console.logFile = fileName;
+			FileHandler fh = new FileHandler(fileName);
 			fh.setFormatter(new SimpleFormatter());
 			logger.addHandler(fh);
 		} catch(Exception e) {
