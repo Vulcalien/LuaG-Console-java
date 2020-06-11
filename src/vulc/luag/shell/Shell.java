@@ -19,7 +19,9 @@ public abstract class Shell {
 
 	private static final int ANIMATION_DELAY = 25;
 
-	public static final List<ShellChar> CHAR_BUFFER = new ArrayList<ShellChar>();
+	public static final List<Character> CONSOLE_BUFFER = new ArrayList<Character>();	// chars written by the console
+	public static final List<Character> USER_BUFFER = new ArrayList<Character>();		// chars written by the user
+
 	public static int scrollBuffer = 0;
 	public static boolean pressedUP = false, pressedLEFT = false, pressedDOWN = false, pressedRIGHT = false;
 
@@ -46,12 +48,16 @@ public abstract class Shell {
 	}
 
 	public static void tick() {
-		if(CHAR_BUFFER.size() != 0) {
-			ShellChar character = CHAR_BUFFER.remove(0);
-			receiveInput(character.val, character.writtenByUser);
+		if(CONSOLE_BUFFER.size() != 0) {
+			char c = CONSOLE_BUFFER.remove(0);
+			receiveInput(c, false);
 
-			if(character.writtenByUser) animationTicks = 0;
-			else animationTicks = ANIMATION_DELAY;
+			animationTicks = ANIMATION_DELAY;
+		} else if(USER_BUFFER.size() != 0) {
+			char c = USER_BUFFER.remove(0);
+			receiveInput(c, true);
+
+			animationTicks = 0;
 		} else {
 			animationTicks++;
 		}
@@ -223,7 +229,7 @@ public abstract class Shell {
 
 	public static void write(String text) {
 		for(int i = 0; i < text.length(); i++) {
-			CHAR_BUFFER.add(new ShellChar(text.charAt(i), false));
+			CONSOLE_BUFFER.add(text.charAt(i));
 		}
 	}
 
