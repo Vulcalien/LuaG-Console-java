@@ -200,6 +200,7 @@ public class Console extends Canvas implements Runnable {
 		}
 
 		Graphics g = bs.getDrawGraphics();
+		g.clearRect(0, 0, instance.getWidth(), instance.getHeight());
 		g.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight, null);
 		g.dispose();
 		bs.show();
