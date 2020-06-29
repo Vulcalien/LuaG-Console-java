@@ -235,9 +235,6 @@ public class Console extends Canvas implements Runnable {
 		instance.setBackground(Color.DARK_GRAY);
 
 		initFrame(false);
-		setInitialScale();
-
-		frame.setLocationRelativeTo(null);
 
 		instance.init(args);
 
@@ -265,7 +262,7 @@ public class Console extends Canvas implements Runnable {
 		LoggerSetup.setup(LOGGER, rootDirectory);
 	}
 
-	public static void setInitialScale() {
+	private static void setInitialScale() {
 		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 
 		// by default, the console's height is half of the screen
@@ -294,7 +291,7 @@ public class Console extends Canvas implements Runnable {
 		yOffset = (height - scaledHeight) / 2;
 	}
 
-	public static void initFrame(boolean fullScreen) {
+	private static void initFrame(boolean fullScreen) {
 		frame = new ConsoleFrame();
 		frame.init();
 		frame.add(instance);
@@ -305,12 +302,15 @@ public class Console extends Canvas implements Runnable {
 			frame.setUndecorated(true);
 			frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		} else {
-			// minimum size: Console's size not scaled
+			// set minimum size (it is console's size not scaled + insets)
 			frame.pack(); // this sets the insets of the frame
 
 			Insets insets = frame.getInsets();
 			frame.setMinimumSize(new Dimension(WIDTH + insets.left + insets.right,
 			                                   HEIGHT + insets.top + insets.bottom));
+
+			setInitialScale();
+			frame.setLocationRelativeTo(null);
 		}
 	}
 
@@ -321,11 +321,6 @@ public class Console extends Canvas implements Runnable {
 
 		// this changes the value of isFullScreen
 		initFrame(!isFullScreen);
-
-		if(!isFullScreen) {
-			setInitialScale();
-			frame.setLocationRelativeTo(null);
-		}
 
 		frame.setVisible(true);
 		instance.requestFocus();
