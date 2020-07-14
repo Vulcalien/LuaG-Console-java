@@ -10,6 +10,7 @@ import vulc.luag.input.InputHandler;
 import vulc.luag.input.InputHandler.Key;
 import vulc.luag.input.InputHandler.KeyType;
 import vulc.luag.shell.Shell;
+import vulc.luag.shell.ShellChar;
 
 public class ShellPanel extends Panel {
 
@@ -18,7 +19,7 @@ public class ShellPanel extends Panel {
 
 	private final KeyAdapter keyListener = new KeyAdapter() {
 		public void keyPressed(KeyEvent e) {
-			Shell.USER_BUFFER.add(e.getKeyChar());
+			Shell.USER_BUFFER.add(new ShellChar(e.getKeyChar(), Shell.USER_FOREGROUND));
 
 			int code = e.getKeyCode();
 			if(code == KeyEvent.VK_UP)

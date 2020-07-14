@@ -11,25 +11,26 @@ import vulc.luag.shell.command.ShellCommand;
 
 public abstract class Shell {
 
-	private static final int BACKGROUND = 0x000000;
-	private static final int FOREGROUND = 0xffffff;
+	public static final int BACKGROUND = 0x000000;
+	public static final int DEFAULT_FOREGROUND = 0xffffff;
+	public static final int USER_FOREGROUND = 0x00ff00;
 
 	public static final int HORIZONTAL_CHARS = Console.WIDTH / (Screen.FONT.widthOf(' ') + 1);
 	public static final int VERTICAL_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);
 
 	private static final int ANIMATION_DELAY = 25;
 
-	public static final List<Character> CONSOLE_BUFFER = new ArrayList<Character>();	// chars written by the console
-	public static final List<Character> USER_BUFFER = new ArrayList<Character>();		// chars written by the user
+	public static final List<ShellChar> CONSOLE_BUFFER = new ArrayList<ShellChar>();	// chars written by the console
+	public static final List<ShellChar> USER_BUFFER = new ArrayList<ShellChar>();		// chars written by the user
 
 	public static int scrollBuffer = 0;
 	public static boolean pressedUP = false, pressedLEFT = false, pressedDOWN = false, pressedRIGHT = false;
 
-	private static final List<String> CLOSED_TEXT = new ArrayList<String>();
-	private static String currentLine = "";
+	private static final List<ShellRow> CLOSED_ROWS = new ArrayList<ShellRow>();
+	private static ShellRow currentLine = new ShellRow();
 	private static int currentChar = 0;
 
-	private static final List<String> COMMAND_HISTORY = new ArrayList<String>();
+	private static final List<ShellRow> COMMAND_HISTORY = new ArrayList<ShellRow>();
 	private static int historyPoint = 0;
 
 	private static int renderOffset = 0;
@@ -49,12 +50,12 @@ public abstract class Shell {
 
 	public static void tick() {
 		if(CONSOLE_BUFFER.size() != 0) {
-			char c = CONSOLE_BUFFER.remove(0);
+			ShellChar c = CONSOLE_BUFFER.remove(0);
 			receiveInput(c, false);
 
 			animationTicks = ANIMATION_DELAY;
 		} else if(USER_BUFFER.size() != 0) {
-			char c = USER_BUFFER.remove(0);
+			ShellChar c = USER_BUFFER.remove(0);
 			receiveInput(c, true);
 
 			animationTicks = 0;
@@ -80,8 +81,8 @@ public abstract class Shell {
 				historyPoint = newHistoryPoint;
 
 				// most recent command is 0
-				currentLine = COMMAND_HISTORY.get(historyPoint);
-				currentChar = currentLine.length();
+				currentLine = COMMAND_HISTORY.get(historyPoint).copy();
+				currentChar = currentLine.size();
 			}
 		}
 
@@ -113,7 +114,7 @@ public abstract class Shell {
 		}
 		if(pressedRIGHT) {
 			pressedRIGHT = false;
-			if(currentChar < currentLine.length()) {
+			if(currentChar < currentLine.size()) {
 				if(panel.ctrl.isKeyDown()) {
 					currentChar = rightWordPosition();
 				} else {
@@ -127,52 +128,48 @@ public abstract class Shell {
 	private static void render() {
 		Console.SCREEN.clear(BACKGROUND);
 
-		String textToRender = "";
+		int margin = 1;
+		int yRender = margin;
+
 		for(int i = 0; i < VERTICAL_LINES; i++) {
 			int line = i + renderOffset;
 
-			if(line < CLOSED_TEXT.size()) {
-				// closed lines always end with '\n'
-				textToRender += CLOSED_TEXT.get(line);
+			if(line < CLOSED_ROWS.size()) {
+				CLOSED_ROWS.get(line).render(Console.SCREEN, margin, yRender);
+				yRender += Screen.FONT.getHeight() + Screen.FONT.getLineSpacing();
 			} else {
-				String text = currentLine;
-
-				String[] splitCurrent = splitCurrentLine(text);
+				ShellRow[] splitCurrent = splitCurrentLine(currentLine);
 				for(int a = 0; a < splitCurrent.length; a++) {
-					textToRender += splitCurrent[a];
-
-					if(a != splitCurrent.length - 1) {
-						textToRender += "\n";
-					}
+					splitCurrent[a].render(Console.SCREEN, margin, yRender);
+					yRender += Screen.FONT.getHeight() + Screen.FONT.getLineSpacing();
 				}
 				break;
 			}
 		}
-		Console.SCREEN.write(textToRender, FOREGROUND, 1, 1);
 
 		// draw the cursor
 		if(animationTicks / ANIMATION_DELAY % 2 == 0) {
 			Font font = Screen.FONT;
-			Console.SCREEN.write("_", FOREGROUND,
+			Console.SCREEN.write("_", DEFAULT_FOREGROUND,
 			                     1 + (font.widthOf(' ') + font.getLetterSpacing())
 			                         * (currentChar % HORIZONTAL_CHARS),
 			                     1 + (font.getHeight() + font.getLineSpacing())
-			                         * (currentChar / HORIZONTAL_CHARS + CLOSED_TEXT.size() - renderOffset));
+			                         * (currentChar / HORIZONTAL_CHARS + CLOSED_ROWS.size() - renderOffset));
 		}
 	}
 
-	public static void receiveInput(char character, boolean shouldExecute) {
+	public static void receiveInput(ShellChar character, boolean shouldExecute) {
 		int lowestOffset;
-		switch(character) {
+		switch(character.value) {
 			case '\n':
 				if(shouldExecute) execute(currentLine);
 
-				String[] splitCurrent = splitCurrentLine(currentLine);
+				ShellRow[] splitCurrent = splitCurrentLine(currentLine);
 				for(int i = 0; i < splitCurrent.length; i++) {
 					// here the text always ends with '\n'
-					CLOSED_TEXT.add(splitCurrent[i] + "\n");
+					CLOSED_ROWS.add(splitCurrent[i]);
 				}
-				currentLine = "";
+				currentLine.clear();
 				currentChar = 0;
 
 				// if is not at bottom then move to bottom
@@ -183,38 +180,38 @@ public abstract class Shell {
 				break;
 
 			case '\b':
-				if(currentLine.length() > 0 && currentChar > 0) {
+				if(currentLine.size() > 0 && currentChar > 0) {
 					if(panel.ctrl.isKeyDown()) {
-						int oldLength = currentLine.length();
-						currentLine = currentLine.substring(0, leftWordPosition())
-						              + currentLine.substring(currentChar, currentLine.length());
+						int oldLength = currentLine.size();
+						currentLine = currentLine.subrow(0, leftWordPosition())
+						                         .join(currentLine.subrow(currentChar, currentLine.size()));
 
-						currentChar -= oldLength - currentLine.length();
+						currentChar -= oldLength - currentLine.size();
 					} else {
-						currentLine = currentLine.substring(0, currentChar - 1)
-						              + currentLine.substring(currentChar, currentLine.length());
+						currentLine = currentLine.subrow(0, currentChar - 1)
+						                         .join(currentLine.subrow(currentChar, currentLine.size()));
 						currentChar--;
 					}
 				}
 				break;
 
 			case 127:
-				if(currentLine.length() > 0 && currentChar != currentLine.length()) {
+				if(currentLine.size() > 0 && currentChar != currentLine.size()) {
 					if(panel.ctrl.isKeyDown()) {
-						currentLine = currentLine.substring(0, currentChar)
-						              + currentLine.substring(rightWordPosition(), currentLine.length());
+						currentLine = currentLine.subrow(0, currentChar)
+						                         .join(currentLine.subrow(rightWordPosition(), currentLine.size()));
 					} else {
-						currentLine = currentLine.substring(0, currentChar)
-						              + currentLine.substring(currentChar + 1, currentLine.length());
+						currentLine = currentLine.subrow(0, currentChar)
+						                         .join(currentLine.subrow(currentChar + 1, currentLine.size()));
 					}
 				}
 				break;
 
 			default:
-				if(character >= 32 && character < 127) {
-					currentLine = currentLine.substring(0, currentChar)
-					              + character
-					              + currentLine.substring(currentChar, currentLine.length());
+				if(character.value >= 32 && character.value < 127) {
+					currentLine = currentLine.subrow(0, currentChar)
+					                         .join(character)
+					                         .join(currentLine.subrow(currentChar, currentLine.size()));
 					currentChar++;
 
 					// if is not at bottom then move to bottom
@@ -227,32 +224,37 @@ public abstract class Shell {
 		}
 	}
 
-	public static void write(String text) {
+	public static void write(String text, int color) {
 		for(int i = 0; i < text.length(); i++) {
-			CONSOLE_BUFFER.add(text.charAt(i));
+			CONSOLE_BUFFER.add(new ShellChar(text.charAt(i), color));
 		}
 	}
 
+	public static void write(String text) {
+		write(text, DEFAULT_FOREGROUND);
+	}
+
 	public static void clear() {
-		CLOSED_TEXT.clear();
-		currentLine = "";
+		CLOSED_ROWS.clear();
+		currentLine.clear();
 		renderOffset = 0;
 	}
 
-	public static void execute(String line) {
-		COMMAND_HISTORY.add(0, line);
+	public static void execute(ShellRow row) {
+		COMMAND_HISTORY.add(0, row.copy());
 		historyPoint = -1;
 
+		String line = row.toString();
 		line = line.trim().replaceAll(" +", " ");
 		if(!ShellCommand.execute(line)) {
 			write("unknown command\n\n");
 		}
 	}
 
-	private static String[] splitCurrentLine(String line) {
-		int height = (line.length() - 1) / (Shell.HORIZONTAL_CHARS) + 1;
+	private static ShellRow[] splitCurrentLine(ShellRow line) {
+		int height = (line.size() - 1) / (Shell.HORIZONTAL_CHARS) + 1;
 
-		String[] splitLine = new String[height];
+		ShellRow[] splitLine = new ShellRow[height];
 		for(int i = 0; i < height; i++) {
 			int start = i * Shell.HORIZONTAL_CHARS;
 
@@ -261,21 +263,21 @@ public abstract class Shell {
 				end += Shell.HORIZONTAL_CHARS;
 			} else {
 				// if length == HORIZONTAL_CHARS the % will be 0
-				if(line.length() != 0
-				   && line.length() % Shell.HORIZONTAL_CHARS == 0) {
+				if(line.size() != 0
+				   && line.size() % Shell.HORIZONTAL_CHARS == 0) {
 					end += Shell.HORIZONTAL_CHARS;
 				} else {
-					end += line.length() % (Shell.HORIZONTAL_CHARS);
+					end += line.size() % (Shell.HORIZONTAL_CHARS);
 				}
 			}
-			splitLine[i] = line.substring(start, end);
+			splitLine[i] = line.subrow(start, end);
 		}
 		return splitLine;
 	}
 
 	private static int lowestOffset() {
-		int currentLineHeight = currentLine.length() / HORIZONTAL_CHARS + 1;
-		return CLOSED_TEXT.size() - VERTICAL_LINES + currentLineHeight;
+		int currentLineHeight = currentLine.size() / HORIZONTAL_CHARS + 1;
+		return CLOSED_ROWS.size() - VERTICAL_LINES + currentLineHeight;
 	}
 
 	// find left word's position, used for ctrl+left and ctrl+'\b'
@@ -297,9 +299,9 @@ public abstract class Shell {
 
 	// find right word's position, used for ctrl+right and ctrl+del
 	private static int rightWordPosition() {
-		int nonSpacePosition = currentLine.length();
+		int nonSpacePosition = currentLine.size();
 		boolean foundSpace = false;
-		for(int i = currentChar; i < currentLine.length(); i++) {
+		for(int i = currentChar; i < currentLine.size(); i++) {
 			if(currentLine.charAt(i) != ' ') {
 				if(foundSpace) {
 					nonSpacePosition = i;
