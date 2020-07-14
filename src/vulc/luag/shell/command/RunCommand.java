@@ -4,7 +4,6 @@ import vulc.luag.Console;
 import vulc.luag.Console.Mode;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.panel.GamePanel;
-import vulc.luag.shell.Shell;
 
 public class RunCommand extends ShellCommand {
 
@@ -19,8 +18,8 @@ public class RunCommand extends ShellCommand {
 			Console.cartridge = null;
 
 			if(Console.mode == Mode.USER_SHELL) {
-				Shell.write("Error:\n"
-				            + "insert cartridge name\n\n");
+				Console.die("Error:\n"
+				            + "insert cartridge name");
 				return;
 			}
 		}

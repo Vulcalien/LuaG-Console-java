@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 
 import vulc.luag.Console;
-import vulc.luag.shell.Shell;
 
 public class LogCommand extends ShellCommand {
 
@@ -43,8 +42,8 @@ public class LogCommand extends ShellCommand {
 
 			File file = new File(Console.logFile);
 			if(!file.isFile()) {
-				Shell.write("Error:\n"
-				            + "log file not found\n\n");
+				Console.die("Error:\n"
+				            + "log file not found");
 				return;
 			}
 

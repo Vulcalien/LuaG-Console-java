@@ -220,7 +220,7 @@ public class Console extends Canvas implements Runnable {
 
 		if(mode == Mode.DEVELOPER || mode == Mode.USER_SHELL) {
 			switchToPanel(new ShellPanel());
-			Shell.write(text + "\n\n");
+			Shell.write(text + "\n\n", Shell.ERROR_FOREGROUND);
 		} else {
 			switchToPanel(new DeathPanel(text));
 		}

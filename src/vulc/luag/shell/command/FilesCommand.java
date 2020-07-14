@@ -4,8 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 
+import vulc.luag.Console;
 import vulc.luag.game.Game;
-import vulc.luag.shell.Shell;
 
 public class FilesCommand extends ShellCommand {
 
@@ -20,9 +20,9 @@ public class FilesCommand extends ShellCommand {
 
 			File folder = new File(Game.USERDATA_DIR);
 			if(!folder.isDirectory()) {
-				Shell.write("Error:\n"
+				Console.die("Error:\n"
 				            + "'" + Game.USERDATA_DIR_NAME + "'\n"
-				            + "folder not found\n\n");
+				            + "folder not found");
 				return;
 			}
 

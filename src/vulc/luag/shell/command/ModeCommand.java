@@ -32,9 +32,9 @@ public class ModeCommand extends ShellCommand {
 			Shell.write("switching to\n"
 			            + "user mode\n\n");
 		} else {
-			Shell.write("Error:\n"
+			Console.die("Error:\n"
 			            + "unrecognized mode\n"
-			            + "try 'd' or 'u'\n\n");
+			            + "try 'd' or 'u'");
 		}
 	}
 

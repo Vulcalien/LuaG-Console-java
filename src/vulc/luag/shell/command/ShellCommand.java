@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
-import vulc.luag.shell.Shell;
 
 public abstract class ShellCommand {
 
@@ -48,9 +47,9 @@ public abstract class ShellCommand {
 		ShellCommand command = findCommand(name);
 		if(command != null) {
 			if(command.isDevelopersOnly && Console.mode != Mode.DEVELOPER) {
-				Shell.write("Error:\n"
+				Console.die("Error:\n"
 				            + "only developers can\n"
-				            + "use this command\n\n");
+				            + "use this command");
 			} else {
 				command.run(args);
 			}

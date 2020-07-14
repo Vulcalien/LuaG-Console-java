@@ -14,6 +14,7 @@ public abstract class Shell {
 	public static final int BACKGROUND = 0x000000;
 	public static final int DEFAULT_FOREGROUND = 0xffffff;
 	public static final int USER_FOREGROUND = 0x00ff00;
+	public static final int ERROR_FOREGROUND = 0xff0000;
 
 	public static final int HORIZONTAL_CHARS = Console.WIDTH / (Screen.FONT.widthOf(' ') + 1);
 	public static final int VERTICAL_LINES = Console.HEIGHT / (Screen.FONT.getHeight() + 1);

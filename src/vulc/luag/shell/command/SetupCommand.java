@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import vulc.luag.Console;
 import vulc.luag.game.Game;
-import vulc.luag.shell.Shell;
 
 public class SetupCommand extends ShellCommand {
 
@@ -21,9 +21,9 @@ public class SetupCommand extends ShellCommand {
 	public void run(String[] args) {
 		File folder = new File(Game.USERDATA_DIR);
 		if(folder.exists()) {
-			Shell.write("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.USERDATA_DIR_NAME + "'\n"
-			            + "already exists\n\n");
+			            + "already exists");
 			return;
 		}
 

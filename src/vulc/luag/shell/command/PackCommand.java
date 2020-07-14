@@ -15,7 +15,6 @@ import com.google.gson.stream.JsonWriter;
 import vulc.luag.Console;
 import vulc.luag.game.Game;
 import vulc.luag.game.interfaces.LuaInterface;
-import vulc.luag.shell.Shell;
 
 public class PackCommand extends ShellCommand {
 
@@ -26,24 +25,24 @@ public class PackCommand extends ShellCommand {
 
 	public void run(String[] args) {
 		if(args.length < 1) {
-			Shell.write("Error: missing arguments\n"
-			            + "pack [cartridge-name]\n\n");
+			Console.die("Error: missing arguments\n"
+			            + "pack [cartridge-name]");
 			return;
 		}
 
 		File consoleUserdata = new File(Game.USERDATA_DIR);
 		if(!consoleUserdata.isDirectory()) {
-			Shell.write("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + Game.USERDATA_DIR_NAME + "'\n"
-			            + "folder not found\n\n");
+			            + "folder not found");
 			return;
 		}
 
 		File cartridge = new File(Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION);
 		if(cartridge.exists()) {
-			Shell.write("Error:\n"
+			Console.die("Error:\n"
 			            + "'" + cartridge + "'\n"
-			            + "file already exists\n\n");
+			            + "file already exists");
 			return;
 		}
 
@@ -59,9 +58,9 @@ public class PackCommand extends ShellCommand {
 				error = true;
 			}
 			if(error) {
-				Shell.write("Error:\n"
+				Console.die("Error:\n"
 				            + "could not\n"
-				            + "create cartridge\n\n");
+				            + "create cartridge");
 				return;
 			}
 
