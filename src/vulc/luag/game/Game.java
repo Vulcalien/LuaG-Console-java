@@ -30,6 +30,7 @@ import vulc.luag.Console;
 import vulc.luag.Console.Mode;
 import vulc.luag.editor.map.MapCompiler;
 import vulc.luag.game.map.Map;
+import vulc.luag.game.save.SaveSystem;
 import vulc.luag.gfx.panel.GamePanel;
 import vulc.luag.gfx.panel.ShellPanel;
 import vulc.luag.input.InputHandler;
@@ -58,10 +59,11 @@ public class Game {
 	public static final int SPR_SIZE = 8;
 
 	private final LuaScriptCore scriptCore = new LuaScriptCore();
+	private final InputHandler input = new InputHandler();
 	public final GameSounds sounds = new GameSounds();
 
 	public JsonObject jsonConfig, cartridgeInfo;
-	private InputHandler input = new InputHandler();
+	public SaveSystem saveSystem;
 	public Bitmap<Integer> atlas;
 	public Map map;
 
@@ -82,6 +84,7 @@ public class Game {
 	// init resources in console-userdata
 	public boolean initDevResources() {
 		Console.LOGGER.info("Loading '" + USERDATA_DIR_NAME + "' resources...");
+		saveSystem = new SaveSystem(USERDATA_DIR);
 
 		// root
 		File rootFolder = new File(USERDATA_DIR);
@@ -141,6 +144,7 @@ public class Game {
 		try {
 			String cartridge = Console.cartridge;
 			Console.LOGGER.info("Loading cartridge '" + cartridge + "' resources...");
+			saveSystem = new SaveSystem(cartridge);
 
 			try {
 				cartridgeFile = new ZipFile(cartridge);

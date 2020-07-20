@@ -4,4 +4,5 @@
 /.classpath
 
 /luag*.log*
+/*.sav
 /console-userdata/

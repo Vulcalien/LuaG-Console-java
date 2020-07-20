@@ -51,6 +51,7 @@ import vulc.luag.shell.Shell;
  * <li>'Bitmap Utility'    by Vulcalien (Copyright 2019 Vulcalien - https://github.com/Vulcalien/Bitmap-Utility/blob/master/LICENSE)</li>
  * <li>'Gson'              by Google (Copyright 2008-2011 Google Inc. - https://github.com/google/gson/blob/master/LICENSE)</li>
  * <li>'LuaJ'              by LuaJ (Copyright (c) 2007-2013 LuaJ - http://luaj.sourceforge.net/license.txt)</li>
+ * <li>'VulcDataFormat'    by Vulcalien (Copyright 2019-2020 Vulcalien - https://github.com/Vulcalien/VulcDataFormat/blob/master/LICENSE)</li>
  * </ul>
  */
 public class Console extends Canvas implements Runnable {
@@ -62,7 +63,7 @@ public class Console extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static final String NAME = "LuaG Console";
-	public static final String VERSION = "post-0.6.3";
+	public static final String VERSION = "0.7.0-WIP";
 	public static final String COPYRIGHT = "Copyright 2020 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;

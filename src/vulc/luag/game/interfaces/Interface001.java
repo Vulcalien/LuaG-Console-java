@@ -68,6 +68,10 @@ public class Interface001 extends LuaInterface {
 		env.set("get_tile", new get_tile());
 		env.set("set_tile", new set_tile());
 		env.set("maprender", new maprender());
+
+		// save
+		env.set("save_data", new save_data());
+		env.set("load_data", new load_data());
 	}
 
 	//---GENERAL---\\
@@ -291,6 +295,21 @@ public class Interface001 extends LuaInterface {
 
 			game.map.render(Console.SCREEN, game, xoff, yoff, scale);
 			return NIL;
+		}
+	}
+
+	//---SAVE---\\
+
+	private class save_data extends OneArgFunction {
+		public LuaValue call(LuaValue saveTable) {
+			game.saveSystem.serialize(saveTable.checktable());
+			return NIL;
+		}
+	}
+
+	private class load_data extends OneArgFunction {
+		public LuaValue call(LuaValue arg) {
+			return game.saveSystem.deserialize();
 		}
 	}
 
