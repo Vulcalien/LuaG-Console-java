@@ -1,5 +1,7 @@
 package vulc.luag.game.save;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -26,7 +28,7 @@ public class SaveSystem {
 		ObjectTag obj = new ObjectTag();
 		addTableToObjectTag(obj, saveTable);
 
-		try(DataOutputStream out = new DataOutputStream(new FileOutputStream(saveFile))) {
+		try(DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(saveFile)))) {
 			obj.serialize(out);
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -61,7 +63,7 @@ public class SaveSystem {
 		LuaTable saveTable = new LuaTable();
 
 		ObjectTag obj = new ObjectTag();
-		try(DataInputStream in = new DataInputStream(new FileInputStream(saveFile))) {
+		try(DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(saveFile)))) {
 			obj.deserialize(in);
 		} catch(IOException e) {
 			e.printStackTrace();
