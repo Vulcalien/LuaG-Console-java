@@ -40,8 +40,14 @@ public class SaveSystem {
 
 			// add all valid values to the ObjectTag
 			if(value.isboolean()) obj.setBoolean(key, value.checkboolean());
-			else if(value.isint()) obj.setInt(key, value.checkint());
-			else if(value.isnumber()) obj.setDouble(key, value.checkdouble());
+			else if(value.isint()) {
+				int num = value.checkint();
+
+				if((byte) num == num) obj.setByte(key, (byte) num);
+				else if((short) num == num) obj.setShort(key, (short) num);
+				else obj.setInt(key, num);
+				// long is considered Double by luaj
+			} else if(value.isnumber()) obj.setDouble(key, value.checkdouble());
 			else if(value.isstring()) obj.setString(key, value.tojstring());
 			else if(value.istable()) {
 				ObjectTag subObj = new ObjectTag();
@@ -71,6 +77,8 @@ public class SaveSystem {
 
 			LuaValue toAdd = null;
 			if(value instanceof Boolean) toAdd = LuaValue.valueOf((boolean) value);
+			else if(value instanceof Byte) toAdd = LuaValue.valueOf((byte) value);
+			else if(value instanceof Short) toAdd = LuaValue.valueOf((short) value);
 			else if(value instanceof Integer) toAdd = LuaValue.valueOf((int) value);
 			else if(value instanceof Double) toAdd = LuaValue.valueOf((double) value);
 			else if(value instanceof String) toAdd = LuaValue.valueOf((String) value);
