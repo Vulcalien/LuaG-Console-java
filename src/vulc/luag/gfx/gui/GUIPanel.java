@@ -52,15 +52,16 @@ public class GUIPanel extends GUIComponent {
 			int yr = yMouse - comp.y;
 
 			if(comp.isPointInside(xr, yr)) {
-				boolean gainFocus = !comp.focused;
-				comp.focused = true;
-				if(gainFocus) comp.onGainFocus();
-
+				if(!comp.focused) {
+					comp.focused = true;
+					comp.onGainFocus();
+				}
 				comp.onMouseDown(xr, yr);
 			} else {
-				boolean losingFocus = comp.focused;
-				comp.focused = false;
-				if(losingFocus) comp.onLostFocus();
+				if(comp.focused) {
+					comp.focused = false;
+					comp.onLostFocus();
+				}
 			}
 		}
 	}
@@ -102,15 +103,16 @@ public class GUIPanel extends GUIComponent {
 			int yr = yMouse - comp.y;
 
 			if(comp.isPointInside(xr, yr)) {
-				boolean wasOutside = !comp.mouseInside;
-				comp.mouseInside = true;
-				if(wasOutside) comp.onMouseEnter();
-
+				if(!comp.mouseInside) {
+					comp.mouseInside = true;
+					comp.onMouseEnter();
+				}
 				comp.onMouseInside(xr, yr);
 			} else {
-				boolean wasInside = comp.mouseInside;
-				comp.mouseInside = false;
-				if(wasInside) comp.onMouseExit();
+				if(comp.mouseInside) {
+					comp.mouseInside = false;
+					comp.onMouseExit();
+				}
 			}
 		}
 	}
@@ -119,9 +121,10 @@ public class GUIPanel extends GUIComponent {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
-			boolean wasInside = comp.mouseInside;
-			comp.mouseInside = false;
-			if(wasInside) comp.onMouseExit();
+			if(comp.mouseInside) {
+				comp.mouseInside = false;
+				comp.onMouseExit();
+			}
 		}
 	}
 
@@ -150,9 +153,10 @@ public class GUIPanel extends GUIComponent {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
 
-			boolean losingFocus = comp.focused;
-			comp.focused = false;
-			if(losingFocus) comp.onLostFocus();
+			if(comp.focused) {
+				comp.focused = false;
+				comp.onLostFocus();
+			}
 		}
 	}
 
