@@ -5,7 +5,7 @@ import vulc.luag.editor.sprite.SpriteEditor;
 
 public class BucketTool extends SpriteTool {
 
-	public boolean onEdit(int x, int y, SpriteEditor editor, Bitmap<Integer> canvas) {
+	public boolean onMouseDown(int x, int y, SpriteEditor editor, Bitmap<Integer> canvas) {
 		boolean[][] checked = new boolean[canvas.width][canvas.height];
 
 		int newColor = editor.selectedColor;

@@ -13,6 +13,7 @@ public class SpriteToolkit {
 	public final SpriteTool pencil = new PencilTool();
 	public final SpriteTool bucket = new BucketTool();
 	public final SpriteTool pickup = new PickupTool();
+	public final SpriteTool select = new SelectTool();
 
 	public SpriteTool currentTool;
 

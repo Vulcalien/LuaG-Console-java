@@ -92,7 +92,7 @@ public class SpriteEditor extends Editor {
 
 		int hToolbar = 9 * 5 + 1;
 		GUIPanel toolbar = new SpriteToolbar(atlasPreview.x, sprPreview.y + (sprPreview.h - hToolbar) / 2,
-		                                     10, hToolbar,
+		                                     19, hToolbar,
 		                                     this);
 		guiPanel.add(toolbar);
 
