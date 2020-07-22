@@ -102,8 +102,26 @@ public class GUIPanel extends GUIComponent {
 			int yr = yMouse - comp.y;
 
 			if(comp.isPointInside(xr, yr)) {
+				boolean wasOutside = !comp.mouseInside;
+				comp.mouseInside = true;
+				if(wasOutside) comp.onMouseEnter();
+
 				comp.onMouseInside(xr, yr);
+			} else {
+				boolean wasInside = comp.mouseInside;
+				comp.mouseInside = false;
+				if(wasInside) comp.onMouseExit();
 			}
+		}
+	}
+
+	public void onMouseExit() {
+		for(int i = 0; i < comps.size(); i++) {
+			GUIComponent comp = comps.get(i);
+
+			boolean wasInside = comp.mouseInside;
+			comp.mouseInside = false;
+			if(wasInside) comp.onMouseExit();
 		}
 	}
 
@@ -115,7 +133,7 @@ public class GUIPanel extends GUIComponent {
 			int xr = xMouse - comp.x;
 			int yr = yMouse - comp.y;
 
-			if(comp.isMouseScrolled(xr, yr, count)) {
+			if(comp.isPointInside(xr, yr)) {
 				comp.onMouseScroll(xr, yr, count);
 			}
 		}
@@ -131,6 +149,7 @@ public class GUIPanel extends GUIComponent {
 	public void onLostFocus() {
 		for(int i = 0; i < comps.size(); i++) {
 			GUIComponent comp = comps.get(i);
+
 			boolean losingFocus = comp.focused;
 			comp.focused = false;
 			if(losingFocus) comp.onLostFocus();

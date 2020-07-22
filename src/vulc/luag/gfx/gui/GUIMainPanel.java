@@ -75,10 +75,11 @@ public class GUIMainPanel extends GUIPanel {
 			}
 		}
 
+		// do this even if isPointInside is false
 		this.onMouseInside(xMouse, yMouse);
 
 		if(wheelRotCount != 0) {
-			if(this.isMouseScrolled(xMouse, yMouse, wheelRotCount)) {
+			if(this.isPointInside(xMouse, yMouse)) {
 				this.onMouseScroll(xMouse, yMouse, wheelRotCount);
 			}
 			wheelRotCount = 0;

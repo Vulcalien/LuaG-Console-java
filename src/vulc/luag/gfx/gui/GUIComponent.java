@@ -6,7 +6,10 @@ public class GUIComponent {
 
 	public int x, y;
 	public int w, h;
+
+	public boolean mouseInside = false;
 	public boolean focused = false;
+
 	public boolean opaque = false;
 	public int background = 0xDDDDDD;
 
@@ -44,6 +47,12 @@ public class GUIComponent {
 	public void onMouseInside(int xMouse, int yMouse) {
 	}
 
+	public void onMouseEnter() {
+	}
+
+	public void onMouseExit() {
+	}
+
 	public void onGainFocus() {
 	}
 
@@ -51,10 +60,6 @@ public class GUIComponent {
 	}
 
 	public void onKeyPress(char character) {
-	}
-
-	public boolean isMouseScrolled(int xMouse, int yMouse, int count) {
-		return isPointInside(xMouse, yMouse);
 	}
 
 	public void onMouseScroll(int xMouse, int yMouse, int count) {
