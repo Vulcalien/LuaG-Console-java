@@ -1,5 +1,6 @@
 package vulc.luag.shell.command;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,7 +51,7 @@ public class PackCommand extends ShellCommand {
 			ZipOutputStream out = null;
 			boolean error = false;
 			try {
-				out = new ZipOutputStream(new FileOutputStream(cartridge));
+				out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(cartridge)));
 				cartridge.createNewFile();
 
 				if(!cartridge.exists()) error = true;

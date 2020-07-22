@@ -1,5 +1,6 @@
 package vulc.luag.game.map;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +55,7 @@ public class Map {
 
 	public static Map load(InputStream inputStream) {
 		try {
-			DataInputStream in = new DataInputStream(inputStream);
+			DataInputStream in = new DataInputStream(new BufferedInputStream(inputStream));
 
 			int w = in.readInt();
 			int h = in.readInt();
@@ -70,7 +71,6 @@ public class Map {
 				}
 				map.tiles[i] = (byte) (data - 128);
 			}
-
 			in.close();
 			return map;
 		} catch(IOException e) {
