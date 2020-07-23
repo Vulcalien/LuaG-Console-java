@@ -14,12 +14,6 @@ public class SpriteAtlasPreview extends AtlasPreview {
 		this.editor = editor;
 	}
 
-	public void onMouseDown(int xMouse, int yMouse) {
-		super.onMouseDown(xMouse, yMouse);
-
-		editor.updatePreview();
-	}
-
 	public Bitmap<Integer> getPreview() {
 		Game game = editor.editorPanel.game;
 		return game.getSprite(selected, editor.scope, editor.scope);
@@ -27,8 +21,11 @@ public class SpriteAtlasPreview extends AtlasPreview {
 
 	public void setSelected(int xs, int ys) {
 		super.setSelected(xs, ys);
+
 		editor.endPaste();
+
 		editor.spriteID = selected;
+		editor.updatePreview();
 	}
 
 }

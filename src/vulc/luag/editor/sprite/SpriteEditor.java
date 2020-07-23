@@ -158,13 +158,12 @@ public class SpriteEditor extends Editor {
 			endPaste();
 		}
 
-		boolean shouldSaveHistory = wasEditing && !isEditing;
+		boolean shouldSave = wasEditing && !isEditing;
 		wasEditing = isEditing;
 		isEditing = false;
 
-		if(shouldSaveHistory) {
-			updateAtlas();
-			history.save();
+		if(shouldSave) {
+			saveHistory();
 		}
 	}
 
@@ -172,8 +171,10 @@ public class SpriteEditor extends Editor {
 		preview = atlasPreview.getPreview();
 	}
 
-	private void updateAtlas() {
+	private void saveHistory() {
+		// update atlas and then history.save will record it
 		atlas.draw(preview, (spriteID % 16) * Game.SPR_SIZE, (spriteID / 16) * Game.SPR_SIZE);
+		history.save();
 	}
 
 	public String getTitle() {
@@ -233,7 +234,12 @@ public class SpriteEditor extends Editor {
 		if(selx0 >= preview.width || selx1 >= preview.width
 		   || sely0 >= preview.height || sely1 >= preview.height) return;
 
-		copied = preview.getSubimage(selx0, sely0, selx1 - selx0 + 1, sely1 - sely0 + 1);
+		int x0 = Math.min(selx0, selx1);
+		int y0 = Math.min(sely0, sely1);
+		int x1 = Math.max(selx0, selx1);
+		int y1 = Math.max(sely0, sely1);
+
+		copied = preview.getSubimage(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
 	}
 
 	public void paste() {
@@ -252,10 +258,12 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void endPaste() {
+		if(!pasteMode) return;
+
 		pasteMode = false;
 		preview.draw(copied, xPasted, yPasted);
 
-		isEditing = true;
+		saveHistory();
 		shouldSaveContent = true;
 	}
 
