@@ -231,23 +231,8 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void copy() {
-		// fix selection
-		if(selx0 < 0) selx0 = 0;
-		if(sely0 < 0) sely0 = 0;
-		if(selx1 < 0) selx1 = 0;
-		if(sely1 < 0) sely1 = 0;
-
-		if(selx0 >= preview.width) selx0 = preview.width - 1;
-		if(sely0 >= preview.height) sely0 = preview.height - 1;
-		if(selx1 >= preview.width) selx1 = preview.width - 1;
-		if(sely1 >= preview.height) sely1 = preview.height - 1;
-
-		int x0 = Math.min(selx0, selx1);
-		int y0 = Math.min(sely0, sely1);
-		int x1 = Math.max(selx0, selx1);
-		int y1 = Math.max(sely0, sely1);
-
-		copied = preview.getSubimage(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+		fixCopySelection();
+		copied = preview.getSubimage(selx0, sely0, selx1 - selx0 + 1, sely1 - sely0 + 1);
 	}
 
 	public void paste() {
@@ -291,11 +276,34 @@ public class SpriteEditor extends Editor {
 			xPasted = selx0;
 			yPasted = sely0;
 
+			// at this point, selection was already fixed, in copy()
 			preview.fill(selx0, sely0, selx1, sely1, 0xff00ff);
 
 			// after setting pasteMode it's necessary to move the pasted bitmap
 			moveSelected(x, y);
 		}
+	}
+
+	private void fixCopySelection() {
+		if(selx0 < 0) selx0 = 0;
+		if(sely0 < 0) sely0 = 0;
+		if(selx1 < 0) selx1 = 0;
+		if(sely1 < 0) sely1 = 0;
+
+		if(selx0 >= preview.width) selx0 = preview.width - 1;
+		if(sely0 >= preview.height) sely0 = preview.height - 1;
+		if(selx1 >= preview.width) selx1 = preview.width - 1;
+		if(sely1 >= preview.height) sely1 = preview.height - 1;
+
+		int x0 = Math.min(selx0, selx1);
+		int y0 = Math.min(sely0, sely1);
+		int x1 = Math.max(selx0, selx1);
+		int y1 = Math.max(sely0, sely1);
+
+		selx0 = x0;
+		sely0 = y0;
+		selx1 = x1;
+		sely1 = y1;
 	}
 
 	public void setScope(int scope) {
