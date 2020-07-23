@@ -1,7 +1,10 @@
 package vulc.luag.editor.sprite.gui;
 
+import vulc.bitmap.Bitmap;
 import vulc.luag.editor.sprite.SpriteEditor;
+import vulc.luag.editor.sprite.tool.SelectTool;
 import vulc.luag.editor.sprite.tool.SpriteTool;
+import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIComponent;
@@ -12,9 +15,10 @@ public class SpritePreview extends GUIComponent {
 		DOWN, PRESS, RELEASE
 	}
 
-	public final SpriteEditor editor;
-
 	public static final int BORDER = 2;
+
+	public final SpriteEditor editor;
+	private int animationTicks = 0;
 
 	public SpritePreview(int x, int y, int w, int h, SpriteEditor editor) {
 		super(x, y, w, h);
@@ -24,10 +28,32 @@ public class SpritePreview extends GUIComponent {
 		this.background = Colors.BACKGROUND_0;
 	}
 
+	public void tick() {
+		animationTicks++;
+	}
+
 	public void render(Screen screen) {
 		super.render(screen);
-		screen.draw(editor.preview.getScaled(SpriteEditor.DEFAULT_SCALE / editor.scope),
-		            x + BORDER, y + BORDER);
+		Bitmap<Integer> preview = editor.preview.getCopy();
+
+		// selection highlight
+		SpriteToolkit toolkit = editor.toolkit;
+		if(toolkit.currentTool == toolkit.select) {
+			SelectTool selTool = (SelectTool) toolkit.select;
+
+			int x0 = Math.min(selTool.x0, selTool.x1);
+			int y0 = Math.min(selTool.y0, selTool.y1);
+			int x1 = Math.max(selTool.x0, selTool.x1);
+			int y1 = Math.max(selTool.y0, selTool.y1);
+
+			int transparency = animationTicks / 50 % 2 == 0 ? 0x55 : 0x77;
+
+			preview.fill(x0, y0, x1, y1, 0xffffff, transparency);
+		}
+
+		preview = preview.getScaled(SpriteEditor.DEFAULT_SCALE / editor.scope);
+		screen.draw(preview, x + BORDER, y + BORDER);
+
 	}
 
 	public void onMouseDown(int xMouse, int yMouse) {
