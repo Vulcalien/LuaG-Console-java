@@ -1,5 +1,6 @@
 package vulc.luag.editor.sprite;
 
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +23,8 @@ import vulc.luag.gfx.gui.GUIComponent;
 import vulc.luag.gfx.gui.GUIPanel;
 import vulc.luag.gfx.gui.GUITextBox;
 import vulc.luag.gfx.panel.EditorPanel;
+import vulc.luag.input.InputHandler.Key;
+import vulc.luag.input.InputHandler.KeyType;
 
 public class SpriteEditor extends Editor {
 
@@ -37,6 +40,7 @@ public class SpriteEditor extends Editor {
 	public int scope = 1;
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();
+	private final Key ctrl, p, f, k, z, y, s;
 
 	// select color and last colors
 	public int selectedColor;
@@ -52,6 +56,15 @@ public class SpriteEditor extends Editor {
 	public SpriteEditor(EditorPanel panel, int x, int y, int w, int h) {
 		super(panel, x, y, w, h);
 		this.atlas = panel.game.atlas;
+
+		// keys
+		this.ctrl = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_CONTROL);
+		this.p = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_P);
+		this.f = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F);
+		this.k = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_K);
+		this.z = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_Z);
+		this.y = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_Y);
+		this.s = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
 
 		preview = panel.game.getSprite(spriteID, scope, scope);
 
@@ -114,6 +127,16 @@ public class SpriteEditor extends Editor {
 		if(shouldSaveHistory) {
 			updateAtlas();
 			history.save();
+		}
+
+		if(ctrl.isKeyDown()) {
+			if(z.isPressed()) undo();
+			if(y.isPressed()) redo();
+		} else {
+			if(p.isPressed()) toolkit.setTool(toolkit.pencil);
+			if(f.isPressed()) toolkit.setTool(toolkit.bucket);
+			if(k.isPressed()) toolkit.setTool(toolkit.pickup);
+			if(s.isPressed()) toolkit.setTool(toolkit.select);
 		}
 	}
 
