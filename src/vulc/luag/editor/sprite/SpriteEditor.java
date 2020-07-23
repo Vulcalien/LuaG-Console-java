@@ -231,8 +231,16 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void copy() {
-		if(selx0 >= preview.width || selx1 >= preview.width
-		   || sely0 >= preview.height || sely1 >= preview.height) return;
+		// fix selection
+		if(selx0 < 0) selx0 = 0;
+		if(sely0 < 0) sely0 = 0;
+		if(selx1 < 0) selx1 = 0;
+		if(sely1 < 0) sely1 = 0;
+
+		if(selx0 >= preview.width) selx0 = preview.width - 1;
+		if(sely0 >= preview.height) sely0 = preview.height - 1;
+		if(selx1 >= preview.width) selx1 = preview.width - 1;
+		if(sely1 >= preview.height) sely1 = preview.height - 1;
 
 		int x0 = Math.min(selx0, selx1);
 		int y0 = Math.min(sely0, sely1);
