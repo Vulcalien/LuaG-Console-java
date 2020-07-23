@@ -2,7 +2,6 @@ package vulc.luag.editor.sprite.gui;
 
 import vulc.bitmap.Bitmap;
 import vulc.luag.editor.sprite.SpriteEditor;
-import vulc.luag.editor.sprite.tool.SelectTool;
 import vulc.luag.editor.sprite.tool.SpriteTool;
 import vulc.luag.editor.sprite.tool.SpriteToolkit;
 import vulc.luag.gfx.Colors;
@@ -36,18 +35,19 @@ public class SpritePreview extends GUIComponent {
 		super.render(screen);
 		Bitmap<Integer> preview = editor.preview.getCopy();
 
+		if(editor.pasteMode) {
+			preview.draw(editor.copied, editor.xPasted, editor.yPasted);
+		}
+
 		// selection highlight
 		SpriteToolkit toolkit = editor.toolkit;
 		if(toolkit.currentTool == toolkit.select) {
-			SelectTool selTool = (SelectTool) toolkit.select;
-
-			int x0 = Math.min(selTool.x0, selTool.x1);
-			int y0 = Math.min(selTool.y0, selTool.y1);
-			int x1 = Math.max(selTool.x0, selTool.x1);
-			int y1 = Math.max(selTool.y0, selTool.y1);
+			int x0 = Math.min(editor.selx0, editor.selx1);
+			int y0 = Math.min(editor.sely0, editor.sely1);
+			int x1 = Math.max(editor.selx0, editor.selx1);
+			int y1 = Math.max(editor.sely0, editor.sely1);
 
 			int transparency = animationTicks / 50 % 2 == 0 ? 0x55 : 0x77;
-
 			preview.fill(x0, y0, x1, y1, 0xffffff, transparency);
 		}
 

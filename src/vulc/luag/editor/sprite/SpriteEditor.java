@@ -40,7 +40,9 @@ public class SpriteEditor extends Editor {
 	public int scope = 1;
 
 	public final SpriteToolkit toolkit = new SpriteToolkit();
-	private final Key ctrl, p, f, k, z, y, s;
+	private final Key ctrl, p, f, k, s,
+	        z, y, c, v,
+	        up, left, down, right;
 
 	// select color and last colors
 	public int selectedColor;
@@ -50,6 +52,12 @@ public class SpriteEditor extends Editor {
 	public final History history = new History(this, 100);
 	public boolean isEditing = false, wasEditing = false;
 	public boolean shouldSaveContent = false;
+
+	// selection and copy/paste
+	public int selx0, sely0, selx1, sely1;
+	public boolean pasteMode = false;
+	public Bitmap<Integer> copied;
+	public int xPasted, yPasted;
 
 	public GUITextBox selectColorTxt;
 
@@ -62,9 +70,17 @@ public class SpriteEditor extends Editor {
 		this.p = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_P);
 		this.f = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_F);
 		this.k = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_K);
+		this.s = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
+
 		this.z = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_Z);
 		this.y = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_Y);
-		this.s = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_S);
+		this.c = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_C);
+		this.v = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_V);
+
+		this.up = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_UP);
+		this.left = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_LEFT);
+		this.down = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_DOWN);
+		this.right = input.new Key(KeyType.KEYBOARD, KeyEvent.VK_RIGHT);
 
 		preview = panel.game.getSprite(spriteID, scope, scope);
 
@@ -123,11 +139,19 @@ public class SpriteEditor extends Editor {
 		if(ctrl.isKeyDown()) {
 			if(z.isPressed()) undo();
 			if(y.isPressed()) redo();
+
+			if(c.isPressed() && toolkit.currentTool == toolkit.select) copy();
+			if(v.isPressed()) paste();
 		} else {
 			if(p.isPressed()) toolkit.setTool(toolkit.pencil);
 			if(f.isPressed()) toolkit.setTool(toolkit.bucket);
 			if(k.isPressed()) toolkit.setTool(toolkit.pickup);
 			if(s.isPressed()) toolkit.setTool(toolkit.select);
+
+			if(up.isPressed()) moveSelected(0, -1);
+			if(left.isPressed()) moveSelected(-1, 0);
+			if(down.isPressed()) moveSelected(0, +1);
+			if(right.isPressed()) moveSelected(+1, 0);
 		}
 
 		boolean shouldSaveHistory = wasEditing && !isEditing;
@@ -198,6 +222,58 @@ public class SpriteEditor extends Editor {
 		if(history.redo()) {
 			updatePreview();
 			shouldSaveContent = true;
+		}
+	}
+
+	public void copy() {
+		if(selx0 >= preview.width || selx1 >= preview.width
+		   || sely0 >= preview.height || sely1 >= preview.height) return;
+
+		copied = preview.getSubimage(selx0, sely0, selx1 - selx0 + 1, sely1 - sely0 + 1);
+	}
+
+	public void paste() {
+		if(copied == null) return;
+
+		pasteMode = true;
+		toolkit.setTool(toolkit.select);
+		xPasted = 0;
+		yPasted = 0;
+
+		selx0 = xPasted;
+		sely0 = yPasted;
+		selx1 = xPasted + copied.width - 1;
+		sely1 = yPasted + copied.height - 1;
+	}
+
+	public void endPaste() {
+		pasteMode = false;
+		preview.draw(copied, xPasted, yPasted);
+
+		isEditing = true;
+		shouldSaveContent = true; // TODO necessary?
+	}
+
+	public void moveSelected(int x, int y) {
+		if(pasteMode) {
+			xPasted += x;
+			yPasted += y;
+
+			selx0 += x;
+			sely0 += y;
+			selx1 += x;
+			sely1 += y;
+		} else {
+			copy();
+
+			pasteMode = true;
+			xPasted = selx0;
+			yPasted = sely0;
+
+			preview.fill(selx0, sely0, selx1, sely1, 0xff00ff); // TODO maybe set a default background constant?
+
+			// after setting pasteMode it's necessary to move the pasted bitmap
+			moveSelected(x, y);
 		}
 	}
 
