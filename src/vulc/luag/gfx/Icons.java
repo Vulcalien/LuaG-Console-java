@@ -22,6 +22,7 @@ public abstract class Icons {
 	public static final Bitmap<Boolean> PENCIL_TOOL = loadIcon("/res/icons/editor/tool/pencil.png");
 	public static final Bitmap<Boolean> BUCKET_TOOL = loadIcon("/res/icons/editor/tool/bucket.png");
 	public static final Bitmap<Boolean> PICKUP_TOOL = loadIcon("/res/icons/editor/tool/pickup.png");
+	public static final Bitmap<Boolean> SELECT_TOOL = loadIcon("/res/icons/editor/tool/select.png");
 
 	// SPRITE EDITOR
 	public static final Bitmap<Boolean> SPRITE_SCOPE_1 = loadIcon("/res/icons/editor/sprite/scope_1.png");

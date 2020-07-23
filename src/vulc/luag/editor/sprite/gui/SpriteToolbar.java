@@ -44,7 +44,7 @@ public class SpriteToolbar extends GUIPanel {
 		this.add(redoButton);
 
 		SpriteToolButton selectButton = createToolButton(1, 0, editor, toolkit.select);
-		selectButton.setImage(Icons.SHELL, Colors.FOREGROUND_1);
+		selectButton.setImage(Icons.SELECT_TOOL, Colors.FOREGROUND_1);
 		this.add(selectButton);
 	}
 

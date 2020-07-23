@@ -120,15 +120,6 @@ public class SpriteEditor extends Editor {
 	}
 
 	public void tick() {
-		boolean shouldSaveHistory = wasEditing && !isEditing;
-		wasEditing = isEditing;
-		isEditing = false;
-
-		if(shouldSaveHistory) {
-			updateAtlas();
-			history.save();
-		}
-
 		if(ctrl.isKeyDown()) {
 			if(z.isPressed()) undo();
 			if(y.isPressed()) redo();
@@ -137,6 +128,15 @@ public class SpriteEditor extends Editor {
 			if(f.isPressed()) toolkit.setTool(toolkit.bucket);
 			if(k.isPressed()) toolkit.setTool(toolkit.pickup);
 			if(s.isPressed()) toolkit.setTool(toolkit.select);
+		}
+
+		boolean shouldSaveHistory = wasEditing && !isEditing;
+		wasEditing = isEditing;
+		isEditing = false;
+
+		if(shouldSaveHistory) {
+			updateAtlas();
+			history.save();
 		}
 	}
 
