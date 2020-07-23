@@ -27,6 +27,7 @@ public class SpriteAtlasPreview extends AtlasPreview {
 
 	public void setSelected(int xs, int ys) {
 		super.setSelected(xs, ys);
+		editor.endPaste();
 		editor.spriteID = selected;
 	}
 

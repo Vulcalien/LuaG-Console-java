@@ -154,6 +154,10 @@ public class SpriteEditor extends Editor {
 			if(right.isPressed()) moveSelected(+1, 0);
 		}
 
+		if(pasteMode && toolkit.currentTool != toolkit.select) {
+			endPaste();
+		}
+
 		boolean shouldSaveHistory = wasEditing && !isEditing;
 		wasEditing = isEditing;
 		isEditing = false;
@@ -234,6 +238,7 @@ public class SpriteEditor extends Editor {
 
 	public void paste() {
 		if(copied == null) return;
+		if(pasteMode) endPaste();
 
 		pasteMode = true;
 		toolkit.setTool(toolkit.select);
@@ -251,7 +256,7 @@ public class SpriteEditor extends Editor {
 		preview.draw(copied, xPasted, yPasted);
 
 		isEditing = true;
-		shouldSaveContent = true; // TODO necessary?
+		shouldSaveContent = true;
 	}
 
 	public void moveSelected(int x, int y) {
@@ -263,14 +268,14 @@ public class SpriteEditor extends Editor {
 			sely0 += y;
 			selx1 += x;
 			sely1 += y;
-		} else {
+		} else if(toolkit.currentTool == toolkit.select) {
 			copy();
 
 			pasteMode = true;
 			xPasted = selx0;
 			yPasted = sely0;
 
-			preview.fill(selx0, sely0, selx1, sely1, 0xff00ff); // TODO maybe set a default background constant?
+			preview.fill(selx0, sely0, selx1, sely1, 0xff00ff);
 
 			// after setting pasteMode it's necessary to move the pasted bitmap
 			moveSelected(x, y);
