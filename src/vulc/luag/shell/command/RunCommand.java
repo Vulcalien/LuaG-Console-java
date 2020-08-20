@@ -2,7 +2,7 @@ package vulc.luag.shell.command;
 
 import vulc.luag.Console;
 import vulc.luag.Console.Mode;
-import vulc.luag.game.Game;
+import vulc.luag.game.cartridge.Cartridge;
 import vulc.luag.gfx.panel.GamePanel;
 
 public class RunCommand extends ShellCommand {
@@ -13,7 +13,7 @@ public class RunCommand extends ShellCommand {
 
 	public void run(String[] args) {
 		if(args.length >= 1) {
-			Console.cartridge = Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION;
+			Console.cartridge = Console.rootDirectory + args[0] + "." + Cartridge.EXTENSION;
 		} else {
 			Console.cartridge = null;
 

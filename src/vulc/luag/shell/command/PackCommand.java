@@ -15,6 +15,7 @@ import com.google.gson.stream.JsonWriter;
 
 import vulc.luag.Console;
 import vulc.luag.game.Game;
+import vulc.luag.game.cartridge.Cartridge;
 import vulc.luag.game.interfaces.LuaInterface;
 
 public class PackCommand extends ShellCommand {
@@ -39,7 +40,7 @@ public class PackCommand extends ShellCommand {
 			return;
 		}
 
-		File cartridge = new File(Console.rootDirectory + args[0] + "." + Game.CARTRIDGE_EXTENSION);
+		File cartridge = new File(Console.rootDirectory + args[0] + "." + Cartridge.EXTENSION);
 		if(cartridge.exists()) {
 			Console.die("Error:\n"
 			            + "'" + cartridge + "'\n"

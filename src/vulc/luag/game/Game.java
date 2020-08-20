@@ -54,8 +54,6 @@ public class Game {
 	public static final String ATLAS_FILE = USERDATA_DIR + "/" + ATLAS_FILE_NAME;
 	public static final String MAP_FILE = USERDATA_DIR + "/" + MAP_FILE_NAME;
 
-	public static final String CARTRIDGE_EXTENSION = "luag";
-
 	public static final int SPR_SIZE = 8;
 
 	private final LuaScriptCore scriptCore = new LuaScriptCore();
