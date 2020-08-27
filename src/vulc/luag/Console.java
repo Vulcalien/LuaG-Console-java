@@ -16,7 +16,6 @@
 package vulc.luag;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Insets;
@@ -234,10 +233,7 @@ public class Console extends Canvas implements Runnable {
 		Toolkit.getDefaultToolkit().setDynamicLayout(false);
 
 		instance = new Console();
-		instance.setBackground(Color.DARK_GRAY);
-
 		initFrame(false);
-
 		instance.init(args);
 
 		frame.setVisible(true);

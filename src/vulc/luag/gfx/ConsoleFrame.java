@@ -1,26 +1,27 @@
 package vulc.luag.gfx;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 import vulc.luag.Console;
 
 // BUG try to do WIN+down when in full screen
-public class ConsoleFrame extends JFrame {
+public class ConsoleFrame extends Frame {
 
 	private static final long serialVersionUID = 1L;
 
 	private int wOld = -1, hOld = -1;
 
 	public void init() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle(Console.NAME + " " + Console.VERSION);
+		setBackground(Color.DARK_GRAY);
 
 		try {
 			setIconImage(ImageIO.read(Console.class.getResourceAsStream("/res/icon.png")));
@@ -29,6 +30,10 @@ public class ConsoleFrame extends JFrame {
 		}
 
 		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+
 			public void windowIconified(WindowEvent e) {
 				Console.stop();
 			}
