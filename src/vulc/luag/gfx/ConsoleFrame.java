@@ -31,6 +31,7 @@ public class ConsoleFrame extends Frame {
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
+				Console.stop();
 				System.exit(0);
 			}
 
