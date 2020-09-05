@@ -31,8 +31,9 @@ public class ConsoleFrame extends Frame {
 
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Console.stop();
-				System.exit(0);
+				synchronized(Console.DONT_STOP_LOCK) {
+					System.exit(0);
+				}
 			}
 
 			public void windowIconified(WindowEvent e) {

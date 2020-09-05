@@ -29,33 +29,35 @@ public class SetupCommand extends ShellCommand {
 			return;
 		}
 
-		try {
-			new File(Game.USERDATA_DIR).mkdir();
+		synchronized(Console.DONT_STOP_LOCK) {
+			try {
+				new File(Game.USERDATA_DIR).mkdir();
 
-			ZipInputStream template =
-			        new ZipInputStream(new BufferedInputStream(SetupCommand.class.getResourceAsStream(TEMPLATE_FILE)));
+				ZipInputStream template =
+				        new ZipInputStream(new BufferedInputStream(SetupCommand.class.getResourceAsStream(TEMPLATE_FILE)));
 
-			ZipEntry entry;
-			byte[] buffer = new byte[1024];
+				ZipEntry entry;
+				byte[] buffer = new byte[1024];
 
-			while((entry = template.getNextEntry()) != null) {
-				File file = new File(Game.USERDATA_DIR + "/" + entry.getName());
-				if(entry.isDirectory()) {
-					file.mkdirs();
-				} else {
-					OutputStream out = new FileOutputStream(file);
+				while((entry = template.getNextEntry()) != null) {
+					File file = new File(Game.USERDATA_DIR + "/" + entry.getName());
+					if(entry.isDirectory()) {
+						file.mkdirs();
+					} else {
+						OutputStream out = new FileOutputStream(file);
 
-					int readLength;
-					while((readLength = template.read(buffer)) > 0) {
-						out.write(buffer, 0, readLength);
+						int readLength;
+						while((readLength = template.read(buffer)) > 0) {
+							out.write(buffer, 0, readLength);
+						}
+						out.close();
 					}
-					out.close();
 				}
+				template.closeEntry();
+				template.close();
+			} catch(IOException e) {
+				e.printStackTrace();
 			}
-			template.closeEntry();
-			template.close();
-		} catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 

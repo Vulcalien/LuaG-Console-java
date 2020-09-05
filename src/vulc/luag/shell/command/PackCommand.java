@@ -48,49 +48,51 @@ public class PackCommand extends ShellCommand {
 			return;
 		}
 
-		try {
-			ZipOutputStream out = null;
-			boolean error = false;
+		synchronized(Console.DONT_STOP_LOCK) {
 			try {
-				out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(cartridge)));
-				cartridge.createNewFile();
+				ZipOutputStream out = null;
+				boolean error = false;
+				try {
+					out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(cartridge)));
+					cartridge.createNewFile();
 
-				if(!cartridge.exists()) error = true;
-			} catch(FileNotFoundException e) {
-				error = true;
+					if(!cartridge.exists()) error = true;
+				} catch(FileNotFoundException e) {
+					error = true;
+				}
+				if(error) {
+					Console.die("Error:\n"
+					            + "could not\n"
+					            + "create cartridge");
+					return;
+				}
+
+				// add files inside 'console-userdata'
+				File[] files = new File(Game.USERDATA_DIR).listFiles();
+				for(File f : files) {
+					addToZip(out, "", f);
+				}
+
+				// add .cartridge-info file
+				ZipEntry infoFile = new ZipEntry(Game.CARTRIDGE_INFO_NAME);
+				out.putNextEntry(infoFile);
+				{
+					JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
+					writer.beginObject();
+					writer.name("console-version").value(Console.VERSION);
+					writer.name("interface-version").value(LuaInterface.DEFAULT_MAJOR_VERSION
+					                                       + "."
+					                                       + LuaInterface.minorVersion(LuaInterface.DEFAULT_MAJOR_VERSION));
+					writer.endObject();
+
+					writer.flush();
+				}
+				out.closeEntry();
+
+				out.close();
+			} catch(IOException e) {
+				e.printStackTrace();
 			}
-			if(error) {
-				Console.die("Error:\n"
-				            + "could not\n"
-				            + "create cartridge");
-				return;
-			}
-
-			// add files inside 'console-userdata'
-			File[] files = new File(Game.USERDATA_DIR).listFiles();
-			for(File f : files) {
-				addToZip(out, "", f);
-			}
-
-			// add .cartridge-info file
-			ZipEntry infoFile = new ZipEntry(Game.CARTRIDGE_INFO_NAME);
-			out.putNextEntry(infoFile);
-			{
-				JsonWriter writer = new JsonWriter(new OutputStreamWriter(out));
-				writer.beginObject();
-				writer.name("console-version").value(Console.VERSION);
-				writer.name("interface-version").value(LuaInterface.DEFAULT_MAJOR_VERSION
-				                                       + "."
-				                                       + LuaInterface.minorVersion(LuaInterface.DEFAULT_MAJOR_VERSION));
-				writer.endObject();
-
-				writer.flush();
-			}
-			out.closeEntry();
-
-			out.close();
-		} catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 

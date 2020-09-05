@@ -12,6 +12,7 @@ import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
+import vulc.luag.Console;
 import vulc.vdf.ObjectTag;
 
 public class SaveSystem {
@@ -29,7 +30,9 @@ public class SaveSystem {
 		addTableToObjectTag(obj, saveTable);
 
 		try(DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(saveFile)))) {
-			obj.serialize(out);
+			synchronized(Console.DONT_STOP_LOCK) {
+				obj.serialize(out);
+			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
