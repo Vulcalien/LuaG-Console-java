@@ -323,6 +323,8 @@ public class Game {
 		input.tick();
 
 		scriptCore.tick();
+		saveSystem.tick();
+
 		if(Console.mode == Mode.DEVELOPER) {
 			if(debugRestartGame.isPressed()) {
 				Console.LOGGER.info("Restarting Game");

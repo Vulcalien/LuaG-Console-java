@@ -302,8 +302,7 @@ public class Interface001 extends LuaInterface {
 
 	private class save_data extends OneArgFunction {
 		public LuaValue call(LuaValue saveTable) {
-			game.saveSystem.serialize(saveTable.checktable());
-			return NIL;
+			return LuaValue.valueOf(game.saveSystem.serialize(saveTable.checktable()));
 		}
 	}
 

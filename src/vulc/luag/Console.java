@@ -83,6 +83,7 @@ public class Console extends Canvas implements Runnable {
 	public static Mode mode;
 
 	public static Console instance;
+	public static int ticks = 0;
 
 	private static boolean running = false;
 	private static Thread thread;
@@ -114,6 +115,7 @@ public class Console extends Canvas implements Runnable {
 
 				try {
 					tick();
+					ticks++;
 				} catch(Throwable e) {
 					LOGGER.log(Level.SEVERE, "Console Error", e);
 					System.exit(1);

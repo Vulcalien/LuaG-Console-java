@@ -1,7 +1,7 @@
 package vulc.luag.game.save;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -13,29 +13,71 @@ import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 
 import vulc.luag.Console;
+import vulc.luag.gfx.Icons;
 import vulc.vdf.ObjectTag;
 
 public class SaveSystem {
 
 	public static final String SAVE_EXTENSION = "sav";
+	public static final int MAX_SIZE = 256 * 1024; // 256 KB
+	public static final int SAVE_DELAY = 60; // 1 sec
 
 	private final String saveFile;
+
+	public int lastSave = 0;
 
 	public SaveSystem(String cartridgeFile) {
 		this.saveFile = cartridgeFile + "." + SAVE_EXTENSION;
 	}
 
-	public void serialize(LuaTable saveTable) {
+	public void tick() {
+		// render the "save" icon only if the action was performed recently
+		if(Console.ticks - lastSave > SAVE_DELAY) return;
+
+		Console.SCREEN.drawBool(Icons.SAVE, 0xffffff,
+		                        ((SAVE_DELAY - (Console.ticks - 1 - lastSave)) * 0xff / SAVE_DELAY),
+		                        151, 3);
+	}
+
+	public int serialize(LuaTable saveTable) {
+		Console.LOGGER.info("Saving game data...");
+
+		// if the save action was performed recently, don't save again
+		if(Console.ticks - lastSave < SAVE_DELAY) {
+			Console.LOGGER.severe("Save Error 1: trying to save too fast "
+			                      + "(delay: " + SAVE_DELAY + " ticks)");
+			return 1; // too fast
+		}
+
+		lastSave = Console.ticks;
+
 		ObjectTag obj = new ObjectTag();
 		addTableToObjectTag(obj, saveTable);
 
-		try(DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(saveFile)))) {
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+		try(DataOutputStream bufferOut = new DataOutputStream(buffer)) {
+			obj.serialize(bufferOut);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
+		if(buffer.size() > MAX_SIZE) {
+			Console.LOGGER.severe("Save Error 2: too much data "
+			                      + "(max: " + MAX_SIZE + " bytes, sent: " + buffer.size() + ")");
+			return 2; // too much data
+		}
+
+		try(FileOutputStream out = new FileOutputStream(saveFile)) {
 			synchronized(Console.DONT_STOP_LOCK) {
-				obj.serialize(out);
+				out.write(buffer.toByteArray());
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+
+		Console.LOGGER.info("Saving complete: " + buffer.size() + " bytes written");
+		return 0; // ok
 	}
 
 	private static void addTableToObjectTag(ObjectTag obj, LuaTable table) {
@@ -63,6 +105,8 @@ public class SaveSystem {
 	}
 
 	public LuaTable deserialize() {
+		Console.LOGGER.info("Loading game data...");
+
 		LuaTable saveTable = new LuaTable();
 
 		ObjectTag obj = new ObjectTag();
@@ -71,8 +115,9 @@ public class SaveSystem {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-
 		addObjectTagToTable(saveTable, obj);
+
+		Console.LOGGER.info("Loading complete");
 		return saveTable;
 	}
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 
 import org.luaj.vm2.Globals;
@@ -185,7 +184,7 @@ public class LuaScriptCore {
 		                .replace("@", "")
 		                .replaceAll("\\.?" + sep + Game.USERDATA_DIR_NAME, "");
 
-		Console.LOGGER.log(Level.SEVERE, msg);
+		Console.LOGGER.severe(msg);
 
 		Console.die("Script Error:\n"
 		            + "see the log file");
