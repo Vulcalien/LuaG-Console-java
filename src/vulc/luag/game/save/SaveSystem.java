@@ -24,7 +24,8 @@ public class SaveSystem {
 
 	private final String saveFile;
 
-	public int lastSave = 0;
+	private int lastSave = 0;
+	private boolean hasLoaded = false;
 
 	public SaveSystem(String cartridgeFile) {
 		this.saveFile = cartridgeFile + "." + SAVE_EXTENSION;
@@ -104,10 +105,14 @@ public class SaveSystem {
 		}
 	}
 
-	public LuaTable deserialize() {
+	public LuaValue deserialize() {
 		Console.LOGGER.info("Loading game data...");
 
-		LuaTable saveTable = new LuaTable();
+		if(hasLoaded) {
+			Console.LOGGER.severe("Load Error: data can be loaded only once");
+			return LuaValue.NIL;
+		}
+		hasLoaded = true;
 
 		ObjectTag obj = new ObjectTag();
 		try(DataInputStream in = new DataInputStream(new BufferedInputStream(new FileInputStream(saveFile)))) {
@@ -115,6 +120,8 @@ public class SaveSystem {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+
+		LuaTable saveTable = new LuaTable();
 		addObjectTagToTable(saveTable, obj);
 
 		Console.LOGGER.info("Loading complete");
