@@ -1,5 +1,6 @@
 package vulc.luag.game;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -109,7 +110,7 @@ public class LuaScriptCore {
 					return false;
 				}
 
-				input = new FileInputStream(mainFile);
+				input = new BufferedInputStream(new FileInputStream(mainFile));
 			} else {
 				ZipEntry mainLuaEntry = game.cartridgeFile.getEntry("script/main.lua");
 				if(mainLuaEntry == null || mainLuaEntry.isDirectory()) {

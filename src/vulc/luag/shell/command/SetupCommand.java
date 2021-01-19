@@ -1,6 +1,7 @@
 package vulc.luag.shell.command;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class SetupCommand extends ShellCommand {
 					if(entry.isDirectory()) {
 						file.mkdirs();
 					} else {
-						OutputStream out = new FileOutputStream(file);
+						OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 
 						int readLength;
 						while((readLength = template.read(buffer)) > 0) {

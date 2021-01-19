@@ -1,5 +1,6 @@
 package vulc.luag.shell.command;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -101,7 +102,7 @@ public class PackCommand extends ShellCommand {
 			ZipEntry entry = new ZipEntry(folder + file.getName());
 			zip.putNextEntry(entry);
 
-			InputStream in = new FileInputStream(file);
+			InputStream in = new BufferedInputStream(new FileInputStream(file));
 			byte[] dataBuffer = new byte[1024];
 			int lengthRead;
 

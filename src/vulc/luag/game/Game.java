@@ -2,6 +2,7 @@ package vulc.luag.game;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -99,7 +100,7 @@ public class Game {
 
 		// config.json
 		Console.LOGGER.info("Load '" + CONFIG_FILE_NAME + "'");
-		try(InputStream in = new FileInputStream(CONFIG_FILE)) {
+		try(InputStream in = new BufferedInputStream(new FileInputStream(CONFIG_FILE))) {
 			if(!loadConfig(in)) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
@@ -112,7 +113,7 @@ public class Game {
 
 		// atlas.png
 		Console.LOGGER.info("Load '" + ATLAS_FILE_NAME + "'");
-		try(InputStream in = new FileInputStream(ATLAS_FILE)) {
+		try(InputStream in = new BufferedInputStream(new FileInputStream(ATLAS_FILE))) {
 			if(!loadAtlas(in)) return false;
 		} catch(FileNotFoundException e) {
 			Console.die("Error:\n"
@@ -127,7 +128,7 @@ public class Game {
 		Console.LOGGER.info("Load '" + MAP_FILE_NAME + "'");
 		File mapFile = new File(MAP_FILE);
 		try {
-			map = Map.load(new FileInputStream(mapFile));
+			map = Map.load(new BufferedInputStream(new FileInputStream(mapFile)));
 			if(map == null) return false;
 		} catch(FileNotFoundException e) {
 			Console.LOGGER.info("Missing map file: generating new file");
@@ -154,7 +155,7 @@ public class Game {
 			}
 			List<ZipEntry> entries = new ArrayList<ZipEntry>();
 			{
-				ZipInputStream zipIn = new ZipInputStream(new FileInputStream(cartridge));
+				ZipInputStream zipIn = new ZipInputStream(new BufferedInputStream(new FileInputStream(cartridge)));
 				while(true) {
 					ZipEntry entry = zipIn.getNextEntry();
 					if(entry != null) {
