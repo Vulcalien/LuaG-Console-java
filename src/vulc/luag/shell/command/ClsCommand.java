@@ -5,7 +5,7 @@ import vulc.luag.shell.Shell;
 public class ClsCommand extends ShellCommand {
 
 	public ClsCommand() {
-		super("cls");
+		super("cls", "clear");
 	}
 
 	public void run(String[] args) {
