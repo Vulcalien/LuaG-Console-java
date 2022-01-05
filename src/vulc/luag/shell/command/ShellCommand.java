@@ -59,11 +59,9 @@ public abstract class ShellCommand {
 	}
 
 	protected static ShellCommand findCommand(String name) {
-		name = name.toLowerCase();
-
 		for(ShellCommand command : COMMAND_LIST) {
 			for(int i = 0; i < command.names.length; i++) {
-				if(name.equals(command.names[i])) return command;
+				if(name.equalsIgnoreCase(command.names[i])) return command;
 			}
 		}
 		return null;
