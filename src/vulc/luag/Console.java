@@ -55,7 +55,7 @@ import vulc.luag.shell.Shell;
  */
 public class Console extends Canvas implements Runnable {
 
-	public static enum Mode {
+	public enum Mode {
 		USER_GAME, USER_SHELL, DEVELOPER
 	}
 
@@ -65,7 +65,7 @@ public class Console extends Canvas implements Runnable {
 
 	public static final String NAME = "LuaG Console";
 	public static final String VERSION = "0.7.0-WIP";
-	public static final String COPYRIGHT = "Copyright 2020 Vulcalien";
+	public static final String COPYRIGHT = "Copyright 2022 Vulcalien";
 
 	public static final int WIDTH = 160, HEIGHT = 160;
 	public static int scaledWidth, scaledHeight;
