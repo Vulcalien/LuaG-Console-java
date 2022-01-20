@@ -7,7 +7,6 @@ import vulc.luag.editor.sprite.SpriteEditor;
 import vulc.luag.game.Game;
 import vulc.luag.gfx.Colors;
 import vulc.luag.gfx.Icons;
-import vulc.luag.gfx.Screen;
 import vulc.luag.gfx.gui.GUIButton;
 import vulc.luag.gfx.gui.GUILabel;
 import vulc.luag.gfx.gui.GUIMainPanel;
@@ -88,7 +87,7 @@ public class EditorPanel extends Panel {
 		footerPanel.background = Colors.BACKGROUND_0;
 		mainPanel.add(footerPanel);
 
-		footerLabel = new GUILabel(1, 1, Screen.FONT.widthOf("Game Editor"), 8);
+		footerLabel = new GUILabel(1, 1, footerPanel.w - 2, 8);
 		footerLabel.textColor = Colors.FOREGROUND_1;
 		footerPanel.add(footerLabel);
 	}
